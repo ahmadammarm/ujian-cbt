@@ -9,6 +9,11 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+    //  untuk membuat relasi many to many kita perlu table tambahan
+    // yang menghubungkan antara users dan courses
+    // table ini akan menyimpan user_id dan course_id
+    // table tersebut bernama pivot table
     public function up(): void
     {
         Schema::create('course_students', function (Blueprint $table) {
@@ -17,6 +22,7 @@ return new class extends Migration
                 ->constrained('users');
             $table->foreignId('course_id')
                 ->constrained('courses');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
