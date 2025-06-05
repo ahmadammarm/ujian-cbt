@@ -15,4 +15,6 @@ class CourseStudent extends Model
     ];
 
     
+
+
 }
