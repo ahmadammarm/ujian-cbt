@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseQuestionController;
 use App\Http\Controllers\LearningController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -21,10 +22,24 @@ Route::middleware('auth')->group(function () {
     Route::prefix('dashboard')->name('dashboard')->group(function () {
 
         // Teacher role routes
-        Route::resource('courses', CourseController::class)->middleware('role:teacher');
+        Route::resource('courses', CourseController::class)
+            ->middleware('role:teacher');
 
+        Route::get('/course/question/create/{courseId}', [CourseQuestionController::class, 'create'])
+            ->name('course.question.create')
+            ->middleware('role:teacher');
+
+        Route::post('/course/question/store/{courseId}', [CourseQuestionController::class, 'store'])
+            ->name('course.question.store')
+            ->middleware('role:teacher');
+
+
+
+            
         // Student role routes
-        Route::get('/learning', [LearningController::class, 'index'])->name('learning.index')->middleware('role:student');
+        Route::get('/learning', [LearningController::class, 'index'])
+            ->name('learning.index')
+            ->middleware('role:student');
     });
 });
 
