@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\LearningController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::prefix('dashboard')->name('dashboard')->group(function() {
+    Route::prefix('dashboard')->name('dashboard')->group(function () {
+
+        // Teacher role routes
         Route::resource('courses', CourseController::class)->middleware('role:teacher');
+
+        // Student role routes
+        Route::get('/learning', [LearningController::class, 'index'])->name('learning.index')->middleware('role:student');
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
