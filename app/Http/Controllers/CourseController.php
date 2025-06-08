@@ -4,24 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        
-    }
+    public function index() {}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('admin.courses.create');
+        $categories = Category::all();
+        return view('admin.courses.create', [
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -29,7 +33,34 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|integer',
+            'cover' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            if ($request->hasFile('cover')) {
+                $coverPath = $request->file('cover')->store('course_covers', 'public');
+                $validated['cover'] = $coverPath;
+            } else {
+                return redirect()->back()->withErrors(['cover' => 'Cover image is required.']);
+            }
+
+            $validated['slug'] = Str::slug($request->name);
+            $newCourse = Course::create($validated);
+
+            DB::commit();
+            return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $error = ValidationException::withMessages([
+                'error' => 'An error occurred while creating the course: ' . $e->getMessage()
+            ]);
+            return redirect()->back()->withErrors($error->errors())->withInput();
+        }
     }
 
     /**
