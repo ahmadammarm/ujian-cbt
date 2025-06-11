@@ -1124,6 +1124,21 @@ video {
   background-color: rgb(234 232 254 / var(--tw-bg-opacity));
 }
 
+.bg-\[\#FDEBEA\] {
+    --tw-bg-opacity: 1;
+    background-color: rgb(253 235 234 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#E6F9E6\] {
+    --tw-bg-opacity: 1;
+    background-color: rgb(230 249 230 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#28A745\] {
+    --tw-bg-opacity: 1;
+    background-color: rgb(40 167 69 / var(--tw-bg-opacity)); /* Green color */
+}
+
 .bg-\[\#F6770B\] {
   --tw-bg-opacity: 1;
   background-color: rgb(246 119 11 / var(--tw-bg-opacity));

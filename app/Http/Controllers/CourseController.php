@@ -15,7 +15,16 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {}
+    public function index()
+    {
+        $courses = Course::orderBy(
+            'created_at',
+            'desc'
+        )->get();
+        return view('admin.courses.index', [
+            'courses' => $courses
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.
