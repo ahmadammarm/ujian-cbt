@@ -250,10 +250,18 @@
                                         class="flex items-center justify-between font-bold text-sm w-full">
                                         Edit Course
                                     </a>
-                                    <a href="#"
+
+                                    <form action="{{ route('dashboard.courses.destroy', $course) }}" method="POST"
+                                        class="flex items-center justify-between font-bold text-sm w-full"
+                                        onsubmit="return confirm('Are you sure you want to delete this course?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-[#FD445E]">Delete</button>
+                                    </form>
+                                    {{-- <a href="#"
                                         class="flex items-center justify-between font-bold text-sm w-full text-[#FD445E]">
                                         Delete
-                                    </a>
+                                    </a> --}}
                                 </div>
                             </div>
                         </div>

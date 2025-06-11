@@ -132,6 +132,18 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $course->delete();
+            DB::commit();
+            return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $error = ValidationException::withMessages([
+                'error' => 'An error occurred while deleting the course: ' . $e->getMessage()
+            ]);
+            return redirect()->back()->withErrors($error->errors());
+        }
     }
 }
