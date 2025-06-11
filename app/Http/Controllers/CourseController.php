@@ -85,7 +85,11 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        //
+        $categories = Category::all();
+        return view('admin.courses.edit', [
+            'course' => $course,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -93,7 +97,34 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|integer',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            if ($request->hasFile('cover')) {
+                $coverPath = $request->file('cover')->store('course_covers', 'public');
+                $validated['cover'] = $coverPath;
+            } else {
+                $validated['cover'] = $course->cover;
+            }
+
+            $validated['slug'] = Str::slug($request->name);
+            $course->update($validated);
+
+            DB::commit();
+            return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $error = ValidationException::withMessages([
+                'error' => 'An error occurred while creating the course: ' . $e->getMessage()
+            ]);
+            return redirect()->back()->withErrors($error->errors())->withInput();
+        }
     }
 
     /**
