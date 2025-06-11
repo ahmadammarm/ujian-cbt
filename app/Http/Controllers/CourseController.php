@@ -132,18 +132,16 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        DB::beginTransaction();
-
+        // Implementasi dari soft delete
+        // ketika menggunakan soft delete, kita tidak menghapus data secara permanen
+        // melainkan hanya menandai data tersebut sebagai sudah dihapus
+        // dalam database, data akan masih ada, namun tidak akan ditampilkan di website
+        // dalam field deleted_at akan diisi dengan tanggal dan waktu saat data dihapus
         try {
             $course->delete();
-            DB::commit();
             return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully.');
         } catch (\Exception $e) {
-            DB::rollBack();
-            $error = ValidationException::withMessages([
-                'error' => 'An error occurred while deleting the course: ' . $e->getMessage()
-            ]);
-            return redirect()->back()->withErrors($error->errors());
+            return redirect()->back()->withErrors(['error' => 'An error occurred while deleting the course: ' . $e->getMessage()]);
         }
     }
 }
