@@ -238,7 +238,7 @@
                                         menu
                                         <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" alt="icon">
                                     </button>
-                                    <a href="#"
+                                    <a href="{{ route('dashboard.courses.show', $course) }}"
                                         class="flex items-center justify-between font-bold text-sm w-full">
                                         Manage
                                     </a>

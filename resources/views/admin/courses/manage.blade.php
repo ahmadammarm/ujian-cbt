@@ -1,0 +1,1 @@
+detail kelas test
