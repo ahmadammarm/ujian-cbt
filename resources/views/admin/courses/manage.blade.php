@@ -25,7 +25,7 @@
                         <a href=""
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/home-hashtag.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/home-hashtag.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold transition-all duration-300 hover:text-white">Overview</p>
                         </a>
@@ -34,7 +34,7 @@
                         <a href=""
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 bg-[#2B82FE] transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/note-favorite.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/note-favorite.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold text-white transition-all duration-300 hover:text-white">Courses</p>
                         </a>
@@ -43,7 +43,7 @@
                         <a href=""
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/profile-2user.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/profile-2user.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold transition-all duration-300 hover:text-white">Students</p>
                         </a>
@@ -52,7 +52,7 @@
                         <a href=""
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/sms-tracking.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/sms-tracking.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold transition-all duration-300 hover:text-white">Messages</p>
                             <div
@@ -65,7 +65,7 @@
                         <a href=""
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/chart-2.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/chart-2.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold transition-all duration-300 hover:text-white">Analytics</p>
                         </a>
@@ -79,7 +79,7 @@
                         <a href=""
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/3dcube.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/3dcube.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold transition-all duration-300 hover:text-white">Rewards</p>
                         </a>
@@ -88,7 +88,7 @@
                         <a href=""
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/code.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/code.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold transition-all duration-300 hover:text-white">A.I Plugins</p>
                         </a>
@@ -97,7 +97,7 @@
                         <a href=""
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/setting-2.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/setting-2.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold transition-all duration-300 hover:text-white">Settings</p>
                         </a>
@@ -106,7 +106,7 @@
                         <a href="signin.html"
                             class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
                             <div>
-                                <img src="assets/images/icons/security-safe.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/security-safe.svg') }}" alt="icon">
                             </div>
                             <p class="font-semibold transition-all duration-300 hover:text-white">Logout</p>
                         </a>
@@ -116,7 +116,7 @@
             <a href="">
                 <div class="w-full flex gap-3 items-center p-4 rounded-[14px] bg-[#0A090B] mt-[30px]">
                     <div>
-                        <img src="assets/images/icons/crown-round-bg.svg" alt="icon">
+                        <img src="{{ asset('assets/images/icons/crown-round-bg.svg') }}" alt="icon">
                     </div>
                     <div class="flex flex-col gap-[2px]">
                         <p class="font-semibold text-white">Get Pro</p>
@@ -133,18 +133,18 @@
                         class="font-semibold placeholder:text-[#7F8190] placeholder:font-normal w-full outline-none"
                         placeholder="Search by report, student, etc" name="search">
                     <button type="submit" class="ml-[10px] w-8 h-8 flex items-center justify-center">
-                        <img src="assets/images/icons/search.svg" alt="icon">
+                        <img src="{{ asset('assets/images/icons/search.svg') }}" alt="icon">
                     </button>
                 </form>
                 <div class="flex items-center gap-[30px]">
                     <div class="flex gap-[14px]">
                         <a href=""
                             class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE]">
-                            <img src="assets/images/icons/receipt-text.svg" alt="icon">
+                            <img src="{{ asset('assets/images/icons/receipt-text.svg') }}" alt="icon">
                         </a>
                         <a href=""
                             class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE]">
-                            <img src="assets/images/icons/notification.svg" alt="icon">
+                            <img src="{{ asset('assets/images/icons/notification.svg') }}" alt="icon">
                         </a>
                     </div>
                     <div class="h-[46px] w-[1px] flex shrink-0 border border-[#EEEEEE]"></div>
@@ -154,7 +154,7 @@
                             <p class="font-semibold">Fany Alqo</p>
                         </div>
                         <div class="w-[46px] h-[46px]">
-                            <img src="assets/images/photos/default-photo.svg" alt="photo">
+                            <img src="{{ asset('assets/images/photos/default-photo.svg') }}" alt="photo">
                         </div>
                     </div>
                 </div>
@@ -184,13 +184,13 @@
                         <div class="flex items-center gap-5">
                             <div class="flex gap-[10px] items-center">
                                 <div class="w-6 h-6 flex shrink-0">
-                                    <img src="assets/images/icons/calendar-add.svg" alt="icon">
+                                    <img src="{{ asset('assets/images/icons/calendar-add.svg') }}" alt="icon">
                                 </div>
                                 <p class="font-semibold">22 August 2024</p>
                             </div>
                             <div class="flex gap-[10px] items-center">
                                 <div class="w-6 h-6 flex shrink-0">
-                                    <img src="assets/images/icons/profile-2user-outline.svg" alt="icon">
+                                    <img src="{{ asset('assets/images/icons/profile-2user-outline.svg') }}" alt="icon">
                                 </div>
                                 <p class="font-semibold">489,509 students</p>
                             </div>
@@ -200,25 +200,25 @@
                 <div class="relative">
                     <a href="#" id="more-button"
                         class="toggle-button w-[46px] h-[46px] flex shrink-0 rounded-full items-center justify-center border border-[#EEEEEE]">
-                        <img src="assets/images/icons/more.svg" alt="icon">
+                        <img src="{{ asset('assets/images/icons/more.svg') }}" alt="icon">
                     </a>
                     <div
                         class="dropdown-menu absolute hidden right-0 top-[66px] w-[270px] flex flex-col gap-4 p-5 border border-[#EEEEEE] bg-white rounded-[18px] transition-all duration-300 shadow-[0_10px_16px_0_#0A090B0D]">
                         <a href="" class="flex gap-[10px] items-center">
                             <div class="w-5 h-5">
-                                <img src="assets/images/icons/profile-2user-outline.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/profile-2user-outline.svg') }}" alt="icon">
                             </div>
                             <span class="font-semibold text-sm">Add Students</span>
                         </a>
                         <a href="" class="flex gap-[10px] items-center">
                             <div class="w-5 h-5">
-                                <img src="assets/images/icons/note-favorite-outline.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/note-favorite-outline.svg') }}" alt="icon">
                             </div>
                             <span class="font-semibold text-sm">Edit Course Details</span>
                         </a>
                         <a href="" class="flex gap-[10px] items-center">
                             <div class="w-5 h-5">
-                                <img src="assets/images/icons/crown-outline.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/crown-outline.svg') }}" alt="icon">
                             </div>
                             <span class="font-semibold text-sm">Upload Certificate</span>
                         </a>
@@ -256,7 +256,7 @@
                         class="w-full h-[92px] flex items-center justify-center p-4 border-dashed border-2 border-[#0A090B] rounded-[20px]">
                         <div class="flex items-center gap-5">
                             <div>
-                                <img src="assets/images/icons/note-add.svg" alt="icon">
+                                <img src="{{ asset('assets/images/icons/note-add.svg') }}" alt="icon">
                             </div>
                             <p class="font-bold text-xl">New Question</p>
                         </div>
@@ -273,7 +273,7 @@
                             <form action="">
                                 <button
                                     class="w-[52px] h-[52px] flex shrink-0 items-center justify-center rounded-full bg-[#FD445E]">
-                                    <img src="assets/images/icons/trash.svg" alt="icon">
+                                    <img src="{{ asset('assets/images/icons/trash.svg') }}" alt="icon">
                                 </button>
                             </form>
                         </div>
@@ -290,7 +290,7 @@
                             <form action="">
                                 <button
                                     class="w-[52px] h-[52px] flex shrink-0 items-center justify-center rounded-full bg-[#FD445E]">
-                                    <img src="assets/images/icons/trash.svg" alt="icon">
+                                    <img src="{{ asset('assets/images/icons/trash.svg') }}" alt="icon">
                                 </button>
                             </form>
                         </div>
@@ -307,7 +307,7 @@
                             <form action="">
                                 <button
                                     class="w-[52px] h-[52px] flex shrink-0 items-center justify-center rounded-full bg-[#FD445E]">
-                                    <img src="assets/images/icons/trash.svg" alt="icon">
+                                    <img src="{{ asset('assets/images/icons/trash.svg') }}" alt="icon">
                                 </button>
                             </form>
                         </div>
