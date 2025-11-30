@@ -161,9 +161,9 @@
             </div>
             <div class="flex flex-col gap-10 px-5 mt-5">
                 <div class="breadcrumb flex items-center gap-[30px]">
-                    <a href="#" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold">Home</a>
+                    <a href="{{ route('dashboard') }}" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold">Home</a>
                     <span class="text-[#7F8190] last:text-[#0A090B]">/</span>
-                    <a href="index.html" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold">Manage
+                    <a href="{{ route('dashboard.courses.index') }}" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold">Manage
                         Courses</a>
                     <span class="text-[#7F8190] last:text-[#0A090B]">/</span>
                     <a href="#" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold ">Course
@@ -173,26 +173,32 @@
             <div class="header ml-[70px] pr-[70px] w-[940px] flex items-center justify-between mt-10">
                 <div class="flex gap-6 items-center">
                     <div class="w-[150px] h-[150px] flex shrink-0 relative overflow-hidden">
-                        <img src="assets/images/thumbnail/Web-Development.png" class="w-full h-full object-contain"
+                        <img src="{{ Storage::url($course->cover) }}" class="w-full h-full object-contain"
                             alt="icon">
                         <p
                             class="p-[8px_16px] rounded-full bg-[#FFF2E6] font-bold text-sm text-[#F6770B] absolute bottom-0 transform -translate-x-1/2 left-1/2 text-nowrap">
-                            Product Design</p>
+                            {{ $course->category->name }}</p>
                     </div>
                     <div class="flex flex-col gap-5">
-                        <h1 class="font-extrabold text-[30px] leading-[45px]">Digital Marketing 101</h1>
+                        <h1 class="font-extrabold text-[30px] leading-[45px]">
+                            {{ $course->name }}
+                        </h1>
                         <div class="flex items-center gap-5">
                             <div class="flex gap-[10px] items-center">
                                 <div class="w-6 h-6 flex shrink-0">
-                                    <img src="{{ asset('assets/images/icons/calendar-add.svg') }}" alt="icon">
+                                    <img src="{{ asset('assets/images/icons/calendar-outline.svg') }}" alt="icon">
                                 </div>
-                                <p class="font-semibold">22 August 2024</p>
+                                <p class="font-semibold">
+                                    {{ \Carbon\Carbon::parse($course->created_at)->format('d F Y') }}
+                                </p>
                             </div>
                             <div class="flex gap-[10px] items-center">
                                 <div class="w-6 h-6 flex shrink-0">
                                     <img src="{{ asset('assets/images/icons/profile-2user-outline.svg') }}" alt="icon">
                                 </div>
-                                <p class="font-semibold">489,509 students</p>
+                                <p class="font-semibold">
+                                    {{ $students->count() }} Students
+                                </p>
                             </div>
                         </div>
                     </div>
