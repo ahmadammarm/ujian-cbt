@@ -8,8 +8,8 @@ use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\View\View;
-
+use Inertia\Inertia;
+use Inertia\Response;
 
 class NewPasswordController extends Controller
 {
@@ -23,10 +23,14 @@ class NewPasswordController extends Controller
     /**
      * Display the password reset view.
      */
-    public function create(Request $request): View
+    public function create(Request $request): Response
     {
-        return view('auth.reset-password', ['request' => $request]);
+        return Inertia::render('Auth/ResetPassword', [
+            'email' => $request->email,
+            'token' => $request->route('token'),
+        ]);
     }
+
 
     /**
      * Handle an incoming new password request.
