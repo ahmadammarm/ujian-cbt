@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\CourseQuestion;
-use App\Http\Controllers\Controller;
 use App\Models\Course;
-use Illuminate\Http\Request;
+use App\Http\Requests\CourseQuestion\StoreCourseQuestionRequest;
+use App\Http\Requests\CourseQuestion\UpdateCourseQuestionRequest;
+use App\Services\CourseQuestionService;
+use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class CourseQuestionController extends Controller
 {
+    public function __construct(
+        protected CourseQuestionService $courseQuestionService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -20,45 +28,22 @@ class CourseQuestionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($courseId)
+    public function create($courseId): Response
     {
-        $course = Course::where('id', $courseId)->first();
-        $students = $course->students()->orderBy('id', 'desc')->get();
-        $questions = $course->questions()->orderBy('id', 'desc')->get();
+        $course = Course::findOrFail($courseId);
         
-        return view('admin.questions.create', [
+        return Inertia::render('Admin/Questions/Create', [
             'course' => $course,
-            'students' => $students,
-            'questions' => $questions
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $courseId)
+    public function store(StoreCourseQuestionRequest $request, $courseId): RedirectResponse
     {
-        $course = Course::where('id', $courseId)->first();
-        $validated = $request->validate([
-            'question' => 'required|string|max:255',
-            'answers' => 'required|array|min:4',
-            'answers.*' => 'required|string',
-            'correct_answer' => 'required|integer',
-        ]);
-
-        \Illuminate\Support\Facades\DB::transaction(function () use ($request, $course) {
-            $question = $course->questions()->create([
-                'question' => $request->question,
-            ]);
-
-            foreach ($request->answers as $index => $answerText) {
-                $isCorrect = ($request->correct_answer == $index);
-                $question->answers()->create([
-                    'answer' => $answerText,
-                    'is_correct' => $isCorrect,
-                ]);
-            }
-        });
+        $course = Course::findOrFail($courseId);
+        $this->courseQuestionService->createQuestionForCourse($course, $request->validated());
 
         return redirect()->route('dashboard.courses.show', $courseId);
     }
@@ -74,43 +59,24 @@ class CourseQuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($courseId, $questionId)
+    public function edit($courseId, $questionId): Response
     {
         $course = Course::findOrFail($courseId);
         $courseQuestion = CourseQuestion::with('answers')->findOrFail($questionId);
 
-        return view('admin.questions.edit', compact('course', 'courseQuestion'));
+        return Inertia::render('Admin/Questions/Edit', [
+            'course' => $course,
+            'courseQuestion' => $courseQuestion
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $courseId, $questionId)
+    public function update(UpdateCourseQuestionRequest $request, $courseId, $questionId): RedirectResponse
     {
         $courseQuestion = CourseQuestion::findOrFail($questionId);
-
-        $validated = $request->validate([
-            'question' => 'required|string|max:255',
-            'answers' => 'required|array|min:4',
-            'answers.*' => 'required|string',
-            'correct_answer' => 'required|integer',
-        ]);
-
-        \Illuminate\Support\Facades\DB::transaction(function () use ($request, $courseQuestion) {
-            $courseQuestion->update([
-                'question' => $request->question,
-            ]);
-
-            $courseQuestion->answers()->delete();
-
-            foreach ($request->answers as $index => $answerText) {
-                $isCorrect = ($request->correct_answer == $index);
-                $courseQuestion->answers()->create([
-                    'answer' => $answerText,
-                    'is_correct' => $isCorrect,
-                ]);
-            }
-        });
+        $this->courseQuestionService->updateQuestion($courseQuestion, $request->validated());
 
         return redirect()->route('dashboard.courses.show', $courseId);
     }
@@ -118,14 +84,11 @@ class CourseQuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($courseId, $questionId)
+    public function destroy($courseId, $questionId): RedirectResponse
     {
-        try {
-            $courseQuestion = CourseQuestion::findOrFail($questionId);
-            $courseQuestion->delete();
-            return redirect()->route('dashboard.courses.show', $courseId);
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to delete question.');
-        }
+        $courseQuestion = CourseQuestion::findOrFail($questionId);
+        $courseQuestion->delete();
+        
+        return redirect()->route('dashboard.courses.show', $courseId);
     }
 }

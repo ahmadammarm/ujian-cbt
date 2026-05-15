@@ -3,25 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
+use App\Http\Requests\Course\StoreCourseRequest;
+use App\Http\Requests\Course\UpdateCourseRequest;
+use App\Services\CourseService;
+use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class CourseController extends Controller
 {
+    public function __construct(
+        protected CourseService $courseService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        $courses = Course::orderBy(
-            'created_at',
-            'desc'
-        )->get();
-        return view('admin.courses.index', [
+        $courses = Course::orderBy('created_at', 'desc')->get();
+        return Inertia::render('Admin/Courses/Index', [
             'courses' => $courses
         ]);
     }
@@ -29,10 +31,10 @@ class CourseController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
         $categories = Category::all();
-        return view('admin.courses.create', [
+        return Inertia::render('Admin/Courses/Create', [
             'categories' => $categories
         ]);
     }
@@ -40,47 +42,23 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCourseRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|integer',
-            'cover' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        $this->courseService->createCourse($request->validated(), $request->file('cover'));
 
-        DB::beginTransaction();
-
-        try {
-            if ($request->hasFile('cover')) {
-                $coverPath = $request->file('cover')->store('course_covers', 'public');
-                $validated['cover'] = $coverPath;
-            } else {
-                return redirect()->back()->withErrors(['cover' => 'Cover image is required.']);
-            }
-
-            $validated['slug'] = Str::slug($request->name);
-            $newCourse = Course::create($validated);
-
-            DB::commit();
-            return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $error = ValidationException::withMessages([
-                'error' => 'An error occurred while creating the course: ' . $e->getMessage()
-            ]);
-            return redirect()->back()->withErrors($error->errors())->withInput();
-        }
+        return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Course $course)
+    public function show(Course $course): Response
     {
+        $course->load('category');
         $students = $course->students()->orderBy('id', 'desc')->get();
         $questions = $course->questions()->orderBy('id', 'desc')->get();
 
-        return view('admin.courses.manage', [
+        return Inertia::render('Admin/Courses/Manage', [
             'course' => $course,
             'students' => $students,
             'questions' => $questions
@@ -90,10 +68,10 @@ class CourseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Course $course)
+    public function edit(Course $course): Response
     {
         $categories = Category::all();
-        return view('admin.courses.edit', [
+        return Inertia::render('Admin/Courses/Edit', [
             'course' => $course,
             'categories' => $categories
         ]);
@@ -102,53 +80,19 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Course $course)
+    public function update(UpdateCourseRequest $request, Course $course): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|integer',
-            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        $this->courseService->updateCourse($course, $request->validated(), $request->file('cover'));
 
-        DB::beginTransaction();
-
-        try {
-            if ($request->hasFile('cover')) {
-                $coverPath = $request->file('cover')->store('course_covers', 'public');
-                $validated['cover'] = $coverPath;
-            } else {
-                $validated['cover'] = $course->cover;
-            }
-
-            $validated['slug'] = Str::slug($request->name);
-            $course->update($validated);
-
-            DB::commit();
-            return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $error = ValidationException::withMessages([
-                'error' => 'An error occurred while creating the course: ' . $e->getMessage()
-            ]);
-            return redirect()->back()->withErrors($error->errors())->withInput();
-        }
+        return redirect()->route('dashboard.courses.index')->with('success', 'Course updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Course $course)
+    public function destroy(Course $course): RedirectResponse
     {
-        // Implementasi dari soft delete
-        // ketika menggunakan soft delete, kita tidak menghapus data secara permanen
-        // melainkan hanya menandai data tersebut sebagai sudah dihapus
-        // dalam database, data akan masih ada, namun tidak akan ditampilkan di website
-        // dalam field deleted_at akan diisi dengan tanggal dan waktu saat data dihapus
-        try {
-            $course->delete();
-            return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'An error occurred while deleting the course: ' . $e->getMessage()]);
-        }
+        $this->courseService->deleteCourse($course);
+        return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully.');
     }
 }

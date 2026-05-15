@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\RoleRedirect::class,
         ]);
 
         $middleware->alias([
@@ -22,5 +23,20 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e, $request) {
+            if (! app()->environment('local') && in_array($e->getStatusCode(), [403, 404])) {
+                return \Inertia\Inertia::render('Errors/' . ($e->getStatusCode() === 403 ? 'Forbidden' : 'NotFound'), [
+                    'status' => $e->getStatusCode(),
+                ])->toResponse($request)->setStatusCode($e->getStatusCode());
+            }
+            
+            // For testing/local we might want to see them too if we force it
+            if (in_array($e->getStatusCode(), [403, 404])) {
+                 return \Inertia\Inertia::render('Errors/' . ($e->getStatusCode() === 403 ? 'Forbidden' : 'NotFound'), [
+                    'status' => $e->getStatusCode(),
+                ])->toResponse($request)->setStatusCode($e->getStatusCode());
+            }
+
+            return null;
+        });
     })->create();
