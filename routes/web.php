@@ -27,12 +27,25 @@ Route::middleware('auth')->group(function () {
         Route::resource('courses', CourseController::class)
             ->middleware('role:teacher');
 
+        // Course question management routes
         Route::get('/course/question/create/{courseId}', [CourseQuestionController::class, 'create'])
             ->name('course.question.create')
             ->middleware('role:teacher');
 
         Route::post('/course/question/store/{courseId}', [CourseQuestionController::class, 'store'])
             ->name('course.question.store')
+            ->middleware('role:teacher');
+
+        Route::get('/course/question/edit/{courseId}/{questionId}', [CourseQuestionController::class, 'edit'])
+            ->name('course.question.edit')
+            ->middleware('role:teacher');
+        
+        Route::put('/course/question/update/{courseId}/{questionId}', [CourseQuestionController::class, 'update'])
+            ->name('course.question.update')
+            ->middleware('role:teacher');
+
+        Route::delete('/course/question/delete/{courseId}/{questionId}', [CourseQuestionController::class, 'destroy'])
+            ->name('course.question.delete')
             ->middleware('role:teacher');
 
         Route::resource('course_questions', CourseQuestionController::class)

@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{{  asset('assets/css/output.css')  }}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="font-poppins text-[#0A090B]">
+    <section id="content" class="flex">
+        <div id="sidebar" class="w-[270px] flex flex-col shrink-0 min-h-screen justify-between p-[30px] border-r border-[#EEEEEE] bg-[#FBFBFB]">
+            <div class="w-full flex flex-col gap-[30px]">
+                <a href="index.html" class="flex items-center justify-center">
+                    <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="logo">
+                </a>
+                <ul class="flex flex-col gap-3">
+                    <li>
+                        <h3 class="font-bold text-xs text-[#A5ABB2]">DAILY USE</h3>
+                    </li>
+                    <li>
+                        <a href="" class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
+                            <div>
+                                <img src="{{ asset('assets/images/icons/home-hashtag.svg') }}" alt="icon">
+                            </div>
+                            <p class="font-semibold transition-all duration-300 hover:text-white">Overview</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 bg-[#2B82FE] transition-all duration-300 hover:bg-[#2B82FE]">
+                            <div>
+                                <img src="{{ asset('assets/images/icons/note-favorite.svg') }}" alt="icon">
+                            </div>
+                            <p class="font-semibold text-white transition-all duration-300 hover:text-white">Courses</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all duration-300 hover:bg-[#2B82FE]">
+                            <div>
+                                <img src="{{ asset('assets/images/icons/profile-2user.svg') }}" alt="icon">
+                            </div>
+                            <p class="font-semibold transition-all duration-300 hover:text-white">Students</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="menu-content" class="flex flex-col w-full pb-[30px]">
+            <div class="nav flex justify-between p-5 border-b border-[#EEEEEE]">
+                <form class="search flex items-center w-[400px] h-[52px] p-[10px_16px] rounded-full border border-[#EEEEEE]">
+                    <input type="text" class="font-semibold placeholder:text-[#7F8190] placeholder:font-normal w-full outline-none" placeholder="Search by report, student, etc" name="search">
+                    <button type="submit" class="ml-[10px] w-8 h-8 flex items-center justify-center">
+                        <img src="{{ asset('assets/images/icons/search.svg') }}" alt="icon">
+                    </button>
+                </form>
+                <div class="flex items-center gap-[30px]">
+                    <div class="flex gap-3 items-center">
+                        <div class="flex flex-col text-right">
+                            <p class="text-sm text-[#7F8190]">Howdy</p>
+                            <p class="font-semibold">{{ Auth::user()->name }}</p>
+                        </div>
+                        <div class="w-[46px] h-[46px]">
+                            <img src="{{ asset('assets/images/photos/default-photo.svg') }}" alt="photo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-10 px-5 mt-5">
+                <div class="breadcrumb flex items-center gap-[30px]">
+                    <a href="#" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold">Home</a>
+                    <span class="text-[#7F8190] last:text-[#0A090B]">/</span>
+                    <a href="{{ route('dashboard.courses.show', $course->id) }}" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold">Course Details</a>
+                    <span class="text-[#7F8190] last:text-[#0A090B]">/</span>
+                    <a href="#" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold">Edit Question</a>
+                </div>
+            </div>
+            <div class="header ml-[70px] pr-[70px] w-[940px] flex items-center justify-between mt-10">
+                <div class="flex gap-6 items-center">
+                    <div class="w-[150px] h-[150px] flex shrink-0 relative overflow-hidden">
+                        <img src="{{ Storage::url($course->cover) }}" class="w-full h-full object-contain" alt="icon">
+                    </div>
+                    <div class="flex flex-col gap-5">
+                        <h1 class="font-extrabold text-[30px] leading-[45px]">
+                            {{ $course->name }}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            @if($errors->any())
+                <div class="mx-[70px] mt-5">
+                    @foreach($errors->all() as $error)
+                        <p class="px-5 py-3 text-white bg-red-500 rounded-3xl">{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('dashboard.course.question.update', [$course->id, $courseQuestion->id]) }}" id="add-question" class="mx-[70px] mt-[30px] flex flex-col gap-5">
+                @csrf
+                @method('PUT')
+                <h2 class="font-bold text-2xl">Edit Question</h2>
+                <div class="flex flex-col gap-[10px]">
+                    <p class="font-semibold">Question</p>
+                    <div class="flex items-center w-[500px] h-[52px] p-[14px_16px] rounded-full border border-[#EEEEEE] focus-within:border-2 focus-within:border-[#0A090B]">
+                        <div class="mr-[14px] w-6 h-6 flex items-center justify-center overflow-hidden">
+                            <img src="{{ asset('assets/images/icons/note-text.svg') }}" class="h-full w-full object-contain" alt="icon">
+                        </div>
+                        <input type="text" class="font-semibold placeholder:text-[#7F8190] placeholder:font-normal w-full outline-none" placeholder="Write the question" name="question" value="{{ $courseQuestion->question }}">
+                    </div>
+                </div>
+                <div class="flex flex-col gap-[10px]">
+                    <p class="font-semibold">Answers</p>
+
+                    @foreach($courseQuestion->answers as $index => $answer)
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center w-[500px] h-[52px] p-[14px_16px] rounded-full border border-[#EEEEEE] focus-within:border-2 focus-within:border-[#0A090B]">
+                            <div class="mr-[14px] w-6 h-6 flex items-center justify-center overflow-hidden">
+                                <img src="{{ asset('assets/images/icons/edit.svg') }}" class="h-full w-full object-contain" alt="icon">
+                            </div>
+                            <input type="text" class="font-semibold placeholder:text-[#7F8190] placeholder:font-normal w-full outline-none" placeholder="Write better answer option" name="answers[]" value="{{ $answer->answer }}">
+                        </div>
+                        <label class="font-semibold flex items-center gap-[10px]"
+                            ><input
+                            type="radio"
+                            value="{{$index}}"
+                            name="correct_answer"
+                            {{ $answer->is_correct ? 'checked' : '' }}
+                            class="w-[24px] h-[24px] appearance-none checked:border-[3px] checked:border-solid checked:border-white rounded-full checked:bg-[#2B82FE] ring ring-[#EEEEEE]"
+                            />
+                            Correct
+                        </label>
+                    </div>
+                    @endforeach
+
+                </div>
+                <button type="submit" class="w-[500px] h-[52px] p-[14px_20px] bg-[#6436F1] rounded-full font-bold text-white transition-all duration-300 hover:shadow-[0_4px_15px_0_#6436F14D] text-center">Update Question</button>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
