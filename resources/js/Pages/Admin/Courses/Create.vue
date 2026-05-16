@@ -2,6 +2,10 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 defineProps({
     categories: {
@@ -14,10 +18,10 @@ const form = useForm({
     name: '',
     category_id: '',
     cover: null,
-    // Add other fields if necessary based on your model/schema
-    course_type: 'Onboarding', // default
-    publish_date: 'Active Now', // default
-    access: 'Invitation Only', // default
+    // Keep hidden defaults for backend compatibility if needed
+    course_type: 'Onboarding',
+    publish_date: 'Active Now',
+    access: 'Invitation Only',
     tnc: true,
 });
 
@@ -42,94 +46,128 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="New Course" />
+    <Head title="Create New Course" />
 
     <AdminLayout>
-        <div class="flex flex-col gap-10 px-5 mt-5">
-            <div class="breadcrumb flex items-center gap-[30px]">
-                <Link :href="route('dashboard')" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold text-sm">Home</Link>
-                <span class="text-[#7F8190] last:text-[#0A090B]">/</span>
-                <Link :href="route('dashboard.courses.index')" class="text-[#7F8190] last:text-[#0A090B] last:font-semibold text-sm">Manage
-                    Courses</Link>
-                <span class="text-[#7F8190] last:text-[#0A090B]">/</span>
-                <p class="text-[#7F8190] last:text-[#0A090B] last:font-semibold text-sm">New Course</p>
+        <div class="max-w-4xl mx-auto">
+            <!-- Breadcrumbs -->
+            <nav class="flex mb-8 text-sm font-medium text-gray-500 animate-fade-in">
+                <Link :href="route('dashboard.overview')" class="hover:text-[#D95300] transition-colors">Dashboard</Link>
+                <span class="mx-3 text-gray-300">/</span>
+                <Link :href="route('dashboard.courses.index')" class="hover:text-[#D95300] transition-colors">Courses</Link>
+                <span class="mx-3 text-gray-300">/</span>
+                <span class="text-gray-900 font-bold">New Course</span>
+            </nav>
+
+            <div class="flex flex-col lg:flex-row gap-12 items-start animate-slide-up">
+                <!-- Left: Header Info -->
+                <div class="lg:w-1/3">
+                    <h1 class="text-4xl font-extrabold text-[#0A090B] tracking-tight leading-tight mb-4">
+                        Create <span class="text-[#D95300]">New Course</span>
+                    </h1>
+                    <p class="text-gray-500 text-lg leading-relaxed">
+                        Design a high-quality learning experience for your students. Fill in the details to get started.
+                    </p>
+                    
+                    <!-- Form Status/Errors -->
+                    <div v-if="Object.keys(form.errors).length > 0" class="mt-8 p-5 bg-red-50 border border-red-100 rounded-[24px]">
+                        <div class="flex items-center gap-3 text-red-600 font-bold mb-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <span>Whoops!</span>
+                        </div>
+                        <ul class="text-sm text-red-500 space-y-1 ml-8 list-disc font-medium">
+                            <li v-for="error in form.errors" :key="error">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right: Form Card -->
+                <div class="flex-1 w-full bg-white p-10 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+                    <form @submit.prevent="submit" class="space-y-8">
+                        <!-- Cover Upload -->
+                        <div class="flex flex-col items-center justify-center p-8 bg-gray-50/50 border-2 border-dashed border-gray-200 rounded-[24px] group hover:border-[#D95300] transition-colors duration-300 relative overflow-hidden">
+                            <input type="file" ref="fileInput" @change="onFileChange" class="hidden" accept="image/*">
+                            
+                            <div v-if="previewUrl" class="absolute inset-0 z-0">
+                                <img :src="previewUrl" class="w-full h-full object-cover opacity-20" alt="Preview Background">
+                            </div>
+
+                            <div class="relative z-10 flex flex-col items-center text-center">
+                                <div class="w-24 h-24 mb-4 rounded-3xl bg-white shadow-sm flex items-center justify-center border border-gray-100 group-hover:scale-110 transition-transform duration-500 overflow-hidden">
+                                    <img v-if="previewUrl" :src="previewUrl" class="w-full h-full object-cover" />
+                                    <svg v-else class="w-10 h-10 text-gray-300 group-hover:text-[#D95300] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <p class="font-bold text-[#0A090B] mb-1">Course Thumbnail</p>
+                                <p class="text-sm text-gray-400 mb-4">PNG, JPG up to 2MB</p>
+                                <button type="button" @click="fileInput.click()" 
+                                    class="px-6 py-2.5 bg-[#0A090B] text-white text-xs font-bold rounded-full hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-gray-200">
+                                    {{ previewUrl ? 'Change Image' : 'Select Image' }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="space-y-2">
+                            <InputLabel for="name" value="Course Name" />
+                            <TextInput
+                                id="name"
+                                type="text"
+                                v-model="form.name"
+                                placeholder="Enter a compelling course name..."
+                                required
+                                autofocus
+                            />
+                            <InputError :message="form.errors.name" />
+                        </div>
+
+                        <!-- Category -->
+                        <div class="space-y-2 font-poppins">
+                            <InputLabel for="category" value="Category" />
+                            <div class="relative">
+                                <select 
+                                    v-model="form.category_id" 
+                                    id="category"
+                                    class="w-full px-5 py-3.5 bg-gray-50/50 border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-[#D95300] rounded-xl transition-all duration-200 appearance-none font-medium text-gray-700"
+                                    required
+                                >
+                                    <option value="" disabled hidden>Select a category</option>
+                                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <InputError :message="form.errors.category_id" />
+                        </div>
+
+                        <div class="pt-6 flex items-center gap-4">
+                            <Link :href="route('dashboard.courses.index')" 
+                                class="flex-1 text-center py-4 bg-gray-100 hover:bg-gray-200 text-[#0A090B] font-bold rounded-2xl transition-all active:scale-95">
+                                Cancel
+                            </Link>
+                            <PrimaryButton class="flex-[2] py-4" :disabled="form.processing">
+                                <span v-if="form.processing">Creating...</span>
+                                <span v-else>Create Course</span>
+                            </PrimaryButton>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="header flex flex-col gap-1 px-5 mt-5">
-            <h1 class="font-extrabold text-[30px] leading-[45px]">New Course</h1>
-            <p class="text-[#7F8190]">Provide high quality for best students</p>
-        </div>
-
-        <div v-if="Object.keys(form.errors).length > 0" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-[70px] mt-5"
-            role="alert">
-            <strong class="font-bold">Whoops!</strong>
-            <ul class="mt-2">
-                <li v-for="error in form.errors" :key="error">{{ error }}</li>
-            </ul>
-        </div>
-
-        <form @submit.prevent="submit" class="flex flex-col gap-[30px] w-[500px] mx-[70px] mt-10">
-            <div class="flex gap-5 items-center">
-                <input type="file" ref="fileInput" @change="onFileChange" class="hidden" accept="image/*">
-                <div
-                    class="relative w-[100px] h-[100px] rounded-full overflow-hidden border-[3px] border-dashed border-[#EEEEEE]"
-                    :class="{'border-none': previewUrl}"
-                >
-                    <div v-if="previewUrl" class="relative z-10 w-full h-full">
-                        <img :src="previewUrl" class="w-full h-full object-cover" alt="thumbnail">
-                    </div>
-                    <span v-else
-                        class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 text-center font-semibold text-sm text-[#7F8190]">Icon
-                        <br>Course</span>
-                </div>
-                <button type="button"
-                    class="flex shrink-0 p-[8px_20px] h-fit items-center rounded-full bg-[#0A090B] font-semibold text-white"
-                    @click="fileInput.click()">
-                    Add Icon
-                </button>
-            </div>
-
-            <div class="flex flex-col gap-[10px]">
-                <p class="font-semibold">Course Name</p>
-                <div
-                    class="flex items-center w-[500px] h-[52px] p-[14px_16px] rounded-full border border-[#EEEEEE] transition-all duration-300 focus-within:border-2 focus-within:border-[#0A090B]">
-                    <div class="mr-[14px] w-6 h-6 flex items-center justify-center overflow-hidden">
-                        <img src="/assets/images/icons/note-favorite-outline.svg"
-                            class="w-full h-full object-contain" alt="icon">
-                    </div>
-                    <input v-model="form.name" type="text"
-                        class="font-semibold placeholder:text-[#7F8190] placeholder:font-normal w-full outline-none"
-                        placeholder="Write your better course name" required>
-                </div>
-            </div>
-
-            <div class="group/category flex flex-col gap-[10px]">
-                <p class="font-semibold">Category</p>
-                <div
-                    class="peer flex items-center p-[12px_16px] rounded-full border border-[#EEEEEE] transition-all duration-300 focus-within:border-2 focus-within:border-[#0A090B]">
-                    <div class="mr-[10px] w-6 h-6 flex items-center justify-center overflow-hidden">
-                        <img src="/assets/images/icons/bill.svg"
-                            class="w-full h-full object-contain" alt="icon">
-                    </div>
-                    <select v-model="form.category_id" id="category"
-                        class="pl-1 font-semibold focus:outline-none w-full text-[#0A090B] appearance-none bg-[url('/assets/images/icons/arrow-down.svg')] bg-no-repeat bg-right pr-4"
-                        required>
-                        <option value="" disabled hidden>Choose one of category</option>
-                        <option v-for="category in categories" :key="category.id" :value="category.id" class="font-semibold">
-                            {{ category.name }}
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-5 mt-4">
-                <button type="button"
-                    class="w-full h-[52px] p-[14px_20px] bg-[#0A090B] rounded-full font-semibold text-white transition-all duration-300 text-center">Add
-                    to Draft</button>
-                <button type="submit" :disabled="form.processing"
-                    class="w-full h-[52px] p-[14px_20px] bg-[#6436F1] rounded-full font-bold text-white transition-all duration-300 hover:shadow-[0_4px_15px_0_#6436F14D] text-center disabled:opacity-50">Save
-                    Course</button>
-            </div>
-        </form>
     </AdminLayout>
 </template>
+
+<style>
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+.animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+</style>
