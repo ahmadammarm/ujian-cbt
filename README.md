@@ -1,66 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Ujian CBT - Computer Based Test Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Ujian CBT is a simple modern mock Computer Based Test (CBT) platform. Developed with **Laravel 11**, **Inertia.js**, and **Vue 3**, it delivers a seamless, SPA-like examination experience while maintaining strict server-side security standards and resource isolation.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Core Capabilities
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Teacher (Admin) Experience
+- **Granular Course Control:** Complete lifecycle management of courses including metadata, categorization, and visual branding.
+- **Advanced Question Bank:** Orchestrate complex multiple-choice assessments with up to 50 questions per course.
+- **Resource Ownership:** Private environment architecture where teachers only access and manage their own curated content.
+- **Engagement Analytics:** Real-time monitoring of student enrollment and platform-wide performance metrics.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Student Experience
+- **Progress Tracking:** Unified dashboard showing enrollment status, average scores, and recent assessment history.
+- **Immersive Testing:** Real-time, interactive examination interface featuring automated countdown timers and instant answer persistence.
+- **Performance Rapport:** Instant generation of detailed results and scoring reports upon test completion.
+- **Integrity Focused:** Client-side data obfuscation prevents access to correct answer keys during active sessions.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Security & Architecture
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+The application is hardened following senior-level security standards to ensure data integrity and platform stability:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Global Throttling:** Multi-layered rate limiting (60 req/min global, 10 req/min for high-stakes actions) to mitigate DoS and brute-force attempts.
+- **Browser-Level Hardening:** Custom security middleware enforcing strict **Content Security Policy (CSP)**, X-Frame-Options (Clickjacking protection), and XSS blocking.
+- **Multi-Tenant Isolation:** Resource-level authorization ensuring strict data privacy between independent teachers.
+- **Universal Mass-Assignment Protection:** Strict `$fillable` allow-lists enforced across 100% of the Eloquent model layer.
+- **Service Layer Architecture:** Business logic is encapsulated in `app/Services`, ensuring thin controllers and highly testable code.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Technical Stack
 
-### Premium Partners
+| Layer | Technology |
+| :--- | :--- |
+| **Backend** | PHP 8.2+ / Laravel 11 |
+| **Frontend** | Vue 3 / Inertia.js / Tailwind CSS |
+| **Package Manager** | **PNPM** |
+| **Build Tool** | Vite |
+| **Database** | MySQL / SQLite |
+| **Authorization** | Spatie Laravel Permission |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## Installation & Setup
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Prerequisites
+- PHP 8.2 or higher
+- **PNPM** (`npm install -g pnpm`)
+- Composer
+- Database (MySQL/SQLite)
 
-## Code of Conduct
+### 1. Dependency Management
+```bash
+composer install
+pnpm install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Environment Configuration
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+*Configure your database and app URL settings within the `.env` file.*
 
-## Security Vulnerabilities
+### 3. Database Initialization
+```bash
+php artisan migrate --seed
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Asset Orchestration
+```bash
+pnpm dev   # Start Vite development server
+# OR
+pnpm build # Compile for production
+```
 
-## License
+### 5. Launch
+```bash
+php artisan serve
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Development Reference
+
+### Directory Structure
+- `app/Http/Controllers`: Inertia-ready request handlers.
+- `app/Services`: Core domain logic (Throttling, Grading, Resource Management).
+- `app/Models`: Hardened data structures.
+- `resources/js/Pages`: Role-specific Vue 3 components (`Admin/` vs `Student/`).
+- `routes/web.php`: Polished, group-based routing with integrated rate limiting.
+
+### Key Commands
+| Task | Command |
+| :--- | :--- |
+| **Clear Caches** | `php artisan optimize:clear` |
+| **Run Tests** | `php artisan test` |
+| **Fix Styling** | `vendor/bin/pint` |
+| **Re-Seed DB** | `php artisan migrate:fresh --seed` |
