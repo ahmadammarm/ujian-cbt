@@ -72,7 +72,9 @@ class CourseQuestionController extends Controller
     public function edit($courseId, $questionId): Response
     {
         $course = Course::findOrFail($courseId);
-        $courseQuestion = CourseQuestion::with('answers')->findOrFail($questionId);
+        $courseQuestion = CourseQuestion::with('answers')
+            ->where('course_id', $courseId)
+            ->findOrFail($questionId);
 
         if ($course->teacher_id !== Auth::id()) {
             abort(403);
@@ -90,7 +92,8 @@ class CourseQuestionController extends Controller
     public function update(UpdateCourseQuestionRequest $request, $courseId, $questionId): RedirectResponse
     {
         $course = Course::findOrFail($courseId);
-        $courseQuestion = CourseQuestion::findOrFail($questionId);
+        $courseQuestion = CourseQuestion::where('course_id', $courseId)
+            ->findOrFail($questionId);
 
         if ($course->teacher_id !== Auth::id()) {
             abort(403);
@@ -107,7 +110,8 @@ class CourseQuestionController extends Controller
     public function destroy($courseId, $questionId): RedirectResponse
     {
         $course = Course::findOrFail($courseId);
-        $courseQuestion = CourseQuestion::findOrFail($questionId);
+        $courseQuestion = CourseQuestion::where('course_id', $courseId)
+            ->findOrFail($questionId);
 
         if ($course->teacher_id !== Auth::id()) {
             abort(403);
