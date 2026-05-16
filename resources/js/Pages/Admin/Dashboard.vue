@@ -1,5 +1,6 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Breadcrumbs from '@/Components/Breadcrumbs.vue';
 import { Head } from '@inertiajs/vue3';
 </script>
 
@@ -7,7 +8,12 @@ import { Head } from '@inertiajs/vue3';
     <Head title="Admin Overview" />
 
     <AdminLayout>
-        <div class="flex flex-col px-5 mt-5">
+        <Breadcrumbs :items="[
+            { label: 'Dashboard', href: route('dashboard.overview') },
+            { label: 'Overview' }
+        ]" />
+        
+        <div class="flex flex-col">
             <div class="w-full flex justify-between items-center">
                 <div class="flex flex-col gap-1">
                     <p class="font-extrabold text-[30px] leading-[45px]">Admin Overview</p>
