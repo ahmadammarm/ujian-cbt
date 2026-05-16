@@ -15,6 +15,21 @@ class LearningController extends Controller
         protected AssessmentService $assessmentService
     ) {}
 
+    public function dashboard()
+    {
+        $user = Auth::user();
+        $courses = $user->courses()->with('category')->withCount('questions')->get();
+        $assessments = StudentAssessment::where('user_id', $user->id)
+            ->with('course')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('Student/Dashboard', [
+            'courses' => $courses,
+            'assessments' => $assessments,
+        ]);
+    }
+
     public function index()
     {
         $user = Auth::user();

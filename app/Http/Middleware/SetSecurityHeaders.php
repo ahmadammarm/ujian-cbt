@@ -21,7 +21,17 @@ class SetSecurityHeaders
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'no-referrer-when-downgrade');
-        $response->headers->set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self';");
+        
+        // Permissive CSP for development and production asset loading
+        $csp = "default-src 'self' *; "
+             . "script-src 'self' 'unsafe-inline' 'unsafe-eval' http: https:; "
+             . "style-src 'self' 'unsafe-inline' http: https:; "
+             . "style-src-elem 'self' 'unsafe-inline' http: https:; "
+             . "img-src 'self' data: blob: http: https:; "
+             . "font-src 'self' data: http: https:; "
+             . "connect-src 'self' ws: wss: http: https:;";
+             
+        $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;
     }

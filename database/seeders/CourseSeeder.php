@@ -30,14 +30,16 @@ class CourseSeeder extends Seeder
             $student->assignRole('student');
         }
 
-        // 2. Get a category
+        // 2. Get a category and teacher
         $category = Category::where('slug', 'programming')->first() ?? Category::first();
+        $teacher = User::where('email', 'jackson@teacher.com')->first();
 
         // 3. Create a comprehensive CBT Course
         $course = Course::create([
             'name' => 'Laravel Advanced Mastery',
             'slug' => 'laravel-advanced-mastery',
             'category_id' => $category->id,
+            'teacher_id' => $teacher ? $teacher->id : null,
             'cover' => 'course_covers/default_laravel.png',
         ]);
 

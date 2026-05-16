@@ -24,10 +24,6 @@ class RoleRedirect
                 if ($user->hasRole('teacher')) {
                     return redirect()->route('dashboard.overview');
                 }
-                
-                if ($user->hasRole('student')) {
-                    return redirect()->route('dashboard.learning.index');
-                }
             }
         }
 
