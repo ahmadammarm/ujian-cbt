@@ -17,8 +17,8 @@ class LearningController extends Controller
 
     public function index()
     {
-        $courses = Course::with('category')->withCount('questions')->get();
         $user = Auth::user();
+        $courses = $user->courses()->with('category')->withCount('questions')->get();
         
         // Enrich courses with latest attempt info
         $courses->each(function($course) use ($user) {
@@ -35,9 +35,13 @@ class LearningController extends Controller
 
     public function start($courseId)
     {
-        $course = Course::findOrFail($courseId);
         $user = Auth::user();
 
+        if (!$user->courses()->where('course_id', $courseId)->exists()) {
+            abort(403, 'You are not enrolled in this course.');
+        }
+
+        $course = Course::findOrFail($courseId);
         $assessment = $this->assessmentService->startAttempt($course, $user);
 
         return redirect()->route('dashboard.learning.course', [
@@ -48,10 +52,18 @@ class LearningController extends Controller
 
     public function learning($courseId, $assessmentId)
     {
-        $course = Course::with('questions.answers')->findOrFail($courseId);
+        $user = Auth::user();
+
+        if (!$user->courses()->where('course_id', $courseId)->exists()) {
+            abort(403, 'You are not enrolled in this course.');
+        }
+
+        $course = Course::with(['questions.answers' => function($query) {
+            $query->select('id', 'course_question_id', 'answer'); // Exclude is_correct
+        }])->findOrFail($courseId);
         $assessment = StudentAssessment::findOrFail($assessmentId);
 
-        if ($assessment->user_id !== Auth::id()) {
+        if ($assessment->user_id !== $user->id) {
             abort(403);
         }
 

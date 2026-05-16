@@ -16,8 +16,9 @@ class Category extends Model
     // misalnya: Category::create(['name' => 'Programming', 'slug' => 'programming']);
 
     // untuk itu dengan menggunakan protected $guarded kita bisa membiarkan laravel yang mengisi field id, created_at, updated_at, dan deleted_at
-    protected $guarded = [
-        'id'
+    protected $fillable = [
+        'name',
+        'slug',
     ];
 
 

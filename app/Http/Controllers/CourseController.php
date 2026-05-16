@@ -10,6 +10,7 @@ use App\Services\CourseService;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -22,7 +23,7 @@ class CourseController extends Controller
      */
     public function index(): Response
     {
-        $courses = Course::with('category')->orderBy('created_at', 'desc')->get();
+        $courses = Auth::user()->teacherCourses()->with('category')->orderBy('created_at', 'desc')->get();
         return Inertia::render('Admin/Courses/Index', [
             'courses' => $courses
         ]);
@@ -44,7 +45,7 @@ class CourseController extends Controller
      */
     public function store(StoreCourseRequest $request): RedirectResponse
     {
-        $this->courseService->createCourse($request->validated(), $request->file('cover'));
+        $this->courseService->createCourse($request->validated(), $request->file('cover'), Auth::user());
 
         return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully.');
     }
@@ -54,8 +55,12 @@ class CourseController extends Controller
      */
     public function show(Course $course): Response
     {
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
         $course->load('category');
-        $students = $course->students()->orderBy('id', 'desc')->get();
+        $students = $course->students()->select('users.id', 'users.name', 'users.email')->orderBy('id', 'desc')->get();
         $questions = $course->questions()->orderBy('id', 'desc')->get();
 
         return Inertia::render('Admin/Courses/Manage', [
@@ -70,6 +75,10 @@ class CourseController extends Controller
      */
     public function edit(Course $course): Response
     {
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
         $categories = Category::all();
         return Inertia::render('Admin/Courses/Edit', [
             'course' => $course,
@@ -82,6 +91,10 @@ class CourseController extends Controller
      */
     public function update(UpdateCourseRequest $request, Course $course): RedirectResponse
     {
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
         $this->courseService->updateCourse($course, $request->validated(), $request->file('cover'));
 
         return redirect()->route('dashboard.courses.index')->with('success', 'Course updated successfully.');
@@ -92,6 +105,10 @@ class CourseController extends Controller
      */
     public function destroy(Course $course): RedirectResponse
     {
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
         $this->courseService->deleteCourse($course);
         return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully.');
     }

@@ -76,17 +76,18 @@ Route::middleware('auth')->group(function () {
             Route::delete('/course/question/delete/{courseId}/{questionId}', [CourseQuestionController::class, 'destroy'])
                 ->name('course.question.delete');
 
-            Route::resource('course_questions', CourseQuestionController::class)
-                ->name('learning.index', 'learning');
+            // Pruning empty or redundant routes
+            // Route::resource('course_questions', CourseQuestionController::class)
+            //    ->name('learning.index', 'learning');
 
-            Route::get('/course/students/show/{courseId}', [CourseStudentController::class, 'index'])
-                ->name('course.students.show');
+            // Route::get('/course/students/show/{courseId}', [CourseStudentController::class, 'index'])
+            //    ->name('course.students.show');
 
-            Route::get('/course/students/create/{courseId}', [CourseStudentController::class, 'create'])
-                ->name('course.students.create');
+            // Route::get('/course/students/create/{courseId}', [CourseStudentController::class, 'create'])
+            //    ->name('course.students.create');
 
-            Route::post('/course/students/store/{courseId}', [CourseStudentController::class, 'store'])
-                ->name('course.students.store');
+            // Route::post('/course/students/store/{courseId}', [CourseStudentController::class, 'store'])
+            //    ->name('course.students.store');
         });
 
 
@@ -105,11 +106,11 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/learning/answer/{assessmentId}/{questionId}', [StudentAnswerController::class, 'store'])
             ->name('learning.answer')
-            ->middleware('role:student');
+            ->middleware(['role:student', 'throttle:60,1']);
 
         Route::post('/learning/finish/{assessmentId}', [LearningController::class, 'finish'])
             ->name('learning.finish')
-            ->middleware('role:student');
+            ->middleware(['role:student', 'throttle:10,1']);
 
         Route::get('/learning/result/{assessmentId}', [LearningController::class, 'learning_rapport'])
             ->name('learning.report')

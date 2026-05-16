@@ -10,6 +10,7 @@ use App\Services\CourseQuestionService;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class CourseQuestionController extends Controller
 {
@@ -31,6 +32,10 @@ class CourseQuestionController extends Controller
     public function create($courseId): Response
     {
         $course = Course::findOrFail($courseId);
+
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
         
         return Inertia::render('Admin/Questions/Create', [
             'course' => $course,
@@ -43,6 +48,11 @@ class CourseQuestionController extends Controller
     public function store(StoreCourseQuestionRequest $request, $courseId): RedirectResponse
     {
         $course = Course::findOrFail($courseId);
+
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
         $this->courseQuestionService->createQuestionForCourse($course, $request->validated());
 
         return redirect()->route('dashboard.courses.show', $courseId);
@@ -64,6 +74,10 @@ class CourseQuestionController extends Controller
         $course = Course::findOrFail($courseId);
         $courseQuestion = CourseQuestion::with('answers')->findOrFail($questionId);
 
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
         return Inertia::render('Admin/Questions/Edit', [
             'course' => $course,
             'courseQuestion' => $courseQuestion
@@ -75,7 +89,13 @@ class CourseQuestionController extends Controller
      */
     public function update(UpdateCourseQuestionRequest $request, $courseId, $questionId): RedirectResponse
     {
+        $course = Course::findOrFail($courseId);
         $courseQuestion = CourseQuestion::findOrFail($questionId);
+
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
         $this->courseQuestionService->updateQuestion($courseQuestion, $request->validated());
 
         return redirect()->route('dashboard.courses.show', $courseId);
@@ -86,7 +106,13 @@ class CourseQuestionController extends Controller
      */
     public function destroy($courseId, $questionId): RedirectResponse
     {
+        $course = Course::findOrFail($courseId);
         $courseQuestion = CourseQuestion::findOrFail($questionId);
+
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
         $courseQuestion->delete();
         
         return redirect()->route('dashboard.courses.show', $courseId);

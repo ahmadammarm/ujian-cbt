@@ -14,6 +14,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \App\Http\Middleware\RoleRedirect::class,
+            \App\Http\Middleware\SetSecurityHeaders::class,
+        ]);
+
+        $middleware->api(prepend: [
+            'throttle:api',
+        ]);
+        
+        $middleware->web(prepend: [
+            'throttle:60,1',
         ]);
 
         $middleware->alias([

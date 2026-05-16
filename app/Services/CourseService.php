@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Course;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -12,14 +13,15 @@ class CourseService
     /**
      * Create a new course.
      */
-    public function createCourse(array $data, ?UploadedFile $cover): Course
+    public function createCourse(array $data, ?UploadedFile $cover, User $teacher): Course
     {
-        return DB::transaction(function () use ($data, $cover) {
+        return DB::transaction(function () use ($data, $cover, $teacher) {
             if ($cover) {
                 $data['cover'] = $cover->store('course_covers', 'public');
             }
 
             $data['slug'] = Str::slug($data['name']);
+            $data['teacher_id'] = $teacher->id;
             
             return Course::create($data);
         });

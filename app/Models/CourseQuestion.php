@@ -10,8 +10,9 @@ class CourseQuestion extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [
-        'id'
+    protected $fillable = [
+        'question',
+        'course_id',
     ];
 
     public function course()
