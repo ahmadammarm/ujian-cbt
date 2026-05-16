@@ -11,8 +11,11 @@ class Course extends Model
 
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [
-        'id'
+    protected $fillable = [
+        'name',
+        'slug',
+        'category_id',
+        'cover',
     ];
 
     public function assessments()

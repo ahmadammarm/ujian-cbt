@@ -25,6 +25,23 @@ class AssessmentService
     }
 
     /**
+     * Save a single answer for an assessment.
+     */
+    public function saveAnswer(StudentAssessment $assessment, CourseQuestion $question, string $answerText): StudentAnswer
+    {
+        return StudentAnswer::updateOrCreate(
+            [
+                'student_assessment_id' => $assessment->id,
+                'course_question_id' => $question->id,
+            ],
+            [
+                'user_id' => $assessment->user_id,
+                'answer' => $answerText,
+            ]
+        );
+    }
+
+    /**
      * Calculate score and finalize the assessment with a batch of answers.
      */
     public function finishAttempt(StudentAssessment $assessment, array $answersData): StudentAssessment

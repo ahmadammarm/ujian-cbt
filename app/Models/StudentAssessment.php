@@ -10,7 +10,13 @@ class StudentAssessment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'user_id',
+        'course_id',
+        'score',
+        'started_at',
+        'finished_at',
+    ];
 
     public function user()
     {
