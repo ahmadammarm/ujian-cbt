@@ -28,46 +28,66 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
-        // Teacher role routes
-        Route::resource('courses', CourseController::class)
-            ->middleware('role:teacher');
+        Route::middleware('role:teacher')->group(function () {
+            Route::get('/overview', function () {
+                return Inertia::render('Admin/Dashboard');
+            })->name('overview');
 
-        // Course question management routes
-        Route::get('/course/question/create/{courseId}', [CourseQuestionController::class, 'create'])
-            ->name('course.question.create')
-            ->middleware('role:teacher');
+            Route::get('/students-list', function () {
+                return Inertia::render('Admin/Students');
+            })->name('students.index');
 
-        Route::post('/course/question/store/{courseId}', [CourseQuestionController::class, 'store'])
-            ->name('course.question.store')
-            ->middleware('role:teacher');
+            Route::get('/messages', function () {
+                return Inertia::render('Admin/Messages');
+            })->name('messages');
 
-        Route::get('/course/question/edit/{courseId}/{questionId}', [CourseQuestionController::class, 'edit'])
-            ->name('course.question.edit')
-            ->middleware('role:teacher');
-        
-        Route::put('/course/question/update/{courseId}/{questionId}', [CourseQuestionController::class, 'update'])
-            ->name('course.question.update')
-            ->middleware('role:teacher');
+            Route::get('/analytics', function () {
+                return Inertia::render('Admin/Analytics');
+            })->name('analytics');
 
-        Route::delete('/course/question/delete/{courseId}/{questionId}', [CourseQuestionController::class, 'destroy'])
-            ->name('course.question.delete')
-            ->middleware('role:teacher');
+            Route::get('/rewards', function () {
+                return Inertia::render('Admin/Rewards');
+            })->name('rewards');
 
-        Route::resource('course_questions', CourseQuestionController::class)
-            ->middleware('role:teacher')
-            ->name('learning.index', 'learning');
+            Route::get('/plugins', function () {
+                return Inertia::render('Admin/Plugins');
+            })->name('plugins');
 
-        Route::get('/course/students/show/{courseId}', [CourseStudentController::class, 'index'])
-            ->name('course.students.show')
-            ->middleware('role:teacher');
+            Route::get('/settings', function () {
+                return Inertia::render('Admin/Settings');
+            })->name('settings');
 
-        Route::get('/course/students/create/{courseId}', [CourseStudentController::class, 'create'])
-            ->name('course.students.create')
-            ->middleware('role:teacher');
+            // Teacher role resource routes
+            Route::resource('courses', CourseController::class);
 
-        Route::post('/course/students/store/{courseId}', [CourseStudentController::class, 'store'])
-            ->name('course.students.store')
-            ->middleware('role:teacher');
+            // Course question management routes
+            Route::get('/course/question/create/{courseId}', [CourseQuestionController::class, 'create'])
+                ->name('course.question.create');
+
+            Route::post('/course/question/store/{courseId}', [CourseQuestionController::class, 'store'])
+                ->name('course.question.store');
+
+            Route::get('/course/question/edit/{courseId}/{questionId}', [CourseQuestionController::class, 'edit'])
+                ->name('course.question.edit');
+
+            Route::put('/course/question/update/{courseId}/{questionId}', [CourseQuestionController::class, 'update'])
+                ->name('course.question.update');
+
+            Route::delete('/course/question/delete/{courseId}/{questionId}', [CourseQuestionController::class, 'destroy'])
+                ->name('course.question.delete');
+
+            Route::resource('course_questions', CourseQuestionController::class)
+                ->name('learning.index', 'learning');
+
+            Route::get('/course/students/show/{courseId}', [CourseStudentController::class, 'index'])
+                ->name('course.students.show');
+
+            Route::get('/course/students/create/{courseId}', [CourseStudentController::class, 'create'])
+                ->name('course.students.create');
+
+            Route::post('/course/students/store/{courseId}', [CourseStudentController::class, 'store'])
+                ->name('course.students.store');
+        });
 
 
         // Student role routes

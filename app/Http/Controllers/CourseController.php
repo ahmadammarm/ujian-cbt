@@ -22,7 +22,7 @@ class CourseController extends Controller
      */
     public function index(): Response
     {
-        $courses = Course::orderBy('created_at', 'desc')->get();
+        $courses = Course::with('category')->orderBy('created_at', 'desc')->get();
         return Inertia::render('Admin/Courses/Index', [
             'courses' => $courses
         ]);

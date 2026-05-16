@@ -22,7 +22,11 @@ class RoleRedirect
             // If user is accessing '/' or '/dashboard', redirect them based on role
             if ($request->is('/') || $request->is('dashboard')) {
                 if ($user->hasRole('teacher')) {
-                    return redirect()->route('dashboard.courses.index');
+                    return redirect()->route('dashboard.overview');
+                }
+                
+                if ($user->hasRole('student')) {
+                    return redirect()->route('dashboard.learning.index');
                 }
             }
         }

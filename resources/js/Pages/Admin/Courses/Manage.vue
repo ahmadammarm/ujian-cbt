@@ -106,7 +106,7 @@ const formatDate = (dateString) => {
                     <div class="flex items-center gap-5">
                         <div class="flex gap-[10px] items-center">
                             <div class="w-6 h-6 flex shrink-0">
-                                <img src="/assets/images/icons/calendar-outline.svg"
+                                <img src="/assets/images/icons/calendar-add.svg"
                                     alt="icon">
                             </div>
                             <p class="font-semibold">
