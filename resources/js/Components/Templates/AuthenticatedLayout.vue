@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
+import ApplicationLogo from '@/Components/Atoms/ApplicationLogo.vue';
+import Dropdown from '@/Components/Organisms/Dropdown.vue';
+import DropdownLink from '@/Components/Molecules/DropdownLink.vue';
+import NavLink from '@/Components/Atoms/NavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
@@ -149,3 +149,4 @@ const showingNavigationDropdown = ref(false);
         </div>
     </div>
 </template>
+

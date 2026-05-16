@@ -27,3 +27,4 @@ import { Head, Link } from '@inertiajs/vue3';
     font-family: 'Poppins', sans-serif;
 }
 </style>
+

@@ -1,10 +1,10 @@
 <script setup>
-import DangerButton from '@/Components/PrimaryButton.vue'; // Using primary for now but styled as danger later or just use as is
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Modal from '@/Components/Modal.vue';
-import SecondaryButton from '@/Components/PrimaryButton.vue'; // Using primary for now
-import TextInput from '@/Components/TextInput.vue';
+import DangerButton from '@/Components/Atoms/PrimaryButton.vue'; // Using primary for now but styled as danger later or just use as is
+import InputError from '@/Components/Atoms/InputError.vue';
+import InputLabel from '@/Components/Atoms/InputLabel.vue';
+import Modal from '@/Components/Organisms/Modal.vue';
+import SecondaryButton from '@/Components/Atoms/PrimaryButton.vue'; // Using primary for now
+import TextInput from '@/Components/Atoms/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -103,3 +103,4 @@ const closeModal = () => {
         </Modal>
     </section>
 </template>
+

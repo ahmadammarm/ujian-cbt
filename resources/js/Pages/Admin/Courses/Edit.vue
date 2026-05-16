@@ -1,12 +1,12 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Breadcrumbs from '@/Components/Breadcrumbs.vue';
+import AdminLayout from '@/Components/Templates/AdminLayout.vue';
+import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputError from '@/Components/Atoms/InputError.vue';
+import InputLabel from '@/Components/Atoms/InputLabel.vue';
+import TextInput from '@/Components/Atoms/TextInput.vue';
+import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
 
 const props = defineProps({
     course: {
@@ -170,3 +170,4 @@ const submit = () => {
 .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
 .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 </style>
+

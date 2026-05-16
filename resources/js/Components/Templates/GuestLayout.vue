@@ -67,3 +67,4 @@ import { Link } from '@inertiajs/vue3';
     animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 </style>
+

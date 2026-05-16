@@ -1,8 +1,8 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Breadcrumbs from '@/Components/Breadcrumbs.vue';
+import AdminLayout from '@/Components/Templates/AdminLayout.vue';
+import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
 
 const props = defineProps({
     course: {
@@ -137,3 +137,4 @@ const submit = () => {
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .animate-slide-up { animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 </style>
+

@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'role_redirect'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -95,20 +95,24 @@ Route::middleware('auth')->group(function () {
             ->name('learning.index')
             ->middleware('role:student');
 
-        Route::get('/learning/finished/{courseId}', [LearningController::class, 'learning_finished'])
-            ->name('learning.finished')
+        Route::post('/learning/start/{courseId}', [LearningController::class, 'start'])
+            ->name('learning.start')
             ->middleware('role:student');
 
-        Route::get('/learning/rapport/{courseId}', [LearningController::class, 'learning_rapport'])
-            ->name('learning.report')
-            ->middleware('role:student');
-
-        Route::get('/learning/{courseId}/{questionId}', [LearningController::class, 'learning'])
+        Route::get('/learning/{courseId}/take/{assessmentId}', [LearningController::class, 'learning'])
             ->name('learning.course')
             ->middleware('role:student');
 
-        Route::post('/learning/answer/{courseId}/{questionId}', [StudentAnswerController::class, 'store'])
+        Route::post('/learning/answer/{assessmentId}/{questionId}', [StudentAnswerController::class, 'store'])
             ->name('learning.answer')
+            ->middleware('role:student');
+
+        Route::post('/learning/finish/{assessmentId}', [LearningController::class, 'finish'])
+            ->name('learning.finish')
+            ->middleware('role:student');
+
+        Route::get('/learning/result/{assessmentId}', [LearningController::class, 'learning_rapport'])
+            ->name('learning.report')
             ->middleware('role:student');
     });
 });

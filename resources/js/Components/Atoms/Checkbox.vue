@@ -32,3 +32,4 @@ const proxyChecked = computed({
         class="rounded border-gray-300 text-[#D95300] shadow-sm focus:ring-[#D95300] w-5 h-5"
     />
 </template>
+

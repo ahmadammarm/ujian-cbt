@@ -1,7 +1,7 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import AlertDialog from '@/Components/AlertDialog.vue';
-import Breadcrumbs from '@/Components/Breadcrumbs.vue';
+import AdminLayout from '@/Components/Templates/AdminLayout.vue';
+import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
+import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted } from 'vue';
 
@@ -256,3 +256,4 @@ const formatDate = (dateString) => {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+

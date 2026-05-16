@@ -15,6 +15,14 @@ class StudentAnswer extends Model
     ];
 
     public function question() {
-        return $this->belongsTo(CourseQuestion::class, 'question_id');
+        return $this->belongsTo(CourseQuestion::class, 'course_question_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function assessment() {
+        return $this->belongsTo(StudentAssessment::class, 'student_assessment_id');
     }
 }

@@ -1,7 +1,7 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import AlertDialog from '@/Components/AlertDialog.vue';
-import Breadcrumbs from '@/Components/Breadcrumbs.vue';
+import AdminLayout from '@/Components/Templates/AdminLayout.vue';
+import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
+import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -174,3 +174,4 @@ const formatDate = (dateString) => {
 .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
 .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 </style>
+

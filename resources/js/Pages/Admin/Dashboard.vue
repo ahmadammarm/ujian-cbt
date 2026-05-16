@@ -1,6 +1,6 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Breadcrumbs from '@/Components/Breadcrumbs.vue';
+import AdminLayout from '@/Components/Templates/AdminLayout.vue';
+import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import { Head } from '@inertiajs/vue3';
 </script>
 
@@ -55,3 +55,4 @@ import { Head } from '@inertiajs/vue3';
         </div>
     </AdminLayout>
 </template>
+

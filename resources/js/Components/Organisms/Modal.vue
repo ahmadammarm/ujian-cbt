@@ -96,3 +96,4 @@ const maxWidthClass = computed(() => {
         </Transition>
     </Teleport>
 </template>
+

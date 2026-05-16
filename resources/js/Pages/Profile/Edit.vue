@@ -1,6 +1,6 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Breadcrumbs from '@/Components/Breadcrumbs.vue';
+import AuthenticatedLayout from '@/Components/Templates/AuthenticatedLayout.vue';
+import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
@@ -74,3 +74,4 @@ defineProps({
 .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .delay-200 { animation-delay: 200ms; }
 </style>
+

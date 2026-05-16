@@ -15,7 +15,13 @@ class Course extends Model
         'id'
     ];
 
-    public function category() {
+    public function assessments()
+    {
+        return $this->hasMany(StudentAssessment::class);
+    }
+
+    public function category()
+ {
         return $this->belongsTo(Category::class, 'category_id');
     }
 

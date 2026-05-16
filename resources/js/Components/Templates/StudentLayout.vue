@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
+import Dropdown from '@/Components/Organisms/Dropdown.vue';
+import DropdownLink from '@/Components/Molecules/DropdownLink.vue';
 
 const { props } = usePage();
 const isSidebarOpen = ref(false);
@@ -51,7 +51,7 @@ onUnmounted(() => {
             >
                 <div class="flex flex-col gap-10">
                     <Link :href="route('dashboard')" class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-[#D95300] rounded-xl flex items-center justify-center shadow-lg shadow-[#D95300]/20">
+                        <div class="w-10 h-10 bg-[#2B82FE] rounded-xl flex items-center justify-center shadow-lg shadow-[#2B82FE]/20">
                             <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -61,37 +61,18 @@ onUnmounted(() => {
 
                     <div class="flex flex-col gap-8">
                         <div>
-                            <h3 class="font-bold text-[11px] text-[#A5ABB2] uppercase tracking-[0.1em] mb-4">Daily Use</h3>
+                            <h3 class="font-bold text-[11px] text-[#A5ABB2] uppercase tracking-[0.1em] mb-4">Learning Area</h3>
                             <ul class="flex flex-col gap-2">
                                 <li>
-                                    <Link :href="route('dashboard.overview')" class="nav-link" :class="{'active': route().current('dashboard.overview')}">
+                                    <Link :href="route('dashboard')" class="nav-link" :class="{'active': route().current('dashboard') && !route().current('dashboard.learning.*')}">
                                         <img src="/assets/images/icons/home-hashtag.svg" class="w-5 h-5 icon" alt="icon">
-                                        <span>Overview</span>
+                                        <span>Dashboard</span>
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link :href="route('dashboard.courses.index')" class="nav-link" :class="{'active': route().current('dashboard.courses.*')}">
+                                    <Link :href="route('dashboard.learning.index')" class="nav-link" :class="{'active': route().current('dashboard.learning.index') || route().current('dashboard.learning.report')}">
                                         <img src="/assets/images/icons/note-favorite.svg" class="w-5 h-5 icon" alt="icon">
-                                        <span>Courses</span>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link :href="route('dashboard.students.index')" class="nav-link" :class="{'active': route().current('dashboard.students.*')}">
-                                        <img src="/assets/images/icons/profile-2user.svg" class="w-5 h-5 icon" alt="icon">
-                                        <span>Students</span>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link :href="route('dashboard.messages')" class="nav-link" :class="{'active': route().current('dashboard.messages')}">
-                                        <img src="/assets/images/icons/sms-tracking.svg" class="w-5 h-5 icon" alt="icon">
-                                        <span>Messages</span>
-                                        <div class="ms-auto w-5 h-5 flex items-center justify-center rounded-full bg-[#D95300] text-[10px] font-bold text-white">12</div>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link :href="route('dashboard.analytics')" class="nav-link" :class="{'active': route().current('dashboard.analytics')}">
-                                        <img src="/assets/images/icons/chart-2.svg" class="w-5 h-5 icon" alt="icon">
-                                        <span>Analytics</span>
+                                        <span>My Courses</span>
                                     </Link>
                                 </li>
                             </ul>
@@ -116,32 +97,19 @@ onUnmounted(() => {
                         </svg>
                     </button>
 
-                    <!-- Spacer for mobile, nothing for desktop -->
-                    <div class="lg:hidden font-bold text-lg">Ujian Online</div>
+                    <div class="lg:hidden font-bold text-lg text-[#2B82FE]">Ujian Online</div>
                     <div class="hidden lg:block"></div>
 
                     <div class="flex items-center gap-6">
-                        <!-- Notifications/Actions -->
-                        <div class="hidden sm:flex items-center gap-3">
-                            <button class="w-11 h-11 flex items-center justify-center rounded-full border border-[#EEEEEE] hover:bg-gray-50 transition-colors">
-                                <img src="/assets/images/icons/receipt-text.svg" class="w-5 h-5" alt="icon">
-                            </button>
-                            <button class="w-11 h-11 flex items-center justify-center rounded-full border border-[#EEEEEE] hover:bg-gray-50 transition-colors">
-                                <img src="/assets/images/icons/notification.svg" class="w-5 h-5" alt="icon">
-                            </button>
-                        </div>
-
-                        <div class="h-8 w-[1px] bg-[#EEEEEE] hidden sm:block"></div>
-
                         <!-- User Dropdown -->
                         <Dropdown align="right" width="56">
                             <template #trigger>
                                 <button class="flex items-center gap-3 p-1.5 rounded-2xl hover:bg-gray-50 transition-all group">
                                     <div class="flex flex-col text-right hidden sm:flex">
-                                        <p class="text-[12px] font-medium text-gray-400">Howdy</p>
-                                        <p class="text-[14px] font-bold text-[#0A090B] group-hover:text-[#D95300] transition-colors">{{ props.auth.user.name }}</p>
+                                        <p class="text-[12px] font-medium text-gray-400">Student</p>
+                                        <p class="text-[14px] font-bold text-[#0A090B] group-hover:text-[#2B82FE] transition-colors">{{ props.auth.user.name }}</p>
                                     </div>
-                                    <div class="w-11 h-11 rounded-xl overflow-hidden border-2 border-transparent group-hover:border-[#D95300] transition-all shadow-sm">
+                                    <div class="w-11 h-11 rounded-xl overflow-hidden border-2 border-transparent group-hover:border-[#2B82FE] transition-all shadow-sm">
                                         <img src="/assets/images/photos/default-photo.svg" alt="photo" class="w-full h-full object-cover">
                                     </div>
                                 </button>

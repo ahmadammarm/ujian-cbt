@@ -1,12 +1,12 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Breadcrumbs from '@/Components/Breadcrumbs.vue';
+import AdminLayout from '@/Components/Templates/AdminLayout.vue';
+import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputError from '@/Components/Atoms/InputError.vue';
+import InputLabel from '@/Components/Atoms/InputLabel.vue';
+import TextInput from '@/Components/Atoms/TextInput.vue';
+import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
 
 defineProps({
     categories: {
@@ -158,3 +158,4 @@ const submit = () => {
         </div>
     </AdminLayout>
 </template>
+
