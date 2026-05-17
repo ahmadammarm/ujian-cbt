@@ -7,9 +7,8 @@ This project is a Computer Based Test (CBT) platform built with **Laravel 11**. 
 - **Purpose:** A web-based application for managing courses, questions, and conducting online exams.
 - **Backend:** PHP 8.2+, Laravel 11.
 - **Frontend:** Vue 3, Inertia.js, Tailwind CSS, Vite.
+- **Dependencies:** Chart.js for analytics, Spatie Permissions for RBAC.
 - **Authentication:** Laravel Breeze (Inertia/Vue stack).
-- **Permissions:** Spatie Laravel Permission (Roles: `teacher`, `student`).
-- **Database:** Migrations and seeders are provided for initial setup.
 
 ## Getting Started
 
@@ -22,7 +21,7 @@ This project is a Computer Based Test (CBT) platform built with **Laravel 11**. 
 
 ### Installation
 
-1.  **Clone and Install Dependencies:**
+1.  **Install Dependencies:**
     ```bash
     composer install
     pnpm install
@@ -34,10 +33,11 @@ This project is a Computer Based Test (CBT) platform built with **Laravel 11**. 
     php artisan key:generate
     ```
 
-3.  **Database Migration & Seeding:**
+3.  **Database Setup:**
     ```bash
     php artisan migrate --seed
     ```
+    *Note: Seeding includes `PlatformDataSeeder` for realistic demo data (50 students, 10 courses, assessments).*
 
 4.  **Frontend Build:**
     ```bash
@@ -46,27 +46,40 @@ This project is a Computer Based Test (CBT) platform built with **Laravel 11**. 
     pnpm build # For production
     ```
 
-5.  **Run the Server:**
-    ```bash
-    php artisan serve
-    ```
+## AI Agent Development Standards
 
-### Default Credentials (from `RolePermissionSeeder`)
+All automated or manual development must strictly adhere to the project's technical manifests located in `.gemini/rules/`. These rules take precedence over general defaults.
 
-- **Teacher:** `jackson@teacher.com` / `password`
+*   **Backend Standards:** See `.gemini/rules/backend-pattern.md`.
+*   **Frontend Standards:** See `.gemini/rules/frontend-pattern.md`.
 
-## Development Conventions
+## Core Architectural Patterns
 
-- **Architecture:** Standard Laravel MVC pattern with a **Service Layer** (`app/Services`) for business logic.
-- **Views:** Vue 3 components located in `resources/js/Pages`.
-- **State Management:** Inertia.js for seamless server-side routing and data handling.
-- **Styling:** Tailwind CSS utility classes.
-- **Authorization:** Use `middleware('role:...')` in routes or `$page.props.auth` in Vue components for access control.
-- **Redirection:** `RoleRedirect` middleware handles automatic redirection from `/` and `/dashboard` based on the user's role.
-- **Middleware Aliases:**
-    - `role`: `\Spatie\Permission\Middleware\RoleMiddleware::class`
-    - `permission`: `\Spatie\Permission\Middleware\PermissionMiddleware::class`
-    - `role_or_permission`: `\Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class`
+### Backend: The Triad Pattern
+We enforce a strict separation of concerns through three layers:
+1.  **Requests (`app/Http/Requests`):** Solely responsible for data validation and structural integrity.
+2.  **Controllers (`app/Http/Controllers`):** Thin orchestrators that receive requests, invoke services, and return Inertia responses.
+3.  **Services (`app/Services`):** The domain layer containing all business logic, complex queries, and persistence operations.
+
+### Frontend: Atomic Design
+UI components are organized in `resources/js/Components` by their complexity:
+*   **Atoms:** Stateless basic elements (Buttons, Badges).
+*   **Molecules:** Simple functional groups (SearchInputs, FormFields).
+*   **Organisms:** Complex sections (DataTables, ChartCards).
+*   **Templates/Layouts:** Page structural containers.
+
+## Role-Based Workflows
+
+### Teacher (Admin)
+- **Overview:** Monitor platform-wide metrics (Total Students, Courses, Assessments).
+- **Course Management:** CRUD operations for courses, categories, and questions.
+- **Student Management:** View paginated students with debounced search, track average scores, and manage account status (Suspend/Activate).
+- **Analytics:** Visualize enrollment trends and course performance leaderboards.
+
+### Student
+- **Learning:** Browse enrolled courses and start assessments.
+- **Assessment:** Real-time answer submission with auto-scoring.
+- **Reporting:** View detailed results and performance rapport.
 
 ## Key Commands
 
@@ -74,30 +87,11 @@ This project is a Computer Based Test (CBT) platform built with **Laravel 11**. 
 | :--- | :--- |
 | **Run Tests** | `php artisan test` |
 | **Clear Cache** | `php artisan optimize:clear` |
-| **Fresh Database** | `php artisan migrate:fresh --seed` |
-| **Linting** | `vendor/bin/pint` |
-| **Vite Dev** | `pnpm dev` |
-| **Vite Build** | `pnpm build` |
+| **Fresh Setup** | `php artisan migrate:fresh --seed` |
+| **Code Linting** | `vendor/bin/pint` |
+| **Dev Server** | `php artisan serve` |
 
-## Directory Structure Highlights
+## Default Credentials
 
-- `app/Http/Controllers`: Controllers handling Inertia requests.
-- `app/Services`: Business logic encapsulated in service classes (e.g., `AssessmentService`, `CourseService`).
-- `app/Models`: Eloquent models (Category, Course, CourseQuestion, StudentAssessment, etc.).
-- `database/migrations`: Schema definitions including assessment and answer tables.
-- `resources/js/Pages`: Vue 3 page components organized by role (`Admin/` and `Student/`).
-- `routes/web.php`: Route definitions with role-based and redirect middleware.
-
-## Role-Based Workflows
-
-### Teacher (Admin)
-- Manage courses and course categories.
-- Create and manage course questions (multiple choice).
-- Enroll students in courses.
-- View dashboard analytics and student lists.
-
-### Student
-- Browse enrolled courses.
-- Start and take assessments.
-- Real-time answer submission.
-- View assessment results and rapport.
+- **Teacher:** `jackson@teacher.com` / `password`
+- **Students:** `student1@example.com` through `student50@example.com` / `password`
