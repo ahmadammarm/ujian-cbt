@@ -2,6 +2,7 @@
 import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
 
 const props = defineProps({
     course: {

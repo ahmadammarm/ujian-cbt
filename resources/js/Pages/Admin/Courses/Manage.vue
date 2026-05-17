@@ -2,6 +2,7 @@
 import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
+import Pagination from '@/Components/Molecules/Pagination.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted } from 'vue';
 
@@ -11,11 +12,11 @@ const props = defineProps({
         required: true,
     },
     students: {
-        type: Array,
+        type: Object,
         required: true,
     },
     questions: {
-        type: Array,
+        type: Object,
         required: true,
     },
 });
@@ -126,7 +127,7 @@ const formatDate = (dateString) => {
                             </div>
                             <div>
                                 <p class="text-[11px] font-bold text-[#A5ABB2] uppercase tracking-[0.2em] mb-0.5">Students</p>
-                                <p class="font-black text-[#0A090B] text-lg">{{ students.length }}</p>
+                                <p class="font-black text-[#0A090B] text-lg">{{ students.total }}</p>
                             </div>
                         </div>
                     </div>
@@ -166,7 +167,7 @@ const formatDate = (dateString) => {
                     <p class="text-[#7F8190] font-medium">Manage questions and tests for this course.</p>
                 </div>
                 <div class="px-5 py-2.5 bg-[#0A090B] rounded-full text-[11px] font-black text-white uppercase tracking-[0.2em] shadow-xl shadow-gray-200">
-                    {{ questions.length }} Questions Loaded
+                    {{ questions.total }} Questions Total
                 </div>
             </div>
 
@@ -188,7 +189,7 @@ const formatDate = (dateString) => {
                 </Link>
 
                 <!-- Question Cards -->
-                <div v-for="(question, index) in questions" :key="question.id"
+                <div v-for="(question, index) in questions.data" :key="question.id"
                     class="w-full flex flex-col lg:flex-row lg:items-center justify-between p-8 lg:p-10 bg-white border border-gray-100 rounded-[40px] hover:shadow-2xl hover:shadow-gray-100/40 transition-all group animate-slide-up relative overflow-hidden"
                     :style="`animation-delay: ${index * 50}ms`"
                 >
@@ -196,7 +197,7 @@ const formatDate = (dateString) => {
                     
                     <div class="flex items-center gap-8 lg:w-[70%]">
                         <div class="w-16 h-16 shrink-0 rounded-2xl bg-gray-50 flex items-center justify-center font-black text-2xl text-[#A5ABB2] border border-gray-100 group-hover:bg-[#EAE8FE] group-hover:text-[#6436F1] transition-colors">
-                            {{ index + 1 }}
+                            {{ (questions.current_page - 1) * questions.per_page + index + 1 }}
                         </div>
                         <div class="flex flex-col gap-2">
                             <p class="text-[10px] font-black text-[#A5ABB2] uppercase tracking-[0.2em]">Question Description</p>
@@ -217,10 +218,15 @@ const formatDate = (dateString) => {
                 </div>
 
                 <!-- Empty State -->
-                <div v-if="questions.length === 0" class="py-24 bg-gray-50/50 rounded-[48px] text-center border-2 border-dashed border-gray-100">
+                <div v-if="questions.data.length === 0" class="py-24 bg-gray-50/50 rounded-[48px] text-center border-2 border-dashed border-gray-100">
                     <img src="/assets/images/icons/note-text.svg" class="w-16 h-16 mx-auto mb-6 opacity-10" alt="icon">
                     <p class="text-[#7F8190] font-black text-xl">No assessment modules found.</p>
                     <p class="text-gray-400 font-medium mt-2">Start adding questions to this course to begin testing students.</p>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-10">
+                    <Pagination :links="questions.links" />
                 </div>
             </div>
         </div>

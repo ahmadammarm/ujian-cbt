@@ -2,12 +2,13 @@
 import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
+import Pagination from '@/Components/Molecules/Pagination.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
     courses: {
-        type: Array,
+        type: Object,
         required: true,
     },
 });
@@ -61,7 +62,7 @@ const formatDate = (dateString) => {
             <div class="w-full flex justify-between items-end">
                 <div class="flex flex-col gap-2">
                     <h1 class="font-black text-[40px] tracking-tight text-[#0A090B] leading-none">Manage Courses</h1>
-                    <p class="text-[#7F8190] font-medium text-lg">You have <span class="text-[#0A090B] font-bold">{{ courses.length }}</span> active courses in your catalog.</p>
+                    <p class="text-[#7F8190] font-medium text-lg">You have <span class="text-[#0A090B] font-bold">{{ courses.total }}</span> active courses in your catalog.</p>
                 </div>
                 <Link :href="route('dashboard.courses.create')"
                     class="h-[60px] p-[0_36px] bg-[#6436F1] text-white rounded-[20px] font-black uppercase tracking-widest text-[13px] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(100,54,241,0.3)] hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3">
@@ -81,7 +82,7 @@ const formatDate = (dateString) => {
             </div>
 
             <!-- Course Rows -->
-            <div v-for="course in courses" :key="course.id" 
+            <div v-for="course in courses.data" :key="course.id" 
                 class="group relative bg-white p-6 lg:p-8 rounded-[32px] border border-gray-100 hover:border-[#2B82FE]/20 hover:shadow-[0_15px_40px_rgb(0,0,0,0.03)] transition-all duration-500 flex flex-col lg:flex-row lg:items-center animate-slide-up">
                 
                 <!-- Info Section -->
@@ -142,7 +143,7 @@ const formatDate = (dateString) => {
             </div>
 
             <!-- Empty State -->
-            <div v-if="courses.length === 0" class="py-32 px-10 bg-gray-50/50 rounded-[40px] text-center border-2 border-dashed border-gray-100 animate-fade-in">
+            <div v-if="courses.data.length === 0" class="py-32 px-10 bg-gray-50/50 rounded-[40px] text-center border-2 border-dashed border-gray-100 animate-fade-in">
                 <div class="w-24 h-24 bg-white rounded-[32px] shadow-sm flex items-center justify-center mx-auto mb-8">
                     <svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.168.477-4.5 1.253" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
@@ -152,6 +153,11 @@ const formatDate = (dateString) => {
                     Create My First Course
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </Link>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-10">
+                <Pagination :links="courses.links" />
             </div>
         </div>
 

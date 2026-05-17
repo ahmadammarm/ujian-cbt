@@ -23,7 +23,11 @@ class CourseController extends Controller
      */
     public function index(): Response
     {
-        $courses = Auth::user()->teacherCourses()->with('category')->orderBy('created_at', 'desc')->get();
+        $courses = Auth::user()->teacherCourses()
+            ->with('category')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+            
         return Inertia::render('Admin/Courses/Index', [
             'courses' => $courses
         ]);
@@ -60,8 +64,16 @@ class CourseController extends Controller
         }
 
         $course->load('category');
-        $students = $course->students()->select('users.id', 'users.name', 'users.email')->orderBy('id', 'desc')->get();
-        $questions = $course->questions()->orderBy('id', 'desc')->get();
+        $students = $course->students()
+            ->select('users.id', 'users.name', 'users.email')
+            ->orderBy('id', 'desc')
+            ->paginate(5, ['*'], 'students_page')
+            ->withQueryString();
+            
+        $questions = $course->questions()
+            ->orderBy('id', 'desc')
+            ->paginate(5, ['*'], 'questions_page')
+            ->withQueryString();
 
         return Inertia::render('Admin/Courses/Manage', [
             'course' => $course,

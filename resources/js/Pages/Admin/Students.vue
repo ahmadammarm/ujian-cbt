@@ -1,6 +1,7 @@
 <script setup>
 import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
+import Pagination from '@/Components/Molecules/Pagination.vue';
 import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
@@ -62,7 +63,7 @@ const formatDate = (dateString) => {
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-12">
                 <div class="flex flex-col gap-1">
                     <h1 class="font-black text-[32px] tracking-tight text-[#0A090B]">Students</h1>
-                    <p class="text-[#7F8190] font-medium text-lg">Manage platform students and monitor their progress.</p>
+                    <p class="text-[#7F8190] font-medium text-lg">Managing <span class="text-[#0A090B] font-bold">{{ students.total }}</span> students across the platform.</p>
                 </div>
                 
                 <div class="relative w-full lg:w-[400px]">
@@ -135,17 +136,8 @@ const formatDate = (dateString) => {
                 </div>
 
                 <!-- Pagination -->
-                <div v-if="students.links.length > 3" class="mt-12 flex justify-center gap-2">
-                    <template v-for="(link, k) in students.links" :key="k">
-                        <div v-if="link.url === null" 
-                            class="px-4 py-2 text-gray-400 text-sm font-bold opacity-50"
-                            v-html="link.label" />
-                        <Link v-else
-                            :href="link.url"
-                            :class="['px-5 py-2.5 rounded-xl text-sm font-black transition-all', link.active ? 'bg-[#6436F1] text-white' : 'bg-white border border-gray-100 text-[#0A090B] hover:bg-gray-50']"
-                            v-html="link.label"
-                        />
-                    </template>
+                <div class="mt-12">
+                    <Pagination :links="students.links" />
                 </div>
             </div>
         </div>
