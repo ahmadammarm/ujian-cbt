@@ -98,6 +98,5 @@ php artisan serve
 | Task | Command |
 | :--- | :--- |
 | **Clear Caches** | `php artisan optimize:clear` |
-| **Run Tests** | `php artisan test` |
 | **Fix Styling** | `vendor/bin/pint` |
 | **Re-Seed DB** | `php artisan migrate:fresh --seed` |
