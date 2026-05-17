@@ -34,16 +34,16 @@ onUnmounted(() => {
 <template>
     <div class="font-poppins text-[#0A090B] bg-white min-h-screen">
         <!-- Mobile Sidebar Overlay -->
-        <div 
-            v-if="isSidebarOpen" 
+        <div
+            v-if="isSidebarOpen"
             class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] lg:hidden"
             @click="isSidebarOpen = false"
         ></div>
 
         <section class="flex flex-col lg:flex-row relative">
             <!-- Sidebar -->
-            <aside 
-                id="sidebar" 
+            <aside
+                id="sidebar"
                 :class="[
                     'fixed lg:sticky top-0 left-0 z-[70] w-[280px] h-screen bg-[#FBFBFB] border-r border-[#EEEEEE] p-8 flex flex-col justify-between transition-transform duration-300 ease-in-out',
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
@@ -82,13 +82,6 @@ onUnmounted(() => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link :href="route('dashboard.messages')" class="nav-link" :class="{'active': route().current('dashboard.messages')}">
-                                        <img src="/assets/images/icons/sms-tracking.svg" class="w-5 h-5 icon" alt="icon">
-                                        <span>Messages</span>
-                                        <div class="ms-auto w-5 h-5 flex items-center justify-center rounded-full bg-[#D95300] text-[10px] font-bold text-white">12</div>
-                                    </Link>
-                                </li>
-                                <li>
                                     <Link :href="route('dashboard.analytics')" class="nav-link" :class="{'active': route().current('dashboard.analytics')}">
                                         <img src="/assets/images/icons/chart-2.svg" class="w-5 h-5 icon" alt="icon">
                                         <span>Analytics</span>
@@ -105,9 +98,9 @@ onUnmounted(() => {
                 <!-- Top Navigation -->
                 <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#EEEEEE] h-20 flex items-center justify-between px-6 lg:px-10">
                     <!-- Hamburger -->
-                    <button 
+                    <button
                         id="hamburger-button"
-                        @click="toggleSidebar" 
+                        @click="toggleSidebar"
                         class="p-2 -ml-2 rounded-xl text-gray-500 hover:bg-gray-100 lg:hidden transition-colors"
                     >
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

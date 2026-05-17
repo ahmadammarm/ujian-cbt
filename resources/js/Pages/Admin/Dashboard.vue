@@ -2,6 +2,12 @@
 import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import { Head } from '@inertiajs/vue3';
+const props = defineProps({
+    metrics: {
+        type: Object,
+        required: true,
+    },
+});
 </script>
 
 <template>
@@ -28,7 +34,7 @@ import { Head } from '@inertiajs/vue3';
                     </div>
                     <div>
                         <p class="text-[#7F8190] font-semibold">Total Courses</p>
-                        <p class="text-3xl font-bold">120</p>
+                        <p class="text-3xl font-bold">{{ metrics.totalCourses }}</p>
                     </div>
                 </div>
                 
@@ -38,7 +44,7 @@ import { Head } from '@inertiajs/vue3';
                     </div>
                     <div>
                         <p class="text-[#7F8190] font-semibold">Total Students</p>
-                        <p class="text-3xl font-bold">4,890</p>
+                        <p class="text-3xl font-bold">{{ metrics.totalStudents }}</p>
                     </div>
                 </div>
 
@@ -47,8 +53,8 @@ import { Head } from '@inertiajs/vue3';
                         <img src="/assets/images/icons/chart-2.svg" class="w-6 h-6" alt="icon">
                     </div>
                     <div>
-                        <p class="text-[#7F8190] font-semibold">Daily Active</p>
-                        <p class="text-3xl font-bold">342</p>
+                        <p class="text-[#7F8190] font-semibold">Assessments Taken</p>
+                        <p class="text-3xl font-bold">{{ metrics.assessmentsTaken }}</p>
                     </div>
                 </div>
             </div>

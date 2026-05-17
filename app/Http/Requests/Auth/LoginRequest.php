@@ -41,8 +41,15 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (! Auth::attempt(array_merge($this->only('email', 'password'), ['is_active' => true]), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
+            $user = \App\Models\User::where('email', $this->email)->first();
+            if ($user && !$user->is_active) {
+                throw ValidationException::withMessages([
+                    'email' => 'Your account has been suspended. Please contact the administrator.',
+                ]);
+            }
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
