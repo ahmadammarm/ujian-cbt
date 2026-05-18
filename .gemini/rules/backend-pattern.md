@@ -198,9 +198,5 @@ class CourseService {
 *   **Mass Assignment Bypassing:** Never use `$guarded = []` in any model.
 *   **Logic Duplication:** Never copy-paste query logic. If a query is complex, it belongs in a Service or a Model Scope.
 
-## 8. Testing Standards
-*   **Unit Tests:** Target specific Service methods. Mock database interactions where appropriate but prefer using a database for integration-style unit tests.
-*   **Feature Tests:** Target Controller endpoints. Verify Inertia props, status codes, and database side-effects.
-
-## 9. Conclusion
+## 8. Conclusion
 Adherence to these standards is not optional. They provide the framework for a robust, professional CBT platform. Any code that violates these patterns will be considered technical debt and must be refactored.
