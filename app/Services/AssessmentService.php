@@ -64,7 +64,7 @@ class AssessmentService
             // 2. Calculate score
             $correctAnswersCount = 0;
             $questions = CourseQuestion::where('course_id', $assessment->course_id)->with('answers')->get();
-            $totalQuestions = 50; // Per requirement
+            $totalQuestions = $questions->count() > 0 ? $questions->count() : 50;
 
             foreach ($questions as $question) {
                 $studentAnswer = StudentAnswer::where('student_assessment_id', $assessment->id)
