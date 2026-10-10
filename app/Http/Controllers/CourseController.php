@@ -49,9 +49,13 @@ class CourseController extends Controller
      */
     public function store(StoreCourseRequest $request): RedirectResponse
     {
-        $this->courseService->createCourse($request->validated(), $request->file('cover'), Auth::user());
+        $course = $this->courseService->createCourse($request->validated(), $request->file('cover'), Auth::user());
 
-        return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully.');
+        if ($request->input('action') === 'add_questions') {
+            return redirect()->route('dashboard.course.question.create', $course->id)->with('success', 'Kursus berhasil dibuat. Silakan tambahkan butir soal pertama.');
+        }
+
+        return redirect()->route('dashboard.courses.show', $course->id)->with('success', 'Kursus berhasil dibuat.');
     }
 
     /**
@@ -109,7 +113,7 @@ class CourseController extends Controller
 
         $this->courseService->updateCourse($course, $request->validated(), $request->file('cover'));
 
-        return redirect()->route('dashboard.courses.index')->with('success', 'Course updated successfully.');
+        return redirect()->route('dashboard.courses.show', $course->id)->with('success', 'Informasi kursus berhasil diperbarui.');
     }
 
     /**

@@ -55,7 +55,11 @@ class CourseQuestionController extends Controller
 
         $this->courseQuestionService->createQuestionForCourse($course, $request->validated());
 
-        return redirect()->route('dashboard.courses.show', $courseId);
+        if ($request->input('action') === 'create_another') {
+            return redirect()->route('dashboard.course.question.create', $courseId)->with('success', 'Butir soal berhasil disimpan. Silakan buat butir soal berikutnya.');
+        }
+
+        return redirect()->route('dashboard.courses.show', $courseId)->with('success', 'Butir soal berhasil disimpan.');
     }
 
     /**
@@ -101,7 +105,7 @@ class CourseQuestionController extends Controller
 
         $this->courseQuestionService->updateQuestion($courseQuestion, $request->validated());
 
-        return redirect()->route('dashboard.courses.show', $courseId);
+        return redirect()->route('dashboard.courses.show', $courseId)->with('success', 'Butir soal berhasil diperbarui.');
     }
 
     /**
