@@ -1,17 +1,18 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import ThemeToggle from '@/Components/Atoms/ThemeToggle.vue';
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col md:flex-row bg-white font-sans selection:bg-[#D95300]/20">
+    <div class="min-h-screen flex flex-col md:flex-row bg-white dark:bg-[#09090B] font-sans selection:bg-[#D95300]/20 transition-colors">
         <!-- Left Section: Image (Hidden on mobile) -->
         <div class="hidden md:flex md:w-[55%] lg:w-[60%] relative h-screen sticky top-0 overflow-hidden">
-            <img 
-                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop" 
+            <img
+                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop"
                 alt="Auth Background"
                 class="absolute inset-0 w-full h-full object-cover brightness-[0.4]"
             />
-            
+
             <!-- Logo top left -->
             <div class="absolute top-10 left-10">
                 <div class="w-14 h-14 bg-white p-2.5 rounded-2xl shadow-2xl flex items-center justify-center text-[#D95300]">
@@ -24,7 +25,7 @@ import { Link } from '@inertiajs/vue3';
             <!-- Text bottom left -->
             <div class="absolute bottom-16 left-12 pr-12 animate-fade-in space-y-2">
                 <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white/90">
-                    Platform Ujian & Asesmen Digital
+                    Platform Ujian &amp; Asesmen Digital
                 </div>
                 <h2 class="text-4xl lg:text-5xl font-bold text-white leading-tight">
                     Selamat datang di <span class="text-[#D95300]">Naiju</span>
@@ -33,11 +34,15 @@ import { Link } from '@inertiajs/vue3';
         </div>
 
         <!-- Right Section: Form -->
-        <div class="flex-1 flex flex-col justify-center items-center px-6 py-12 sm:px-12 lg:px-20 bg-white">
-            <div class="w-full max-w-[440px] animate-slide-up">
+        <div class="flex-1 flex flex-col justify-center items-center px-6 py-12 sm:px-12 lg:px-20 bg-white dark:bg-[#09090B] relative transition-colors">
+            <div class="absolute top-6 right-6">
+                <ThemeToggle />
+            </div>
+
+            <div class="w-full max-w-[440px] animate-slide-up text-slate-900 dark:text-slate-100">
                 <slot />
 
-                <p class="mt-12 text-center text-sm text-gray-400 font-medium">
+                <p class="mt-12 text-center text-sm text-gray-400 dark:text-slate-500 font-medium">
                     &copy; {{ new Date().getFullYear() }} Naiju. All rights reserved.
                 </p>
             </div>

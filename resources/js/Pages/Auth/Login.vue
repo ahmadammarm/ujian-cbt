@@ -34,8 +34,8 @@ const submit = () => {
         <Head title="Log in" />
 
         <div class="mb-10">
-            <h1 class="text-5xl font-bold text-gray-900 mb-3">Selamat Datang</h1>
-            <p class="text-gray-500 font-medium text-lg">Masuk ke akun Anda untuk melanjutkan</p>
+            <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-3">Selamat Datang</h1>
+            <p class="text-gray-500 dark:text-slate-400 font-medium text-lg">Masuk ke akun Anda untuk melanjutkan</p>
         </div>
 
         <div v-if="status" class="mb-6 p-4 rounded-xl bg-green-50 text-sm text-green-600 border border-green-100">
@@ -75,9 +75,9 @@ const submit = () => {
             <div class="flex items-center justify-between mt-6">
                 <div class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-3 text-sm font-medium text-gray-600">Ingat saya</span>
+                    <span class="ms-3 text-sm font-medium text-gray-600 dark:text-slate-400">Ingat saya</span>
                 </div>
-                
+
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
@@ -94,7 +94,7 @@ const submit = () => {
             </div>
 
             <div class="mt-10 text-center text-lg">
-                <span class="text-gray-600 font-medium">Belum punya akun?</span>
+                <span class="text-gray-600 dark:text-slate-400 font-medium">Belum punya akun?</span>
                 <Link
                     :href="route('register')"
                     class="ms-2 font-bold text-[#D95300] hover:underline"

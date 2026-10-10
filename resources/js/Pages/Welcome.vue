@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
+import ThemeToggle from '@/Components/Atoms/ThemeToggle.vue';
 
 defineProps({
     canLogin: {
@@ -328,56 +329,60 @@ const progressPercentage = computed(() => {
 <template>
     <Head title="Naiju - Platform Ujian & Asesmen Digital" />
 
-    <div class="min-h-screen bg-[#F8FAFC] text-[#0A090B] font-sans antialiased selection:bg-[#D95300] selection:text-white">
+    <div class="min-h-screen bg-[#F8FAFC] dark:bg-[#09090B] text-[#0A090B] dark:text-slate-100 font-sans antialiased selection:bg-[#D95300] selection:text-white transition-colors">
         <!-- Institutional Navigation Header -->
-        <header class="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200">
+        <header class="fixed top-0 inset-x-0 z-50 bg-white/95 dark:bg-[#0A090B]/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 <!-- Brand Lockup -->
                 <Link :href="route('dashboard')" class="flex items-center gap-3.5 group">
-                    <div class="w-10 h-10 bg-[#D95300] rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm transition-transform group-hover:scale-105">
+                    <div class="w-10 h-10 bg-[#D95300] rounded-xl flex items-center justify-center text-white shrink-0 shadow-xs transition-transform group-hover:scale-105">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
                             <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                         </svg>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-xl font-extrabold tracking-tight text-[#0A090B]">Naiju</span>
-                        <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Platform Ujian &amp; Asesmen Digital</span>
+                        <span class="text-xl font-extrabold tracking-tight text-[#0A090B] dark:text-white">Naiju</span>
+                        <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Platform Ujian &amp; Asesmen Digital</span>
                     </div>
                 </Link>
 
                 <!-- Navigation Destinations -->
-                <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-                    <a href="#simulasi" class="hover:text-[#D95300] transition-colors">Simulasi Ujian</a>
-                    <a href="#spesifikasi" class="hover:text-[#D95300] transition-colors">Spesifikasi Sistem</a>
-                    <a href="#ruang-kerja" class="hover:text-[#D95300] transition-colors">Ruang Kerja</a>
-                    <a href="#keamanan" class="hover:text-[#D95300] transition-colors">Integritas Server</a>
+                <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
+                    <a href="#simulasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Simulasi Ujian</a>
+                    <a href="#spesifikasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Spesifikasi Sistem</a>
+                    <a href="#ruang-kerja" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Ruang Kerja</a>
+                    <a href="#keamanan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Integritas Server</a>
                 </nav>
 
-                <!-- Access Controls -->
-                <div v-if="canLogin" class="flex items-center gap-3">
-                    <Link
-                        v-if="$page.props.auth.user"
-                        :href="route('dashboard')"
-                        class="px-5 py-2.5 bg-[#0A090B] text-white text-sm font-semibold rounded-xl hover:bg-slate-800 transition-colors shadow-sm"
-                    >
-                        Buka Dashboard
-                    </Link>
+                <!-- Access Controls & Theme Switcher -->
+                <div class="flex items-center gap-3">
+                    <ThemeToggle />
 
-                    <template v-else>
+                    <template v-if="canLogin">
                         <Link
-                            :href="route('login')"
-                            class="px-4 py-2.5 text-sm font-semibold text-slate-700 hover:text-[#D95300] rounded-xl hover:bg-slate-100 transition-colors"
+                            v-if="$page.props.auth.user"
+                            :href="route('dashboard')"
+                            class="px-5 py-2.5 bg-[#0A090B] dark:bg-white text-white dark:text-[#0A090B] text-sm font-semibold rounded-xl hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors shadow-xs"
                         >
-                            Masuk
+                            Buka Dashboard
                         </Link>
 
-                        <Link
-                            v-if="canRegister"
-                            :href="route('register')"
-                            class="px-5 py-2.5 bg-[#D95300] text-white text-sm font-semibold rounded-xl hover:bg-[#BF4900] transition-colors shadow-sm"
-                        >
-                            Daftar Peserta
-                        </Link>
+                        <template v-else>
+                            <Link
+                                :href="route('login')"
+                                class="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-[#D95300] dark:hover:text-[#D95300] rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            >
+                                Masuk
+                            </Link>
+
+                            <Link
+                                v-if="canRegister"
+                                :href="route('register')"
+                                class="px-5 py-2.5 bg-[#D95300] text-white text-sm font-semibold rounded-xl hover:bg-[#BF4900] transition-colors shadow-xs"
+                            >
+                                Daftar Peserta
+                            </Link>
+                        </template>
                     </template>
                 </div>
             </div>
@@ -394,11 +399,11 @@ const progressPercentage = computed(() => {
                             Standar Asesmen Digital Berintegritas
                         </div>
 
-                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0A090B] tracking-tight leading-[1.15]">
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0A090B] dark:text-white tracking-tight leading-[1.15]">
                             Infrastruktur Ujian Digital Terproteksi untuk Sekolah &amp; Kampus.
                         </h1>
 
-                        <p class="text-base text-slate-600 leading-relaxed font-normal">
+                        <p class="text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                             Naiju menyederhanakan manajemen bank soal pengajar, pengawasan ujian real-time, dan evaluasi hasil otomatis. Kunci jawaban dilindungi secara ketat di sisi server untuk menjamin kejujuran asesmen.
                         </p>
 
@@ -407,7 +412,7 @@ const progressPercentage = computed(() => {
                             <Link
                                 v-if="$page.props.auth.user"
                                 :href="route('dashboard')"
-                                class="px-6 py-3.5 bg-[#D95300] text-white font-bold text-sm rounded-xl text-center hover:bg-[#BF4900] transition-colors shadow-sm"
+                                class="px-6 py-3.5 bg-[#D95300] text-white font-bold text-sm rounded-xl text-center hover:bg-[#BF4900] transition-colors shadow-xs"
                             >
                                 Menuju Portal Dashboard
                             </Link>
@@ -415,30 +420,30 @@ const progressPercentage = computed(() => {
                             <Link
                                 v-else
                                 :href="route('login')"
-                                class="px-6 py-3.5 bg-[#D95300] text-white font-bold text-sm rounded-xl text-center hover:bg-[#BF4900] transition-colors shadow-sm"
+                                class="px-6 py-3.5 bg-[#D95300] text-white font-bold text-sm rounded-xl text-center hover:bg-[#BF4900] transition-colors shadow-xs"
                             >
                                 Masuk Portal Ujian
                             </Link>
 
                             <a
                                 href="#simulasi"
-                                class="px-6 py-3.5 bg-white text-slate-700 font-bold text-sm border border-slate-300 rounded-xl text-center hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm"
+                                class="px-6 py-3.5 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 font-bold text-sm border border-slate-300 dark:border-slate-700 rounded-xl text-center hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors shadow-xs"
                             >
                                 Uji Simulasi Interaktif
                             </a>
                         </div>
 
                         <!-- Technical Highlights Grid -->
-                        <div class="pt-6 border-t border-slate-200 grid grid-cols-2 gap-4 text-left">
-                            <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-xs">
-                                <span class="text-xs font-bold text-slate-900 block">Server-Side Sanitization</span>
-                                <p class="text-xs text-slate-500 leading-normal">
-                                    Atribut <code class="text-[11px] bg-slate-100 px-1 py-0.5 rounded text-[#D95300]">is_correct</code> disaring di level query database sebelum dikirim ke browser.
+                        <div class="pt-6 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 gap-4 text-left">
+                            <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl space-y-1.5 shadow-xs">
+                                <span class="text-xs font-bold text-slate-900 dark:text-slate-100 block">Server-Side Sanitization</span>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-normal">
+                                    Atribut <code class="text-[11px] bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-[#D95300]">is_correct</code> disaring di level query database sebelum dikirim ke browser.
                                 </p>
                             </div>
-                            <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-xs">
-                                <span class="text-xs font-bold text-slate-900 block">Penyimpanan Asinkron</span>
-                                <p class="text-xs text-slate-500 leading-normal">
+                            <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl space-y-1.5 shadow-xs">
+                                <span class="text-xs font-bold text-slate-900 dark:text-slate-100 block">Penyimpanan Asinkron</span>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-normal">
                                     Jawaban tersimpan otomatis per butir soal untuk mengamankan progres dari kendala koneksi.
                                 </p>
                             </div>
@@ -447,9 +452,9 @@ const progressPercentage = computed(() => {
 
                     <!-- Right: Authentic Interactive CBT Examination Window -->
                     <div id="simulasi" class="lg:col-span-7">
-                        <div class="bg-white rounded-2xl border border-slate-300 shadow-md overflow-hidden">
+                        <div class="bg-white dark:bg-[#111116] rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md overflow-hidden transition-colors">
                             <!-- Real Institutional Exam App Header -->
-                            <div class="px-6 py-3.5 bg-[#0A090B] text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-800">
+                            <div class="px-6 py-3.5 bg-[#0A090B] dark:bg-black text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-800">
                                 <div class="flex items-center gap-3">
                                     <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
                                     <span class="text-xs font-mono font-bold tracking-wider text-slate-200">NAIJU EXAM · SESI AKTIF</span>
@@ -464,19 +469,19 @@ const progressPercentage = computed(() => {
                             </div>
 
                             <!-- Session Meta Bar & Real-Time Sync Indicator -->
-                            <div class="px-6 py-2.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+                            <div class="px-6 py-2.5 bg-slate-50 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400">
                                 <div class="flex items-center gap-2">
-                                    <span>Peserta: <strong class="text-slate-900 font-semibold">Ahmad Ammar</strong> (ID #ST-0042)</span>
+                                    <span>Peserta: <strong class="text-slate-900 dark:text-slate-100 font-semibold">Ahmad Ammar</strong> (ID #ST-0042)</span>
                                 </div>
 
                                 <!-- Live Auto-Save Indicator -->
                                 <div class="flex items-center gap-2 font-mono">
-                                    <span v-if="isSaving" class="text-amber-600 font-semibold flex items-center gap-1.5">
+                                    <span v-if="isSaving" class="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1.5">
                                         <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                                         Menyinkronkan jawaban...
                                     </span>
-                                    <span v-else class="text-emerald-700 font-semibold flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <span v-else class="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                             <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                         Tersimpan di server ({{ lastSavedTime }})
@@ -485,7 +490,7 @@ const progressPercentage = computed(() => {
                             </div>
 
                             <!-- Progress Meter -->
-                            <div class="w-full bg-slate-100 h-1">
+                            <div class="w-full bg-slate-100 dark:bg-slate-800 h-1">
                                 <div
                                     class="bg-emerald-500 h-full transition-all duration-300"
                                     :style="{ width: `${progressPercentage}%` }"
@@ -497,14 +502,14 @@ const progressPercentage = computed(() => {
                                 <!-- Question Prompt & Points -->
                                 <div class="space-y-2">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                             Butir Pertanyaan {{ currentQuestion.num }} dari 50
                                         </span>
-                                        <span class="text-xs font-semibold px-2 py-0.5 bg-slate-100 text-slate-700 rounded border border-slate-200">
+                                        <span class="text-xs font-semibold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
                                             Bobot: 2.0 Poin
                                         </span>
                                     </div>
-                                    <p class="text-base sm:text-lg font-bold text-[#0A090B] leading-relaxed">
+                                    <p class="text-base sm:text-lg font-bold text-[#0A090B] dark:text-white leading-relaxed">
                                         {{ currentQuestion.title }}
                                     </p>
                                 </div>
@@ -518,8 +523,8 @@ const progressPercentage = computed(() => {
                                         :class="[
                                             'p-3.5 sm:p-4 rounded-xl border text-sm flex items-start gap-3.5 cursor-pointer transition-all',
                                             currentQuestion.selected === opt.id
-                                                ? 'bg-[#FFF4EC] border-[#D95300] text-slate-900 shadow-xs'
-                                                : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
+                                                ? 'bg-[#FFF4EC] dark:bg-[#D95300]/15 border-[#D95300] text-slate-900 dark:text-white shadow-xs'
+                                                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-200'
                                         ]"
                                     >
                                         <!-- Keycap Tile -->
@@ -528,7 +533,7 @@ const progressPercentage = computed(() => {
                                                 'w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs shrink-0 mt-0.5 border transition-colors shadow-xs',
                                                 currentQuestion.selected === opt.id
                                                     ? 'bg-[#D95300] border-[#BF4900] text-white'
-                                                    : 'bg-slate-100 border-slate-200 text-slate-700'
+                                                    : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
                                             ]"
                                         >
                                             {{ opt.id }}
@@ -538,15 +543,15 @@ const progressPercentage = computed(() => {
                                 </div>
 
                                 <!-- Examination Toolbar Controls -->
-                                <div class="pt-3 flex items-center justify-between border-t border-slate-200 text-xs">
+                                <div class="pt-3 flex items-center justify-between border-t border-slate-200 dark:border-slate-800 text-xs">
                                     <button
                                         type="button"
                                         @click="toggleFlag"
                                         :class="[
                                             'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg font-semibold border transition-colors',
                                             currentQuestion.isFlagged
-                                                ? 'bg-amber-50 text-amber-900 border-amber-300'
-                                                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                                                ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700'
+                                                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
                                         ]"
                                     >
                                         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -560,7 +565,7 @@ const progressPercentage = computed(() => {
                                             type="button"
                                             @click="goToPrevious"
                                             :disabled="activeQuestionNumber === 1"
-                                            class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                                            class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                                         >
                                             Sebelumnya
                                         </button>
@@ -568,7 +573,7 @@ const progressPercentage = computed(() => {
                                             type="button"
                                             @click="goToNext"
                                             :disabled="activeQuestionNumber === questions.length"
-                                            class="px-4 py-2 rounded-lg bg-[#0A090B] text-white font-semibold hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-xs"
+                                            class="px-4 py-2 rounded-lg bg-[#0A090B] dark:bg-white text-white dark:text-[#0A090B] font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-xs"
                                         >
                                             Berikutnya
                                         </button>
@@ -576,8 +581,8 @@ const progressPercentage = computed(() => {
                                 </div>
 
                                 <!-- Question Sheet Navigator Palette -->
-                                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
-                                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
+                                <div class="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl space-y-3">
+                                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
                                         <span>Navigasi Lembar Jawaban (Pilih Nomor)</span>
                                         <div class="flex items-center gap-3 text-[11px]">
                                             <span class="flex items-center gap-1.5">
@@ -589,7 +594,7 @@ const progressPercentage = computed(() => {
                                                 <span>Ragu</span>
                                             </span>
                                             <span class="flex items-center gap-1.5">
-                                                <span class="w-2.5 h-2.5 rounded bg-white border border-slate-300"></span>
+                                                <span class="w-2.5 h-2.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700"></span>
                                                 <span>Kosong</span>
                                             </span>
                                         </div>
@@ -606,10 +611,10 @@ const progressPercentage = computed(() => {
                                                 item.num === activeQuestionNumber
                                                     ? 'bg-[#D95300] text-white ring-2 ring-[#D95300]/40'
                                                     : item.isFlagged
-                                                    ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                                                    ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700'
                                                     : item.selected !== null
-                                                    ? 'bg-emerald-100 text-emerald-900 border border-emerald-200'
-                                                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
+                                                    ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800'
+                                                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                                             ]"
                                         >
                                             {{ item.num }}
@@ -623,49 +628,49 @@ const progressPercentage = computed(() => {
             </section>
 
             <!-- Technical Specifications Grid: Verifiable, Concrete Architecture -->
-            <section id="spesifikasi" class="border-y border-slate-200 bg-white py-16">
+            <section id="spesifikasi" class="border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0E0E12] py-16 transition-colors">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="max-w-3xl mb-12 space-y-2">
-                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                             Spesifikasi &amp; Standar Teknis
                         </div>
-                        <h2 class="text-2xl sm:text-3xl font-black text-[#0A090B] tracking-tight">
+                        <h2 class="text-2xl sm:text-3xl font-black text-[#0A090B] dark:text-white tracking-tight">
                             Parameter Arsitektur Sistem Asesmen Naiju
                         </h2>
-                        <p class="text-sm text-slate-600">
+                        <p class="text-sm text-slate-600 dark:text-slate-400">
                             Setiap modul dibangun dengan batasan teknis yang terukur untuk menjamin stabilitas saat ujian massal diselenggarakan.
                         </p>
                     </div>
 
                     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
-                            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">01 · KAPASITAS SESI</span>
-                            <div class="text-2xl font-black text-[#0A090B]">50 Butir Soal</div>
-                            <p class="text-xs text-slate-600 leading-normal">
+                        <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2">
+                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">01 · KAPASITAS SESI</span>
+                            <div class="text-2xl font-black text-[#0A090B] dark:text-white">50 Butir Soal</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
                                 Bobot 2 poin per butir untuk total skala 100 dengan batas Kriteria Ketuntasan Minimal (KKM) standar 70.
                             </p>
                         </div>
 
-                        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
-                            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">02 · KEAMANAN DATA</span>
-                            <div class="text-2xl font-black text-[#0A090B]">Zero-Payload Leak</div>
-                            <p class="text-xs text-slate-600 leading-normal">
+                        <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2">
+                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">02 · KEAMANAN DATA</span>
+                            <div class="text-2xl font-black text-[#0A090B] dark:text-white">Zero-Payload Leak</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
                                 Endpoint ujian hanya menyajikan array pilihan tanpa atribut validasi kebenaran, meniadakan kecurangan inspect element.
                             </p>
                         </div>
 
-                        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
-                            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">03 · TRAFFIC CONTROLS</span>
-                            <div class="text-2xl font-black text-[#0A090B]">Dual-Tier Throttling</div>
-                            <p class="text-xs text-slate-600 leading-normal">
+                        <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2">
+                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">03 · TRAFFIC CONTROLS</span>
+                            <div class="text-2xl font-black text-[#0A090B] dark:text-white">Dual-Tier Throttling</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
                                 Pembatasan rate 60 request/menit untuk simpan jawaban dan 10 request/menit untuk penyerahan akhir ujian.
                             </p>
                         </div>
 
-                        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50 space-y-2">
-                            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider block">04 · KONSISTENSI DATA</span>
-                            <div class="text-2xl font-black text-[#0A090B]">DB::transaction</div>
-                            <p class="text-xs text-slate-600 leading-normal">
+                        <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2">
+                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">04 · KONSISTENSI DATA</span>
+                            <div class="text-2xl font-black text-[#0A090B] dark:text-white">DB::transaction</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
                                 Rekapitulasi nilai dan penguncian sesi dieksekusi secara atomik untuk mencegah inkonsistensi data skor.
                             </p>
                         </div>
@@ -676,19 +681,19 @@ const progressPercentage = computed(() => {
             <!-- Workspace Showcase: Naiju Studio vs Naiju Exam -->
             <section id="ruang-kerja" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl mb-10 space-y-2">
-                    <div class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                         Pemisahan Ruang Lingkup
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-[#0A090B] tracking-tight">
+                    <h2 class="text-2xl sm:text-3xl font-black text-[#0A090B] dark:text-white tracking-tight">
                         Lingkungan Pengajar dan Siswa yang Terisolasi
                     </h2>
-                    <p class="text-sm text-slate-600">
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
                         Akses sistem dibagi tegas berdasarkan peran pengguna guna memastikan pengajar memiliki kontrol penuh atas bank materi dan siswa fokus mengerjakan ujian.
                     </p>
                 </div>
 
                 <!-- Workspace Role Tab Controls -->
-                <div class="flex items-center gap-3 mb-8 border-b border-slate-200">
+                <div class="flex items-center gap-3 mb-8 border-b border-slate-200 dark:border-slate-800">
                     <button
                         type="button"
                         @click="activeWorkspaceTab = 'studio'"
@@ -696,7 +701,7 @@ const progressPercentage = computed(() => {
                             'pb-3.5 px-4 text-sm font-bold border-b-2 transition-colors flex items-center gap-2',
                             activeWorkspaceTab === 'studio'
                                 ? 'border-[#D95300] text-[#D95300]'
-                                : 'border-transparent text-slate-500 hover:text-slate-800'
+                                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                         ]"
                     >
                         <span>Naiju Studio (Ruang Pengajar)</span>
@@ -708,7 +713,7 @@ const progressPercentage = computed(() => {
                             'pb-3.5 px-4 text-sm font-bold border-b-2 transition-colors flex items-center gap-2',
                             activeWorkspaceTab === 'exam'
                                 ? 'border-[#2B82FE] text-[#2B82FE]'
-                                : 'border-transparent text-slate-500 hover:text-slate-800'
+                                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                         ]"
                     >
                         <span>Naiju Exam (Portal Siswa)</span>
@@ -717,60 +722,60 @@ const progressPercentage = computed(() => {
 
                 <!-- Teacher Workspace Live Showcase -->
                 <div v-if="activeWorkspaceTab === 'studio'" class="grid lg:grid-cols-12 gap-8 items-start">
-                    <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-300 p-6 sm:p-7 space-y-6 shadow-xs">
-                        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <div class="lg:col-span-7 bg-white dark:bg-[#111116] rounded-2xl border border-slate-300 dark:border-slate-800 p-6 sm:p-7 space-y-6 shadow-xs transition-colors">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                             <div>
                                 <span class="text-xs font-mono font-bold text-[#D95300] uppercase tracking-wider">KURSUS AKTIF</span>
-                                <h3 class="text-lg font-bold text-slate-900">Rekayasa Web &amp; Arsitektur Backend</h3>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Rekayasa Web &amp; Arsitektur Backend</h3>
                             </div>
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-[#FFF4EC] text-[#D95300] rounded-lg border border-[#FED7AA]">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-[#FFF4EC] dark:bg-[#D95300]/15 text-[#D95300] dark:text-[#FF8A3D] rounded-lg border border-[#FED7AA] dark:border-[#D95300]/30">
                                 Pengajar: Jackson, S.Kom
                             </span>
                         </div>
 
                         <!-- Teacher Overview Mock Controls -->
                         <div class="grid grid-cols-3 gap-3 text-center">
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                                <span class="text-xs text-slate-500 font-medium block">Bank Soal</span>
-                                <span class="text-lg font-bold text-slate-900">50 Butir</span>
+                            <div class="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Bank Soal</span>
+                                <span class="text-lg font-bold text-slate-900 dark:text-white">50 Butir</span>
                             </div>
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                                <span class="text-xs text-slate-500 font-medium block">Peserta Terdaftar</span>
-                                <span class="text-lg font-bold text-slate-900">42 Siswa</span>
+                            <div class="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Peserta Terdaftar</span>
+                                <span class="text-lg font-bold text-slate-900 dark:text-white">42 Siswa</span>
                             </div>
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                                <span class="text-xs text-slate-500 font-medium block">Standar KKM</span>
-                                <span class="text-lg font-bold text-emerald-700">70 Poin</span>
+                            <div class="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Standar KKM</span>
+                                <span class="text-lg font-bold text-emerald-700 dark:text-emerald-400">70 Poin</span>
                             </div>
                         </div>
 
-                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                        <div class="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl space-y-2">
                             <div class="flex items-center justify-between text-xs font-semibold">
-                                <span class="text-slate-700">Status Validasi Bank Soal:</span>
-                                <span class="text-emerald-700 font-bold">100% Lengkap (50 dari 50 soal terverifikasi)</span>
+                                <span class="text-slate-700 dark:text-slate-300">Status Validasi Bank Soal:</span>
+                                <span class="text-emerald-700 dark:text-emerald-400 font-bold">100% Lengkap (50 dari 50 soal terverifikasi)</span>
                             </div>
-                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                                 <div class="bg-[#D95300] h-full w-full"></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="lg:col-span-5 space-y-4">
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-1.5 shadow-xs">
-                            <h4 class="text-sm font-bold text-slate-900">Isolasi Kepemilikan Materi</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">
-                                Setiap pengajar hanya memiliki hak akses penuh terhadap kursus yang diciptakannya (<code class="bg-slate-100 px-1 py-0.5 rounded text-xs">teacher_id = auth()->id()</code>), menjaga kerahasiaan materi antar-instruktur.
+                        <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Isolasi Kepemilikan Materi</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Setiap pengajar hanya memiliki hak akses penuh terhadap kursus yang diciptakannya (<code class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-1 py-0.5 rounded text-xs">teacher_id = auth()->id()</code>), menjaga kerahasiaan materi antar-instruktur.
                             </p>
                         </div>
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-1.5 shadow-xs">
-                            <h4 class="text-sm font-bold text-slate-900">Kontrol Enrolment Siswa</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">
+                        <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Kontrol Enrolment Siswa</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                 Hanya peserta didik yang didaftarkan ke tabel pivot kursus yang dapat memulai sesi asesmen resmi.
                             </p>
                         </div>
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-1.5 shadow-xs">
-                            <h4 class="text-sm font-bold text-slate-900">Analitik Kelulusan Otomatis</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">
+                        <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Analitik Kelulusan Otomatis</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                 Grafik performa nilai rata-rata, rasio kelulusan KKM, dan distribusi skor tersedia langsung tanpa rekap manual.
                             </p>
                         </div>
@@ -779,57 +784,57 @@ const progressPercentage = computed(() => {
 
                 <!-- Student Workspace Live Showcase -->
                 <div v-else class="grid lg:grid-cols-12 gap-8 items-start">
-                    <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-300 p-6 sm:p-7 space-y-6 shadow-xs">
-                        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <div class="lg:col-span-7 bg-white dark:bg-[#111116] rounded-2xl border border-slate-300 dark:border-slate-800 p-6 sm:p-7 space-y-6 shadow-xs transition-colors">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                             <div>
                                 <span class="text-xs font-mono font-bold text-[#2B82FE] uppercase tracking-wider">HASIL UJIAN SISWA</span>
-                                <h3 class="text-lg font-bold text-slate-900">Lembar Rapor Digital (learning_rapport)</h3>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Lembar Rapor Digital (learning_rapport)</h3>
                             </div>
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-200">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 rounded-lg border border-emerald-200 dark:border-emerald-800">
                                 Status: Tuntas / Lulus KKM
                             </span>
                         </div>
 
                         <!-- Score Metric Badge -->
-                        <div class="flex items-center gap-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                        <div class="flex items-center gap-6 p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl">
                             <div class="w-20 h-20 bg-emerald-600 text-white rounded-2xl flex flex-col items-center justify-center font-black shrink-0 shadow-sm">
                                 <span class="text-2xl leading-none">84</span>
                                 <span class="text-[10px] font-medium opacity-80 pt-1">SKOR AKHIR</span>
                             </div>
                             <div class="space-y-1 text-xs">
-                                <div class="font-bold text-slate-900">Pencapaian: Melampaui Batas KKM (70)</div>
-                                <p class="text-slate-500">42 jawaban benar dari total 50 butir soal (Bobot 2.0 poin per butir). Durasi pengerjaan: 38 menit 42 detik.</p>
+                                <div class="font-bold text-slate-900 dark:text-white">Pencapaian: Melampaui Batas KKM (70)</div>
+                                <p class="text-slate-500 dark:text-slate-400">42 jawaban benar dari total 50 butir soal (Bobot 2.0 poin per butir). Durasi pengerjaan: 38 menit 42 detik.</p>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3 text-center text-xs">
-                            <div class="p-3 bg-white border border-slate-200 rounded-xl">
-                                <span class="text-slate-500 block">Jawaban Benar</span>
-                                <span class="text-base font-bold text-emerald-700">42 Butir</span>
+                            <div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+                                <span class="text-slate-500 dark:text-slate-400 block">Jawaban Benar</span>
+                                <span class="text-base font-bold text-emerald-700 dark:text-emerald-400">42 Butir</span>
                             </div>
-                            <div class="p-3 bg-white border border-slate-200 rounded-xl">
-                                <span class="text-slate-500 block">Jawaban Salah</span>
-                                <span class="text-base font-bold text-rose-600">8 Butir</span>
+                            <div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+                                <span class="text-slate-500 dark:text-slate-400 block">Jawaban Salah</span>
+                                <span class="text-base font-bold text-rose-600 dark:text-rose-400">8 Butir</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="lg:col-span-5 space-y-4">
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-1.5 shadow-xs">
-                            <h4 class="text-sm font-bold text-slate-900">Fokus Pengerjaan Bebas Distraksi</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">
+                        <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Fokus Pengerjaan Bebas Distraksi</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                 Antarmuka ujian dirancang tanpa elemen dekoratif berlebih agar peserta didik dapat berkonsentrasi penuh pada materi evaluasi.
                             </p>
                         </div>
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-1.5 shadow-xs">
-                            <h4 class="text-sm font-bold text-slate-900">Perlindungan dari Gangguan Jaringan</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">
+                        <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Perlindungan dari Gangguan Jaringan</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                 Setiap klik opsi tersimpan asinkron ke server, memastikan progres ujian tidak terhapus apabila terjadi gangguan konektivitas lokal.
                             </p>
                         </div>
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 space-y-1.5 shadow-xs">
-                            <h4 class="text-sm font-bold text-slate-900">Transparansi Penilaian Instan</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">
+                        <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Transparansi Penilaian Instan</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                 Begitu tombol selesaikan ujian ditekan, sistem langsung memvalidasi skor akhir dan menampilkan ulasan performa belajar.
                             </p>
                         </div>
@@ -906,15 +911,15 @@ const progressPercentage = computed(() => {
 
             <!-- Direct Getting Started Pathways -->
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-                <div class="bg-white border border-slate-300 rounded-3xl p-8 sm:p-12 lg:p-16 shadow-xs">
+                <div class="bg-white dark:bg-[#111116] border border-slate-300 dark:border-slate-800 rounded-3xl p-8 sm:p-12 lg:p-16 shadow-xs transition-colors">
                     <div class="max-w-2xl space-y-4">
-                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                             Akses Portal Sistem
                         </div>
-                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0A090B] tracking-tight">
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0A090B] dark:text-white tracking-tight">
                             Mulai Gunakan Platform Asesmen Naiju
                         </h2>
-                        <p class="text-sm text-slate-600 leading-relaxed">
+                        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                             Masuk dengan akun pengajar untuk mulai mengelola kursus dan bank soal, atau masuk dengan akun peserta untuk mengikuti ujian yang telah dijadwalkan.
                         </p>
 
@@ -930,7 +935,7 @@ const progressPercentage = computed(() => {
                             <Link
                                 v-if="!$page.props.auth.user && canRegister"
                                 :href="route('register')"
-                                class="px-6 py-3.5 bg-slate-100 text-slate-800 text-sm font-bold rounded-xl text-center hover:bg-slate-200 transition-colors"
+                                class="px-6 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-bold rounded-xl text-center hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                             >
                                 Daftar Akun Peserta Baru
                             </Link>
@@ -938,7 +943,7 @@ const progressPercentage = computed(() => {
                             <Link
                                 v-if="$page.props.auth.user"
                                 :href="route('dashboard')"
-                                class="px-6 py-3.5 bg-[#0A090B] text-white text-sm font-bold rounded-xl text-center hover:bg-slate-800 transition-colors shadow-sm"
+                                class="px-6 py-3.5 bg-[#0A090B] dark:bg-white text-white dark:text-[#0A090B] text-sm font-bold rounded-xl text-center hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors shadow-sm"
                             >
                                 Buka Dashboard
                             </Link>
@@ -949,7 +954,7 @@ const progressPercentage = computed(() => {
         </main>
 
         <!-- Institutional Footer -->
-        <footer class="bg-white border-t border-slate-200 py-12">
+        <footer class="bg-white dark:bg-[#0A090B] border-t border-slate-200 dark:border-slate-800 py-12 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                     <!-- Brand Identifier -->
@@ -959,20 +964,20 @@ const progressPercentage = computed(() => {
                                 <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                             </svg>
                         </div>
-                        <span class="font-extrabold text-base tracking-tight text-[#0A090B]">Naiju</span>
-                        <span class="text-xs text-slate-500 pl-3 border-l border-slate-200">Platform Ujian &amp; Asesmen Digital</span>
+                        <span class="font-extrabold text-base tracking-tight text-[#0A090B] dark:text-white">Naiju</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 pl-3 border-l border-slate-200 dark:border-slate-800">Platform Ujian &amp; Asesmen Digital</span>
                     </div>
 
                     <!-- Navigation Jump Links -->
-                    <div class="flex flex-wrap items-center gap-6 text-xs font-semibold text-slate-600">
-                        <a href="#simulasi" class="hover:text-[#D95300] transition-colors">Simulasi Ujian</a>
-                        <a href="#spesifikasi" class="hover:text-[#D95300] transition-colors">Spesifikasi</a>
-                        <a href="#ruang-kerja" class="hover:text-[#D95300] transition-colors">Ruang Kerja</a>
-                        <a href="#keamanan" class="hover:text-[#D95300] transition-colors">Keamanan</a>
+                    <div class="flex flex-wrap items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                        <a href="#simulasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Simulasi Ujian</a>
+                        <a href="#spesifikasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Spesifikasi</a>
+                        <a href="#ruang-kerja" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Ruang Kerja</a>
+                        <a href="#keamanan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Keamanan</a>
                     </div>
 
                     <!-- Copyright Notice -->
-                    <div class="text-xs text-slate-500 font-medium">
+                    <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">
                         &copy; {{ new Date().getFullYear() }} Naiju. Hak Cipta Dilindungi.
                     </div>
                 </div>
