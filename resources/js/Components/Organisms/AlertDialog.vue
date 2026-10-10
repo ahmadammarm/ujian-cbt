@@ -89,7 +89,7 @@ const buttonClass = computed(() => {
             leave-from-class="opacity-100"
             leave-to-class="opacity-0"
         >
-            <div v-show="show" class="fixed inset-0 z-[100] overflow-y-auto px-4 py-6 sm:px-0 flex items-center justify-center">
+            <div v-show="show" class="fixed inset-0 z-[120] overflow-y-auto px-4 py-6 sm:px-0 flex items-center justify-center">
                 <!-- Backdrop -->
                 <div class="fixed inset-0 transform transition-all" @click="close">
                     <div class="absolute inset-0 bg-[#0A090B]/40 backdrop-blur-sm" />
