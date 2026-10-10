@@ -364,7 +364,7 @@ const faqs = [
         <meta property="og:type" content="website" />
     </Head>
 
-    <div class="min-h-screen bg-[#F8FAFC] dark:bg-[#09090B] text-[#0A090B] dark:text-slate-100 font-sans antialiased selection:bg-[#D95300] selection:text-white transition-colors">
+    <div class="min-h-screen bg-[#F8FAFC] dark:bg-[#09090B] text-[#0A090B] dark:text-slate-100 font-poppins antialiased selection:bg-[#D95300] selection:text-white transition-colors">
         <!-- Institutional Navigation Header -->
         <header class="fixed top-0 inset-x-0 z-50 bg-white/95 dark:bg-[#0A090B]/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
