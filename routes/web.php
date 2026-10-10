@@ -32,6 +32,8 @@ Route::middleware(['auth', 'verified', 'role_redirect'])->group(function () {
             Route::get('/settings', fn() => Inertia::render('Admin/Settings'))->name('settings');
 
             Route::resource('courses', CourseController::class);
+            Route::post('/courses/{course}/enroll-students', [CourseController::class, 'enrollStudents'])->name('courses.enroll-students');
+            Route::delete('/courses/{course}/unenroll-student/{student}', [CourseController::class, 'unenrollStudent'])->name('courses.unenroll-student');
 
             Route::prefix('course/question')->name('course.question.')->group(function () {
                 Route::get('/create/{courseId}', [CourseQuestionController::class, 'create'])->name('create');

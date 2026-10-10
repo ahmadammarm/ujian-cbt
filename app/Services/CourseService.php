@@ -53,4 +53,27 @@ class CourseService
     {
         return $course->delete();
     }
+
+    /**
+     * Enroll multiple students into a course.
+     *
+     * @param Course $course
+     * @param array<int> $studentIds
+     */
+    public function enrollStudents(Course $course, array $studentIds): void
+    {
+        DB::transaction(function () use ($course, $studentIds) {
+            $course->students()->syncWithoutDetaching($studentIds);
+        });
+    }
+
+    /**
+     * Unenroll a student from a course.
+     */
+    public function unenrollStudent(Course $course, User $student): void
+    {
+        DB::transaction(function () use ($course, $student) {
+            $course->students()->detach($student->id);
+        });
+    }
 }

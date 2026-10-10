@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Category;
+use App\Models\User;
 use App\Http\Requests\Course\StoreCourseRequest;
 use App\Http\Requests\Course\UpdateCourseRequest;
 use App\Services\CourseService;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,16 +75,32 @@ class CourseController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(5, ['*'], 'students_page')
             ->withQueryString();
-            
+
         $questions = $course->questions()
             ->orderBy('id', 'desc')
             ->paginate(5, ['*'], 'questions_page')
             ->withQueryString();
 
+        $enrolledStudentIds = $course->students()->pluck('users.id')->all();
+        $availableStudents = User::role('student')
+            ->where('is_active', true)
+            ->select('id', 'name', 'email')
+            ->orderBy('name')
+            ->get()
+            ->map(function ($s) use ($enrolledStudentIds) {
+                return [
+                    'id' => $s->id,
+                    'name' => $s->name,
+                    'email' => $s->email,
+                    'is_enrolled' => in_array($s->id, $enrolledStudentIds),
+                ];
+            });
+
         return Inertia::render('Admin/Courses/Manage', [
             'course' => $course,
             'students' => $students,
-            'questions' => $questions
+            'questions' => $questions,
+            'availableStudents' => $availableStudents,
         ]);
     }
 
@@ -127,5 +145,38 @@ class CourseController extends Controller
 
         $this->courseService->deleteCourse($course);
         return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully.');
+    }
+
+    /**
+     * Enroll selected students into the course.
+     */
+    public function enrollStudents(Request $request, Course $course): RedirectResponse
+    {
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'required|integer|exists:users,id',
+        ]);
+
+        $this->courseService->enrollStudents($course, $validated['student_ids']);
+
+        return redirect()->back()->with('success', count($validated['student_ids']) . ' peserta didik berhasil didaftarkan ke modul ini.');
+    }
+
+    /**
+     * Unenroll a single student from the course.
+     */
+    public function unenrollStudent(Course $course, User $student): RedirectResponse
+    {
+        if ($course->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $this->courseService->unenrollStudent($course, $student);
+
+        return redirect()->back()->with('success', 'Peserta didik ' . $student->name . ' berhasil dikeluarkan dari modul ini.');
     }
 }
