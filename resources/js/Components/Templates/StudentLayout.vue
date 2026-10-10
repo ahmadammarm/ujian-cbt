@@ -74,7 +74,7 @@ onUnmounted(() => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link :href="route('dashboard.learning.index')" class="nav-link" :class="{'active': route().current('dashboard.learning.index') || route().current('dashboard.learning.report')}">
+                                    <Link :href="route('dashboard.learning.index')" class="nav-link" :class="{'active': route().current('dashboard.learning.*')}">
                                         <img src="/assets/images/icons/note-favorite.svg" class="w-5 h-5 icon" alt="icon">
                                         <span>Kursus & Ujian</span>
                                     </Link>

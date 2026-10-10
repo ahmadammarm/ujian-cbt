@@ -3,6 +3,7 @@ import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import Pagination from '@/Components/Molecules/Pagination.vue';
+import CourseThumbnail from '@/Components/Atoms/CourseThumbnail.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
@@ -135,10 +136,12 @@ const filteredCourses = computed(() => {
                     <!-- Col 1: Course Info (5 Cols) -->
                     <div class="w-full lg:col-span-5 flex items-center gap-4 min-w-0">
                         <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                            <img v-if="course.cover" :src="'/storage/' + course.cover" class="w-full h-full object-cover" alt="thumbnail">
-                            <div v-else class="w-full h-full flex items-center justify-center font-bold text-lg text-[#D95300]">
-                                {{ course.name.charAt(0).toUpperCase() }}
-                            </div>
+                            <CourseThumbnail
+                                :src="course.cover"
+                                :name="course.name"
+                                theme="teacher"
+                                monogramClass="text-lg"
+                            />
                         </div>
                         <div class="min-w-0 flex-1">
                             <Link

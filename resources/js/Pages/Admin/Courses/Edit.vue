@@ -1,6 +1,7 @@
 <script setup>
 import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
+import CourseThumbnail from '@/Components/Atoms/CourseThumbnail.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import InputError from '@/Components/Atoms/InputError.vue';
@@ -151,7 +152,13 @@ const submit = () => {
                             <!-- Preview Active -->
                             <div v-if="previewUrl" class="w-full flex flex-col sm:flex-row items-center gap-6">
                                 <div class="w-40 h-28 shrink-0 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 relative">
-                                    <img :src="previewUrl" class="w-full h-full object-cover" alt="Preview Sampul">
+                                    <CourseThumbnail
+                                        :src="previewUrl"
+                                        :name="course.name"
+                                        theme="teacher"
+                                        alt="Preview Sampul"
+                                        monogramClass="text-2xl"
+                                    />
                                 </div>
                                 <div class="flex-1 text-center sm:text-left min-w-0">
                                     <div class="flex items-center justify-center sm:justify-start gap-2 mb-1">

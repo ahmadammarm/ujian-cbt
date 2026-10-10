@@ -33,6 +33,22 @@ class CourseSeeder extends Seeder
         $category = Category::where('slug', 'programming')->first() ?? Category::first();
         $teacher = User::where('email', 'jackson@teacher.com')->first();
 
+        // Ensure default course covers exist in storage
+        $coverDir = storage_path('app/public/course_covers');
+        if (!file_exists($coverDir)) {
+            mkdir($coverDir, 0755, true);
+        }
+        $sourceLaravel = public_path('assets/images/thumbnail/Web-Development-big.png');
+        $targetLaravel = $coverDir . '/default_laravel.png';
+        if (file_exists($sourceLaravel) && !file_exists($targetLaravel)) {
+            copy($sourceLaravel, $targetLaravel);
+        }
+        $sourceDefault = public_path('assets/images/thumbnail/Web-Development.png');
+        $targetDefault = $coverDir . '/default.png';
+        if (file_exists($sourceDefault) && !file_exists($targetDefault)) {
+            copy($sourceDefault, $targetDefault);
+        }
+
         // 3. Create or update course
         $course = Course::firstOrCreate(
             ['slug' => 'laravel-advanced-mastery'],

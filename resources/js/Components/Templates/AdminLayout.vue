@@ -74,7 +74,7 @@ onUnmounted(() => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link :href="route('dashboard.courses.index')" class="nav-link" :class="{'active': route().current('dashboard.courses.*')}">
+                                    <Link :href="route('dashboard.courses.index')" class="nav-link" :class="{'active': route().current('dashboard.courses.*') || route().current('dashboard.course.question.*')}">
                                         <img src="/assets/images/icons/note-favorite.svg" class="w-5 h-5 icon" alt="icon">
                                         <span>Daftar Kursus</span>
                                     </Link>
@@ -86,7 +86,7 @@ onUnmounted(() => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link :href="route('dashboard.analytics')" class="nav-link" :class="{'active': route().current('dashboard.analytics')}">
+                                    <Link :href="route('dashboard.analytics')" class="nav-link" :class="{'active': route().current('dashboard.analytics*')}">
                                         <img src="/assets/images/icons/chart-2.svg" class="w-5 h-5 icon" alt="icon">
                                         <span>Analitik Nilai</span>
                                     </Link>

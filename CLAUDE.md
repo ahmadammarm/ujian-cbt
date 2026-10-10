@@ -57,7 +57,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Role-Based Architecture & Access Control
 - User roles: `teacher` and `student`.
 - Route isolation (`routes/web.php`):
-  - Teacher routes are grouped under `role:teacher` (`/dashboard/overview`, `/dashboard/courses`, `/dashboard/students-list`, `/dashboard/analytics`).
+  - Teacher routes are grouped under `role:teacher` (`/dashboard/overview`, `/dashboard/courses`, `/dashboard/students`, `/dashboard/analytics`).
   - Student routes are grouped under `role:student` (`/dashboard/learning/*`).
 - Role routing middleware:
   - `RoleRedirect` automatically directs authenticated users hitting `/` or `/dashboard` to `dashboard.overview` if they have the `teacher` role, or to `dashboard` (student dashboard) otherwise.

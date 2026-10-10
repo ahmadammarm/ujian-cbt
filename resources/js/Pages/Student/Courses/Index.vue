@@ -1,5 +1,6 @@
 <script setup>
 import StudentLayout from '@/Components/Templates/StudentLayout.vue';
+import CourseThumbnail from '@/Components/Atoms/CourseThumbnail.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
@@ -83,15 +84,13 @@ const filteredCourses = computed(() => {
                 >
                     <!-- 16:9 Aspect Ratio Thumbnail with Solid Border -->
                     <div class="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 border-b border-slate-200/80 dark:border-slate-800">
-                        <img
-                            v-if="course.cover"
-                            :src="'/storage/' + course.cover"
-                            :alt="course.name"
-                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        >
-                        <div v-else class="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-[#2B82FE] font-black text-3xl">
-                            {{ course.name.substring(0, 2).toUpperCase() }}
-                        </div>
+                        <CourseThumbnail
+                            :src="course.cover"
+                            :name="course.name"
+                            theme="student"
+                            imgClass="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            monogramClass="text-3xl"
+                        />
 
                         <!-- Solid Category Badge (Zero Blur) -->
                         <div class="absolute top-3.5 left-3.5" v-if="course.category">

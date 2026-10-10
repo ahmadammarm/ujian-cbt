@@ -1,5 +1,6 @@
 <script setup>
 import StudentLayout from '@/Components/Templates/StudentLayout.vue';
+import CourseThumbnail from '@/Components/Atoms/CourseThumbnail.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -120,8 +121,12 @@ const getLatestScore = (courseId) => {
                     >
                         <div class="flex items-center gap-4">
                             <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-slate-700 shrink-0">
-                                <img v-if="assessment.course.cover" :src="'/storage/' + assessment.course.cover" class="w-full h-full object-cover">
-                                <div v-else class="text-[#2B82FE] font-bold text-sm">{{ assessment.course.name.substring(0, 2).toUpperCase() }}</div>
+                                <CourseThumbnail
+                                    :src="assessment.course.cover"
+                                    :name="assessment.course.name"
+                                    theme="student"
+                                    monogramClass="text-base"
+                                />
                             </div>
                             <div class="flex flex-col">
                                 <p class="font-bold text-base text-[#0A090B] dark:text-white group-hover:text-[#2B82FE] transition-colors line-clamp-1">

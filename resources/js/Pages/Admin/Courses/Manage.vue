@@ -3,6 +3,7 @@ import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
 import Pagination from '@/Components/Molecules/Pagination.vue';
+import CourseThumbnail from '@/Components/Atoms/CourseThumbnail.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -71,10 +72,12 @@ const formatDate = (dateString) => {
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 min-w-0">
                         <!-- Thumbnail Cover -->
                         <div class="w-24 h-24 lg:w-28 lg:h-28 rounded-2xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
-                            <img v-if="course.cover" :src="'/storage/' + course.cover" class="w-full h-full object-cover" alt="cover">
-                            <div v-else class="w-full h-full flex items-center justify-center font-black text-2xl text-[#D95300]">
-                                {{ course.name.charAt(0).toUpperCase() }}
-                            </div>
+                            <CourseThumbnail
+                                :src="course.cover"
+                                :name="course.name"
+                                theme="teacher"
+                                monogramClass="text-2xl"
+                            />
                         </div>
 
                         <!-- Meta Info -->

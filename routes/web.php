@@ -23,7 +23,7 @@ Route::middleware(['auth', 'verified', 'role_redirect'])->group(function () {
         // Teacher role routes
         Route::middleware('role:teacher')->group(function () {
             Route::get('/overview', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('overview');
-            Route::get('/students-list', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('students.index');
+            Route::get('/students', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('students.index');
             Route::post('/students/{student}/toggle-suspension', [\App\Http\Controllers\Admin\StudentController::class, 'toggleSuspension'])->name('students.toggle-suspension');
             Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics');
             Route::get('/messages', fn() => Inertia::render('Admin/Messages'))->name('messages');

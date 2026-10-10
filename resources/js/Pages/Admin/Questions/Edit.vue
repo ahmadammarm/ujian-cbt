@@ -1,6 +1,7 @@
 <script setup>
 import AdminLayout from '@/Components/Templates/AdminLayout.vue';
 import Breadcrumbs from '@/Components/Molecules/Breadcrumbs.vue';
+import CourseThumbnail from '@/Components/Atoms/CourseThumbnail.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import InputError from '@/Components/Atoms/InputError.vue';
@@ -62,10 +63,12 @@ const isFormValid = computed(() => {
             <div class="w-full flex items-center justify-between mb-8 p-5 bg-white dark:bg-[#111116] rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                 <div class="flex items-center gap-4 min-w-0">
                     <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        <img v-if="course.cover" :src="'/storage/' + course.cover" class="w-full h-full object-cover" alt="cover">
-                        <div v-else class="w-full h-full flex items-center justify-center font-black text-lg text-[#D95300]">
-                            {{ course.name.charAt(0).toUpperCase() }}
-                        </div>
+                        <CourseThumbnail
+                            :src="course.cover"
+                            :name="course.name"
+                            theme="teacher"
+                            monogramClass="text-sm"
+                        />
                     </div>
                     <div class="min-w-0">
                         <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#D95300]">Pembaruan Butir Soal</span>
