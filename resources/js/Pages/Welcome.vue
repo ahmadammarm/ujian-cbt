@@ -383,7 +383,6 @@ const faqs = [
 
                 <!-- Navigation Destinations -->
                 <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
-                    <a href="#simulasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Simulasi CBT</a>
                     <a href="#keunggulan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Keunggulan</a>
                     <a href="#ruang-kerja" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Portal Guru &amp; Siswa</a>
                     <a href="#keamanan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Proteksi Ujian</a>
