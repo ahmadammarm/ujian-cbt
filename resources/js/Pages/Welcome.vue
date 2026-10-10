@@ -324,10 +324,46 @@ const answeredCount = computed(() => {
 const progressPercentage = computed(() => {
     return Math.round((answeredCount.value / questions.value.length) * 100);
 });
+
+// Interactive state for SEO-rich Frequently Asked Questions
+const activeFaqIndex = ref(null);
+const toggleFaq = (index) => {
+    activeFaqIndex.value = activeFaqIndex.value === index ? null : index;
+};
+
+const faqs = [
+    {
+        q: 'Apakah aplikasi ujian CBT Naiju bisa diakses dari HP atau laptop siswa?',
+        a: 'Ya. Antarmuka Naiju dirancang responsif dan ringan, sehingga siswa dapat mengerjakan ujian dengan lancar menggunakan laptop, komputer laboratorium sekolah, tablet, maupun smartphone tanpa perlu mengunduh aplikasi tambahan.',
+    },
+    {
+        q: 'Bagaimana jika koneksi internet siswa terputus saat ujian berlangsung?',
+        a: 'Sistem Naiju menerapkan penyimpanan otomatis (auto-save) setiap kali opsi jawaban dipilih. Jika koneksi terputus atau baterai habis, siswa dapat masuk kembali dan melanjutkan ujian tanpa kehilangan jawaban yang telah tersimpan.',
+    },
+    {
+        q: 'Apakah pengajar bisa membuat bank soal dan mengatur waktu ujian sendiri?',
+        a: 'Tentu saja. Melalui portal Naiju Studio, setiap guru dan dosen memiliki kendali penuh untuk menyusun paket soal pilihan ganda, menentukan bobot penilaian, durasi hitung mundur, serta memilih kelas siswa yang berhak mengikuti ujian.',
+    },
+    {
+        q: 'Apakah hasil ujian dan rekap nilai siswa langsung keluar setelah ujian selesai?',
+        a: 'Ya. Segera setelah siswa menekan tombol selesaikan ujian, sistem mengoreksi lembar jawaban secara otomatis dan menyajikan perolehan skor akhir serta lembar evaluasi hasil belajar secara instan.',
+    },
+    {
+        q: 'Apakah platform ujian ini aman dari kecurangan inspect element browser?',
+        a: 'Sangat aman. Kunci jawaban tidak pernah dikirimkan ke browser siswa saat sesi ujian berlangsung. Seluruh proses validasi dan penilaian dieksekusi secara terproteksi di sisi server.',
+    },
+];
 </script>
 
 <template>
-    <Head title="Naiju - Platform Ujian & Asesmen Digital" />
+    <Head>
+        <title>Naiju - Aplikasi Ujian Online & CBT Sekolah Berintegritas</title>
+        <meta name="description" content="Naiju adalah platform ujian online CBT (Computer Based Test) terpadu untuk sekolah dan kampus. Dilengkapi proteksi anti-curang, bank soal otomatis, auto-save real-time, dan rekapitulasi nilai instan." />
+        <meta name="keywords" content="aplikasi ujian online, cbt sekolah, computer based test, platform ujian cbt, bank soal ujian, aplikasi asesmen digital, ujian sekolah bebas curang, ujian online otomatis" />
+        <meta property="og:title" content="Naiju - Aplikasi Ujian Online & CBT Sekolah Berintegritas" />
+        <meta property="og:description" content="Platform ujian berbasis komputer (CBT) dan asesmen digital terpercaya untuk sekolah dan universitas. Aman dari kebocoran kunci jawaban, mudah digunakan guru dan siswa." />
+        <meta property="og:type" content="website" />
+    </Head>
 
     <div class="min-h-screen bg-[#F8FAFC] dark:bg-[#09090B] text-[#0A090B] dark:text-slate-100 font-sans antialiased selection:bg-[#D95300] selection:text-white transition-colors">
         <!-- Institutional Navigation Header -->
@@ -348,10 +384,11 @@ const progressPercentage = computed(() => {
 
                 <!-- Navigation Destinations -->
                 <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
-                    <a href="#simulasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Simulasi Ujian</a>
-                    <a href="#spesifikasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Spesifikasi Sistem</a>
-                    <a href="#ruang-kerja" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Ruang Kerja</a>
-                    <a href="#keamanan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Integritas Server</a>
+                    <a href="#simulasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Simulasi CBT</a>
+                    <a href="#keunggulan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Keunggulan</a>
+                    <a href="#ruang-kerja" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Portal Guru &amp; Siswa</a>
+                    <a href="#keamanan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Proteksi Ujian</a>
+                    <a href="#faq" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Tanya Jawab</a>
                 </nav>
 
                 <!-- Access Controls & Theme Switcher -->
@@ -396,15 +433,15 @@ const progressPercentage = computed(() => {
                     <!-- Left: Problem Statement & Practical Core Value -->
                     <div class="lg:col-span-5 space-y-6 lg:pt-4">
                         <div class="text-xs font-bold uppercase tracking-wider text-[#D95300]">
-                            Standar Asesmen Digital Berintegritas
+                            Sistem CBT &amp; Asesmen Sekolah Modern
                         </div>
 
                         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0A090B] dark:text-white tracking-tight leading-[1.15]">
-                            Infrastruktur Ujian Digital Terproteksi untuk Sekolah &amp; Kampus.
+                            Aplikasi Ujian Online &amp; CBT Sekolah yang Praktis, Akurat, dan Anti-Bocor.
                         </h1>
 
                         <p class="text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                            Naiju menyederhanakan manajemen bank soal pengajar, pengawasan ujian real-time, dan evaluasi hasil otomatis. Kunci jawaban dilindungi secara ketat di sisi server untuk menjamin kejujuran asesmen.
+                            Naiju membantu sekolah dan perguruan tinggi menyelenggarakan ujian berbasis komputer (CBT) tanpa repot. Kelola bank soal guru dengan mudah, amankan kunci jawaban di server, dan peroleh hasil evaluasi siswa secara instan tanpa perlu koreksi manual.
                         </p>
 
                         <!-- Primary Direct Actions -->
@@ -422,29 +459,29 @@ const progressPercentage = computed(() => {
                                 :href="route('login')"
                                 class="px-6 py-3.5 bg-[#D95300] text-white font-bold text-sm rounded-xl text-center hover:bg-[#BF4900] transition-colors shadow-xs"
                             >
-                                Masuk Portal Ujian
+                                Masuk ke Portal Ujian
                             </Link>
 
                             <a
                                 href="#simulasi"
                                 class="px-6 py-3.5 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 font-bold text-sm border border-slate-300 dark:border-slate-700 rounded-xl text-center hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors shadow-xs"
                             >
-                                Uji Simulasi Interaktif
+                                Coba Simulasi CBT Interaktif
                             </a>
                         </div>
 
                         <!-- Technical Highlights Grid -->
                         <div class="pt-6 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 gap-4 text-left">
                             <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl space-y-1.5 shadow-xs">
-                                <span class="text-xs font-bold text-slate-900 dark:text-slate-100 block">Server-Side Sanitization</span>
+                                <span class="text-xs font-bold text-slate-900 dark:text-slate-100 block">Kunci Jawaban Anti-Bocor</span>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 leading-normal">
-                                    Atribut <code class="text-[11px] bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-[#D95300]">is_correct</code> disaring di level query database sebelum dikirim ke browser.
+                                    Kunci jawaban diamankan di server, mencegah siswa membocorkan jawaban via Inspect Element di browser.
                                 </p>
                             </div>
                             <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl space-y-1.5 shadow-xs">
-                                <span class="text-xs font-bold text-slate-900 dark:text-slate-100 block">Penyimpanan Asinkron</span>
+                                <span class="text-xs font-bold text-slate-900 dark:text-slate-100 block">Penyimpanan Jawaban Real-Time</span>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 leading-normal">
-                                    Jawaban tersimpan otomatis per butir soal untuk mengamankan progres dari kendala koneksi.
+                                    Setiap pilihan tersimpan otomatis ke server. Bebas cemas dari kendala mati listrik atau koneksi internet terputus.
                                 </p>
                             </div>
                         </div>
@@ -457,7 +494,7 @@ const progressPercentage = computed(() => {
                             <div class="px-6 py-3.5 bg-[#0A090B] dark:bg-black text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-800">
                                 <div class="flex items-center gap-3">
                                     <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
-                                    <span class="text-xs font-mono font-bold tracking-wider text-slate-200">NAIJU EXAM · SESI AKTIF</span>
+                                    <span class="text-xs font-mono font-bold tracking-wider text-slate-200">NAIJU CBT · SIMULASI UJIAN ONLINE</span>
                                     <span class="text-xs text-slate-400 border-l border-slate-700 pl-3">Mata Uji: Rekayasa Web</span>
                                 </div>
                                 <div class="flex items-center gap-3">
@@ -478,7 +515,7 @@ const progressPercentage = computed(() => {
                                 <div class="flex items-center gap-2 font-mono">
                                     <span v-if="isSaving" class="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1.5">
                                         <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                                        Menyinkronkan jawaban...
+                                        Menyimpan jawaban ke server...
                                     </span>
                                     <span v-else class="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -503,7 +540,7 @@ const progressPercentage = computed(() => {
                                 <div class="space-y-2">
                                     <div class="flex items-center justify-between">
                                         <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                            Butir Pertanyaan {{ currentQuestion.num }} dari 50
+                                            Butir Soal {{ currentQuestion.num }} dari 50
                                         </span>
                                         <span class="text-xs font-semibold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
                                             Bobot: 2.0 Poin
@@ -583,7 +620,7 @@ const progressPercentage = computed(() => {
                                 <!-- Question Sheet Navigator Palette -->
                                 <div class="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl space-y-3">
                                     <div class="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
-                                        <span>Navigasi Lembar Jawaban (Pilih Nomor)</span>
+                                        <span>Navigasi Soal Ujian (Pilih Nomor untuk Berpindah)</span>
                                         <div class="flex items-center gap-3 text-[11px]">
                                             <span class="flex items-center gap-1.5">
                                                 <span class="w-2.5 h-2.5 rounded bg-emerald-600"></span>
@@ -627,51 +664,51 @@ const progressPercentage = computed(() => {
                 </div>
             </section>
 
-            <!-- Technical Specifications Grid: Verifiable, Concrete Architecture -->
-            <section id="spesifikasi" class="border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0E0E12] py-16 transition-colors">
+            <!-- Keunggulan Sistem: Solusi Lengkap Asesmen Digital Sekolah -->
+            <section id="keunggulan" class="border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0E0E12] py-16 transition-colors">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="max-w-3xl mb-12 space-y-2">
-                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                            Spesifikasi &amp; Standar Teknis
+                        <div class="text-xs font-bold uppercase tracking-wider text-[#D95300]">
+                            Solusi Asesmen Digital Terpadu
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-black text-[#0A090B] dark:text-white tracking-tight">
-                            Parameter Arsitektur Sistem Asesmen Naiju
+                            Keunggulan Aplikasi CBT Naiju untuk Evaluasi Belajar Modern
                         </h2>
                         <p class="text-sm text-slate-600 dark:text-slate-400">
-                            Setiap modul dibangun dengan batasan teknis yang terukur untuk menjamin stabilitas saat ujian massal diselenggarakan.
+                            Dirancang untuk memenuhi kebutuhan ujian harian, Asesmen Sumatif (PTS &amp; PAS), Ujian Sekolah, hingga simulasi tryout yang hemat biaya dan waktu.
                         </p>
                     </div>
 
                     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2">
-                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">01 · KAPASITAS SESI</span>
-                            <div class="text-2xl font-black text-[#0A090B] dark:text-white">50 Butir Soal</div>
+                            <span class="text-xs font-mono font-bold text-[#D95300] uppercase tracking-wider block">01 · KOREKSI OTOMATIS</span>
+                            <div class="text-xl font-black text-[#0A090B] dark:text-white">Nilai Terhitung Instan</div>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
-                                Bobot 2 poin per butir untuk total skala 100 dengan batas Kriteria Ketuntasan Minimal (KKM) standar 70.
+                                Hasil ujian terkoreksi otomatis seketika siswa selesai. Guru menghemat waktu tanpa perlu memeriksa lembar kertas manual.
                             </p>
                         </div>
 
                         <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2">
-                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">02 · KEAMANAN DATA</span>
-                            <div class="text-2xl font-black text-[#0A090B] dark:text-white">Zero-Payload Leak</div>
+                            <span class="text-xs font-mono font-bold text-[#D95300] uppercase tracking-wider block">02 · ANTI-KECURANGAN</span>
+                            <div class="text-xl font-black text-[#0A090B] dark:text-white">Kunci Jawaban Anti-Bocor</div>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
-                                Endpoint ujian hanya menyajikan array pilihan tanpa atribut validasi kebenaran, meniadakan kecurangan inspect element.
+                                Kunci jawaban diamankan di server dan tidak pernah dikirim ke browser siswa, menjaga kejujuran evaluasi belajar.
                             </p>
                         </div>
 
                         <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2">
-                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">03 · TRAFFIC CONTROLS</span>
-                            <div class="text-2xl font-black text-[#0A090B] dark:text-white">Dual-Tier Throttling</div>
+                            <span class="text-xs font-mono font-bold text-[#D95300] uppercase tracking-wider block">03 · PERFORMA TINGGI</span>
+                            <div class="text-xl font-black text-[#0A090B] dark:text-white">Akses Ringan &amp; Stabil</div>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
-                                Pembatasan rate 60 request/menit untuk simpan jawaban dan 10 request/menit untuk penyerahan akhir ujian.
+                                Dioptimasi melayani ratusan siswa ujian serentak di jaringan lokal maupun internet sekolah tanpa gangguan lag.
                             </p>
                         </div>
 
                         <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-2">
-                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">04 · KONSISTENSI DATA</span>
-                            <div class="text-2xl font-black text-[#0A090B] dark:text-white">DB::transaction</div>
+                            <span class="text-xs font-mono font-bold text-[#D95300] uppercase tracking-wider block">04 · REKAPITULASI AKURAT</span>
+                            <div class="text-xl font-black text-[#0A090B] dark:text-white">Laporan Nilai Otomatis</div>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-normal">
-                                Rekapitulasi nilai dan penguncian sesi dieksekusi secara atomik untuk mencegah inkonsistensi data skor.
+                                Rekapitulasi skor, daftar soal yang salah, dan status ketuntasan KKM tersaji transparan untuk mempermudah evaluasi.
                             </p>
                         </div>
                     </div>
@@ -681,14 +718,14 @@ const progressPercentage = computed(() => {
             <!-- Workspace Showcase: Naiju Studio vs Naiju Exam -->
             <section id="ruang-kerja" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl mb-10 space-y-2">
-                    <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                        Pemisahan Ruang Lingkup
+                    <div class="text-xs font-bold uppercase tracking-wider text-[#D95300]">
+                        Portal Guru &amp; Siswa Terintegrasi
                     </div>
                     <h2 class="text-2xl sm:text-3xl font-black text-[#0A090B] dark:text-white tracking-tight">
-                        Lingkungan Pengajar dan Siswa yang Terisolasi
+                        Portal Ujian Mandiri untuk Guru dan Siswa
                     </h2>
                     <p class="text-sm text-slate-600 dark:text-slate-400">
-                        Akses sistem dibagi tegas berdasarkan peran pengguna guna memastikan pengajar memiliki kontrol penuh atas bank materi dan siswa fokus mengerjakan ujian.
+                        Akses sistem dibagi dengan jelas. Guru fokus mengelola bank soal dan rekapitulasi nilai, sementara siswa fokus mengerjakan ujian tanpa distraksi.
                     </p>
                 </div>
 
@@ -725,11 +762,11 @@ const progressPercentage = computed(() => {
                     <div class="lg:col-span-7 bg-white dark:bg-[#111116] rounded-2xl border border-slate-300 dark:border-slate-800 p-6 sm:p-7 space-y-6 shadow-xs transition-colors">
                         <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                             <div>
-                                <span class="text-xs font-mono font-bold text-[#D95300] uppercase tracking-wider">KURSUS AKTIF</span>
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Rekayasa Web &amp; Arsitektur Backend</h3>
+                                <span class="text-xs font-mono font-bold text-[#D95300] uppercase tracking-wider">KURSUS &amp; PAKET UJIAN</span>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Teknologi Informasi &amp; Jaringan</h3>
                             </div>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-[#FFF4EC] dark:bg-[#D95300]/15 text-[#D95300] dark:text-[#FF8A3D] rounded-lg border border-[#FED7AA] dark:border-[#D95300]/30">
-                                Pengajar: Jackson, S.Kom
+                                Guru Pengampu: Jackson, S.Kom
                             </span>
                         </div>
 
@@ -740,7 +777,7 @@ const progressPercentage = computed(() => {
                                 <span class="text-lg font-bold text-slate-900 dark:text-white">50 Butir</span>
                             </div>
                             <div class="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800">
-                                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Peserta Terdaftar</span>
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium block">Peserta Ujian</span>
                                 <span class="text-lg font-bold text-slate-900 dark:text-white">42 Siswa</span>
                             </div>
                             <div class="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800">
@@ -751,8 +788,8 @@ const progressPercentage = computed(() => {
 
                         <div class="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl space-y-2">
                             <div class="flex items-center justify-between text-xs font-semibold">
-                                <span class="text-slate-700 dark:text-slate-300">Status Validasi Bank Soal:</span>
-                                <span class="text-emerald-700 dark:text-emerald-400 font-bold">100% Lengkap (50 dari 50 soal terverifikasi)</span>
+                                <span class="text-slate-700 dark:text-slate-300">Kesiapan Paket Soal Ujian:</span>
+                                <span class="text-emerald-700 dark:text-emerald-400 font-bold">100% Siap (50 dari 50 soal tervalidasi)</span>
                             </div>
                             <div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                                 <div class="bg-[#D95300] h-full w-full"></div>
@@ -762,21 +799,21 @@ const progressPercentage = computed(() => {
 
                     <div class="lg:col-span-5 space-y-4">
                         <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
-                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Isolasi Kepemilikan Materi</h4>
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Bank Soal Mandiri Guru</h4>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                Setiap pengajar hanya memiliki hak akses penuh terhadap kursus yang diciptakannya (<code class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-1 py-0.5 rounded text-xs">teacher_id = auth()->id()</code>), menjaga kerahasiaan materi antar-instruktur.
+                                Setiap pengajar memiliki ruang pribadi untuk menyusun paket soal, pilihan ganda, dan bobot nilai secara rahasia dan independen.
                             </p>
                         </div>
                         <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
-                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Kontrol Enrolment Siswa</h4>
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Penugasan Kelas &amp; Siswa Mudah</h4>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                Hanya peserta didik yang didaftarkan ke tabel pivot kursus yang dapat memulai sesi asesmen resmi.
+                                Daftarkan peserta ujian berdasarkan kelas atau rombel dengan cepat tanpa khawatir salah jadwal ujian.
                             </p>
                         </div>
                         <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
-                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Analitik Kelulusan Otomatis</h4>
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Analisis Ketuntasan Belajar Instan</h4>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                Grafik performa nilai rata-rata, rasio kelulusan KKM, dan distribusi skor tersedia langsung tanpa rekap manual.
+                                Rekap nilai rata-rata, persentase kelulusan KKM, dan butir soal yang paling sering salah tersaji otomatis tanpa rumus Excel manual.
                             </p>
                         </div>
                     </div>
@@ -787,8 +824,8 @@ const progressPercentage = computed(() => {
                     <div class="lg:col-span-7 bg-white dark:bg-[#111116] rounded-2xl border border-slate-300 dark:border-slate-800 p-6 sm:p-7 space-y-6 shadow-xs transition-colors">
                         <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                             <div>
-                                <span class="text-xs font-mono font-bold text-[#2B82FE] uppercase tracking-wider">HASIL UJIAN SISWA</span>
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Lembar Rapor Digital (learning_rapport)</h3>
+                                <span class="text-xs font-mono font-bold text-[#2B82FE] uppercase tracking-wider">HASIL ASESMEN SISWA</span>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Laporan Hasil Belajar (Rapor Digital)</h3>
                             </div>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 rounded-lg border border-emerald-200 dark:border-emerald-800">
                                 Status: Tuntas / Lulus KKM
@@ -802,8 +839,8 @@ const progressPercentage = computed(() => {
                                 <span class="text-[10px] font-medium opacity-80 pt-1">SKOR AKHIR</span>
                             </div>
                             <div class="space-y-1 text-xs">
-                                <div class="font-bold text-slate-900 dark:text-white">Pencapaian: Melampaui Batas KKM (70)</div>
-                                <p class="text-slate-500 dark:text-slate-400">42 jawaban benar dari total 50 butir soal (Bobot 2.0 poin per butir). Durasi pengerjaan: 38 menit 42 detik.</p>
+                                <div class="font-bold text-slate-900 dark:text-white">Pencapaian: Melampaui Standar KKM (70)</div>
+                                <p class="text-slate-500 dark:text-slate-400">42 jawaban benar dari total 50 butir soal (Bobot 2.0 poin per butir). Durasi pengerjaan: 38 menit.</p>
                             </div>
                         </div>
 
@@ -821,21 +858,21 @@ const progressPercentage = computed(() => {
 
                     <div class="lg:col-span-5 space-y-4">
                         <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
-                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Fokus Pengerjaan Bebas Distraksi</h4>
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Antarmuka Bersih &amp; Bebas Distraksi</h4>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                Antarmuka ujian dirancang tanpa elemen dekoratif berlebih agar peserta didik dapat berkonsentrasi penuh pada materi evaluasi.
+                                Tampilan ujian ramah mata, tanpa iklan atau pop-up, membantu siswa tetap rileks dan fokus membaca soal ujian.
                             </p>
                         </div>
                         <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
-                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Perlindungan dari Gangguan Jaringan</h4>
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Auto-Save: Aman Saat Internet Terputus</h4>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                Setiap klik opsi tersimpan asinkron ke server, memastikan progres ujian tidak terhapus apabila terjadi gangguan konektivitas lokal.
+                                Setiap butir yang diklik tersimpan otomatis ke server. Jawaban tidak hilang meskipun kuota habis atau laptop mati mendadak.
                             </p>
                         </div>
                         <div class="bg-white dark:bg-[#111116] p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 shadow-xs transition-colors">
-                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Transparansi Penilaian Instan</h4>
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Pengumuman Skor &amp; Pembahasan Transparan</h4>
                             <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                Begitu tombol selesaikan ujian ditekan, sistem langsung memvalidasi skor akhir dan menampilkan ulasan performa belajar.
+                                Siswa dapat langsung melihat perolehan skor dan mengevaluasi hasil belajar segera setelah menyelesaikan ujian.
                             </p>
                         </div>
                     </div>
@@ -847,13 +884,13 @@ const progressPercentage = computed(() => {
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="max-w-3xl mb-12 space-y-2">
                         <div class="text-xs font-mono font-bold uppercase tracking-wider text-amber-400">
-                            Audit Integritas Data &amp; Server
+                            Jaminan Kejujuran Ujian
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-white">
-                            Perbandingan Payload Respon JSON Ujian
+                            Bebas Bocor: Kunci Jawaban Tidak Pernah Dikirim ke Komputer Siswa
                         </h2>
                         <p class="text-sm text-slate-400">
-                            Mengapa sistem ujian konvensional rentan terhadap kecurangan inspect element dan bagaimana Naiju meniadakannya secara total.
+                            Bandingkan bagaimana aplikasi CBT konvensional rentan dibobol dengan Inspect Element browser, dan bagaimana sistem Naiju melindunginya secara mutlak.
                         </p>
                     </div>
 
@@ -862,10 +899,10 @@ const progressPercentage = computed(() => {
                         <div class="bg-slate-900 border border-rose-900/40 rounded-2xl p-6 space-y-4">
                             <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                                 <span class="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider">
-                                    Celah Rentan: Platform Konvensional
+                                    Celah Rentan: Aplikasi CBT Biasa
                                 </span>
                                 <span class="text-[11px] font-mono text-rose-300 bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800/40">
-                                    BOCOR VIA NETWORK TAB
+                                    KUNCI BOCOR DI BROWSER
                                 </span>
                             </div>
 
@@ -873,12 +910,12 @@ const progressPercentage = computed(() => {
   "question_id": 14,
   "options": [
     { "id": "A", "text": "...", <span class="text-rose-400 font-bold">"is_correct": false</span> },
-    { "id": "B", "text": "...", <span class="text-rose-400 font-bold">"is_correct": true</span> } <span class="text-rose-500">// Kunci terbaca DevTools</span>
+    { "id": "B", "text": "...", <span class="text-rose-400 font-bold">"is_correct": true</span> } <span class="text-rose-500">// Kunci terbaca via Inspect Element</span>
   ]
 }</code></pre>
 
                             <p class="text-xs text-slate-400 leading-relaxed">
-                                Aplikasi mengirim atribut validasi kebenaran langsung ke browser klien. Siswa cukup menekan tombol Inspect Element / Network Tab untuk melihat jawaban benar sebelum memilih.
+                                Banyak aplikasi mengirim tanda benar/salah langsung ke browser siswa. Siswa yang paham teknologi dapat membuka menu Inspect Element (F12) untuk menyontek kunci jawaban sebelum memilih opsi.
                             </p>
                         </div>
 
@@ -886,10 +923,10 @@ const progressPercentage = computed(() => {
                         <div class="bg-slate-900 border border-emerald-900/40 rounded-2xl p-6 space-y-4">
                             <div class="flex items-center justify-between pb-3 border-b border-slate-800">
                                 <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                                    Arsitektur Naiju: Zero-Leakage Sanitized
+                                    Proteksi Server-Side Naiju
                                 </span>
                                 <span class="text-[11px] font-mono text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
-                                    QUERY-LEVEL MASKING
+                                    100% BEBAS DARI BOCOR
                                 </span>
                             </div>
 
@@ -897,13 +934,65 @@ const progressPercentage = computed(() => {
   "question_id": 14,
   "options": [
     { "id": "A", "text": "..." },
-    { "id": "B", "text": "..." } <span class="text-emerald-400 font-bold">// Tanpa boolean kunci jawaban</span>
+    { "id": "B", "text": "..." } <span class="text-emerald-400 font-bold">// Tanpa data kunci jawaban</span>
   ]
 }</code></pre>
 
                             <p class="text-xs text-slate-400 leading-relaxed">
-                                Query controller hanya mengambil kolom <code class="text-amber-300 bg-slate-800 px-1 py-0.5 rounded text-[11px]">['id', 'course_question_id', 'answer']</code>. Atribut penentu kunci tidak pernah meninggalkan database sampai sesi ditutup dan dievaluasi di server.
+                                Server Naiju menyaring data dan hanya mengirim teks soal serta pilihan jawaban ke komputer siswa. Kunci jawaban tetap aman di server hingga ujian dikumpulkan dan dikoreksi otomatis.
                             </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive SEO FAQ Accordion Section -->
+            <section id="faq" class="py-20 bg-slate-50 dark:bg-[#0E0E12] border-b border-slate-200 dark:border-slate-800 transition-colors">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-3xl mb-12 space-y-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-[#D95300]">
+                            Tanya Jawab Seputar CBT
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-[#0A090B] dark:text-white tracking-tight">
+                            Pertanyaan Seputar Aplikasi CBT Naiju
+                        </h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">
+                            Jawaban lengkap atas pertanyaan yang sering diajukan mengenai implementasi ujian online di sekolah, madrasah, dan kampus.
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div
+                            v-for="(faq, idx) in faqs"
+                            :key="idx"
+                            class="bg-white dark:bg-[#111116] rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors"
+                        >
+                            <button
+                                type="button"
+                                @click="toggleFaq(idx)"
+                                class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors"
+                            >
+                                <span class="text-sm sm:text-base leading-snug">{{ faq.q }}</span>
+                                <span
+                                    :class="[
+                                        'w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border transition-transform duration-200',
+                                        activeFaqIndex === idx
+                                            ? 'bg-[#D95300] border-[#BF4900] text-white rotate-180'
+                                            : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                                    ]"
+                                >
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </button>
+
+                            <div
+                                v-show="activeFaqIndex === idx"
+                                class="px-5 sm:px-6 pb-6 pt-1 text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/60"
+                            >
+                                {{ faq.a }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -913,14 +1002,14 @@ const progressPercentage = computed(() => {
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                 <div class="bg-white dark:bg-[#111116] border border-slate-300 dark:border-slate-800 rounded-3xl p-8 sm:p-12 lg:p-16 shadow-xs transition-colors">
                     <div class="max-w-2xl space-y-4">
-                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                            Akses Portal Sistem
+                        <div class="text-xs font-bold uppercase tracking-wider text-[#D95300]">
+                            Siap Memulai Evaluasi Digital?
                         </div>
                         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0A090B] dark:text-white tracking-tight">
-                            Mulai Gunakan Platform Asesmen Naiju
+                            Tingkatkan Kualitas Ujian Sekolah Anda Bersama Naiju
                         </h2>
                         <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                            Masuk dengan akun pengajar untuk mulai mengelola kursus dan bank soal, atau masuk dengan akun peserta untuk mengikuti ujian yang telah dijadwalkan.
+                            Mulai selenggarakan ujian online dengan bank soal guru yang aman, koreksi nilai instan, dan proses pelaksanaan yang bebas ribet. Hemat kertas, hemat waktu, dan hasil belajar terukur akurat.
                         </p>
 
                         <div class="flex flex-col sm:flex-row gap-3 pt-4">
@@ -929,7 +1018,7 @@ const progressPercentage = computed(() => {
                                 :href="route('login')"
                                 class="px-6 py-3.5 bg-[#D95300] text-white text-sm font-bold rounded-xl text-center hover:bg-[#BF4900] transition-colors shadow-sm"
                             >
-                                Masuk ke Akun
+                                Masuk ke Portal Ujian
                             </Link>
 
                             <Link
@@ -937,7 +1026,7 @@ const progressPercentage = computed(() => {
                                 :href="route('register')"
                                 class="px-6 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-bold rounded-xl text-center hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                             >
-                                Daftar Akun Peserta Baru
+                                Daftar Akun Baru
                             </Link>
 
                             <Link
@@ -965,15 +1054,16 @@ const progressPercentage = computed(() => {
                             </svg>
                         </div>
                         <span class="font-extrabold text-base tracking-tight text-[#0A090B] dark:text-white">Naiju</span>
-                        <span class="text-xs text-slate-500 dark:text-slate-400 pl-3 border-l border-slate-200 dark:border-slate-800">Platform Ujian &amp; Asesmen Digital</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 pl-3 border-l border-slate-200 dark:border-slate-800">Aplikasi Ujian Online &amp; CBT Sekolah</span>
                     </div>
 
                     <!-- Navigation Jump Links -->
                     <div class="flex flex-wrap items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
                         <a href="#simulasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Simulasi Ujian</a>
-                        <a href="#spesifikasi" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Spesifikasi</a>
-                        <a href="#ruang-kerja" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Ruang Kerja</a>
-                        <a href="#keamanan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Keamanan</a>
+                        <a href="#keunggulan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Keunggulan CBT</a>
+                        <a href="#ruang-kerja" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Portal Guru &amp; Siswa</a>
+                        <a href="#keamanan" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Anti-Curang</a>
+                        <a href="#faq" class="hover:text-[#D95300] dark:hover:text-[#D95300] transition-colors">Tanya Jawab</a>
                     </div>
 
                     <!-- Copyright Notice -->
