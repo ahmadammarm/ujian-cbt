@@ -100,7 +100,7 @@ const finishTest = () => {
 </script>
 
 <template>
-    <Head :title="'Ruang Ujian: ' + course.name + ' · Naiju Exam'" />
+    <Head :title="'Ruang Ujian: ' + course.name" />
 
     <div class="min-h-screen bg-[#F8F9FA] dark:bg-[#0A090B] font-poppins text-[#0A090B] dark:text-slate-100 transition-colors">
         <!-- CBT Distraction-Free Top Bar -->

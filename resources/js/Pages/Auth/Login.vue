@@ -31,7 +31,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Log in" />
+        <Head title="Masuk" />
 
         <div class="mb-10">
             <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-3">Selamat Datang</h1>

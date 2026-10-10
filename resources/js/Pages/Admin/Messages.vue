@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Messages" />
+    <Head title="Pesan & Notifikasi" />
     <AdminLayout>
         <Breadcrumbs :items="[
             { label: 'Dashboard', href: route('dashboard.overview') },

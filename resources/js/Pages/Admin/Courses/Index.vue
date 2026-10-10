@@ -56,7 +56,7 @@ const filteredCourses = computed(() => {
 </script>
 
 <template>
-    <Head title="Manajemen Kursus & Asesmen · Naiju Studio" />
+    <Head title="Manajemen Kursus" />
 
     <AdminLayout>
         <div class="max-w-7xl mx-auto pb-20">

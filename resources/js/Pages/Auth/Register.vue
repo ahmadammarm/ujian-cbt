@@ -22,7 +22,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="Pendaftaran Akun" />
 
         <div class="mb-10">
             <h1 class="text-5xl font-bold text-gray-900 mb-3">Daftar Akun</h1>

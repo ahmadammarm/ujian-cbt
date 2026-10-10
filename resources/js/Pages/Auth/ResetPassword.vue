@@ -33,7 +33,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Reset Password" />
+        <Head title="Atur Ulang Kata Sandi" />
 
         <div class="mb-8">
             <h1 class="text-2xl font-semibold text-gray-900">Set new password</h1>

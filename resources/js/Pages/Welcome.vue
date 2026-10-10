@@ -356,11 +356,10 @@ const faqs = [
 </script>
 
 <template>
-    <Head>
-        <title>Naiju - Aplikasi Ujian Online & CBT Sekolah Berintegritas</title>
+    <Head title="Platform CBT & Ujian Online Modern">
         <meta name="description" content="Naiju adalah platform ujian online CBT (Computer Based Test) terpadu untuk sekolah dan kampus. Dilengkapi proteksi anti-curang, bank soal otomatis, auto-save real-time, dan rekapitulasi nilai instan." />
         <meta name="keywords" content="aplikasi ujian online, cbt sekolah, computer based test, platform ujian cbt, bank soal ujian, aplikasi asesmen digital, ujian sekolah bebas curang, ujian online otomatis" />
-        <meta property="og:title" content="Naiju - Aplikasi Ujian Online & CBT Sekolah Berintegritas" />
+        <meta property="og:title" content="Naiju - Platform CBT & Ujian Online Modern" />
         <meta property="og:description" content="Platform ujian berbasis komputer (CBT) dan asesmen digital terpercaya untuk sekolah dan universitas. Aman dari kebocoran kunci jawaban, mudah digunakan guru dan siswa." />
         <meta property="og:type" content="website" />
     </Head>

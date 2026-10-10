@@ -5,7 +5,7 @@ import { Head, Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Settings" />
+    <Head title="Pengaturan Sistem" />
     <AdminLayout>
         <Breadcrumbs :items="[
             { label: 'Dashboard', href: route('dashboard.overview') },

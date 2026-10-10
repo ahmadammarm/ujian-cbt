@@ -26,7 +26,7 @@ const filteredCourses = computed(() => {
 </script>
 
 <template>
-    <Head title="Katalog Modul Ujian & Asesmen · Naiju Exam" />
+    <Head title="Katalog Modul Ujian" />
 
     <StudentLayout>
         <div class="max-w-7xl mx-auto pb-20 flex flex-col gap-8">

@@ -147,7 +147,7 @@ const formatDate = (dateString) => {
 </script>
 
 <template>
-    <Head :title="'Kelola Kursus: ' + course.name + ' · Naiju Studio'" />
+    <Head :title="'Kelola Kursus: ' + course.name" />
 
     <AdminLayout>
         <div class="max-w-7xl mx-auto pb-20">

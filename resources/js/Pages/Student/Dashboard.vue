@@ -15,7 +15,7 @@ const getLatestScore = (courseId) => {
 </script>
 
 <template>
-    <Head title="Dashboard Siswa · Naiju Exam" />
+    <Head title="Dasbor Siswa" />
 
     <StudentLayout>
         <div class="flex flex-col gap-10">

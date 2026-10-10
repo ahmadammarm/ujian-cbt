@@ -66,7 +66,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head :title="'Edit Kursus: ' + course.name + ' · Naiju Studio'" />
+    <Head :title="'Edit Kursus: ' + course.name" />
 
     <AdminLayout>
         <div class="max-w-4xl mx-auto pb-20">

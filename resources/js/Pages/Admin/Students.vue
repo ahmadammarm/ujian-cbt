@@ -44,7 +44,7 @@ const toggleSuspension = () => {
 </script>
 
 <template>
-    <Head title="Daftar Siswa · Naiju Studio" />
+    <Head title="Daftar Siswa" />
 
     <AdminLayout>
         <Breadcrumbs :items="[

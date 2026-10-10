@@ -40,7 +40,7 @@ const isFormValid = computed(() => {
 </script>
 
 <template>
-    <Head :title="'Tambah Soal: ' + course.name + ' · Naiju Studio'" />
+    <Head :title="'Tambah Soal: ' + course.name" />
 
     <AdminLayout>
         <div class="max-w-7xl mx-auto pb-20">

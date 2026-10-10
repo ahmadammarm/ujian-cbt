@@ -56,7 +56,7 @@ const chartOptions = {
 </script>
 
 <template>
-    <Head title="Analitik Nilai & Performa · Naiju Studio" />
+    <Head title="Analitik Nilai" />
 
     <AdminLayout>
         <Breadcrumbs :items="[

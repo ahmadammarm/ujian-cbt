@@ -34,7 +34,7 @@ const getDuration = () => {
 </script>
 
 <template>
-    <Head title="Rapor & Hasil Asesmen · Naiju Exam" />
+    <Head title="Rapor Hasil Ujian" />
 
     <StudentLayout>
         <div class="flex flex-col gap-10">

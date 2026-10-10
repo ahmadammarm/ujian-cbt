@@ -23,7 +23,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Forgot Password" />
+        <Head title="Lupa Kata Sandi" />
 
         <div class="mb-10">
             <h1 class="text-4xl font-bold text-gray-900 mb-3">Lupa Kata Sandi</h1>

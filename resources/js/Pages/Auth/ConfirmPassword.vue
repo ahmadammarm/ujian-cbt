@@ -19,7 +19,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Confirm Password" />
+        <Head title="Konfirmasi Kata Sandi" />
 
         <div class="mb-8">
             <h1 class="text-2xl font-semibold text-gray-900">Secure area</h1>

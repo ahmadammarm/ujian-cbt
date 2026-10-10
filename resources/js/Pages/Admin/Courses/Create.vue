@@ -71,7 +71,7 @@ const submitWithAction = (actionType) => {
 </script>
 
 <template>
-    <Head title="Buat Kursus Baru · Naiju Studio" />
+    <Head title="Buat Kursus Baru" />
 
     <AdminLayout>
         <div class="max-w-4xl mx-auto pb-20">

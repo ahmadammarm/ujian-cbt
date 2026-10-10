@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="403 Forbidden" />
+    <Head title="403 Akses Ditolak" />
     <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 font-poppins">
         <div class="text-center p-8 bg-white rounded-3xl shadow-xl max-w-lg w-full">
             <div class="mb-6">

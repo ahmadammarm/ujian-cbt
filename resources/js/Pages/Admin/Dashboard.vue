@@ -12,7 +12,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <Head title="Overview · Naiju Studio" />
+    <Head title="Ringkasan Overview" />
 
     <AdminLayout>
         <Breadcrumbs :items="[

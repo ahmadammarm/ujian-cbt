@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Rewards" />
+    <Head title="Penghargaan & Poin" />
     <AdminLayout>
         <Breadcrumbs :items="[
             { label: 'Dashboard', href: route('dashboard.overview') },

@@ -17,7 +17,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="My Profile" />
+    <Head title="Profil Pengguna" />
 
     <AuthenticatedLayout>
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

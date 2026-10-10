@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="A.I Plugins" />
+    <Head title="Plugin & Ekstensi" />
     <AdminLayout>
         <Breadcrumbs :items="[
             { label: 'Dashboard', href: route('dashboard.overview') },
