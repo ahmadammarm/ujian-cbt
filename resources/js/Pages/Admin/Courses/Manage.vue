@@ -32,9 +32,9 @@ const confirmDeleteQuestion = (id) => {
 const deleteForm = useForm({});
 
 const deleteQuestion = () => {
-    deleteForm.delete(route('dashboard.course.question.delete', { 
-        courseId: props.course.id, 
-        questionId: selectedQuestionId.value 
+    deleteForm.delete(route('dashboard.course.question.delete', {
+        courseId: props.course.id,
+        questionId: selectedQuestionId.value
     }), {
         onSuccess: () => {
             isDeleteDialogOpen.value = false;
@@ -76,156 +76,154 @@ const formatDate = (dateString) => {
 </script>
 
 <template>
-    <Head title="Course Details" />
+    <Head :title="'Detail Kursus: ' + course.name + ' · Naiju Studio'" />
 
     <AdminLayout>
         <div class="flex flex-col">
             <Breadcrumbs :items="[
-                { label: 'Dashboard', href: route('dashboard.overview') },
-                { label: 'Courses', href: route('dashboard.courses.index') },
-                { label: 'Course Details' }
+                { label: 'Naiju Studio', href: route('dashboard.overview') },
+                { label: 'Daftar Kursus', href: route('dashboard.courses.index') },
+                { label: course.name }
             ]" />
         </div>
 
         <!-- Header Card -->
-        <div class="header w-full flex flex-col lg:flex-row items-start lg:items-center justify-between mb-16 animate-slide-up gap-8 bg-white p-8 lg:p-12 rounded-[48px] border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.02)]">
-            <div class="flex flex-col lg:flex-row gap-10 items-center lg:items-start text-center lg:text-left">
-                <div class="w-[200px] h-[200px] flex shrink-0 relative overflow-hidden group">
-                    <img :src="'/storage/' + course.cover" class="w-full h-full object-cover rounded-[40px] shadow-2xl border-4 border-white group-hover:scale-110 transition-transform duration-700" alt="icon">
+        <div class="w-full flex flex-col lg:flex-row items-start lg:items-center justify-between mb-12 animate-slide-up gap-8 bg-white dark:bg-[#111116] p-7 lg:p-10 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+            <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start text-center lg:text-left">
+                <div class="w-36 h-36 lg:w-44 lg:h-44 flex shrink-0 relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 group">
+                    <img v-if="course.cover" :src="'/storage/' + course.cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="cover">
+                    <div v-else class="w-full h-full flex items-center justify-center font-black text-4xl text-[#D95300]">
+                        {{ course.name ? course.name.charAt(0).toUpperCase() : 'C' }}
+                    </div>
                     <div v-if="course.category"
-                        class="absolute bottom-4 left-1/2 -translate-x-1/2 px-5 py-2 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-orange-50 animate-fade-in">
-                        <p class="font-black text-[11px] text-[#D95300] uppercase tracking-widest whitespace-nowrap">
+                        class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md shadow-xs border border-slate-200/60 dark:border-slate-700">
+                        <p class="font-extrabold text-[10px] text-[#D95300] uppercase tracking-widest whitespace-nowrap">
                             {{ course.category?.name }}
                         </p>
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-8 max-w-xl">
-                    <div class="space-y-3">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-600 rounded-full border border-green-100 mb-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                            <span class="text-[10px] font-black uppercase tracking-widest">Active Course</span>
+                <div class="flex flex-col gap-6 max-w-xl">
+                    <div class="space-y-2">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full border border-emerald-500/20">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest">Modul Aktif</span>
                         </div>
-                        <h1 class="font-black text-4xl lg:text-5xl leading-tight text-[#0A090B] tracking-tighter">
+                        <h1 class="font-black text-2xl lg:text-4xl leading-tight text-[#0A090B] dark:text-white tracking-tight">
                             {{ course.name }}
                         </h1>
                     </div>
-                    
-                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-10 font-poppins">
-                        <div class="flex gap-4 items-center group">
-                            <div class="w-14 h-14 flex shrink-0 items-center justify-center bg-gray-50 rounded-[20px] group-hover:bg-[#FFF2E6] transition-all duration-300">
-                                <img src="/assets/images/icons/calendar-outline.svg" class="w-6 h-6" alt="icon">
+
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-8">
+                        <div class="flex gap-3.5 items-center">
+                            <div class="w-11 h-11 flex shrink-0 items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
                             </div>
                             <div>
-                                <p class="text-[11px] font-bold text-[#A5ABB2] uppercase tracking-[0.2em] mb-0.5">Launched</p>
-                                <p class="font-black text-[#0A090B] text-lg">{{ formatDate(course.created_at) }}</p>
+                                <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Tanggal Dibuat</p>
+                                <p class="font-extrabold text-sm text-[#0A090B] dark:text-white">{{ formatDate(course.created_at) }}</p>
                             </div>
                         </div>
-                        <div class="flex gap-4 items-center group">
-                            <div class="w-14 h-14 flex shrink-0 items-center justify-center bg-gray-50 rounded-[20px] group-hover:bg-[#EAE8FE] transition-all duration-300">
-                                <img src="/assets/images/icons/profile-2user-outline.svg" class="w-6 h-6" alt="icon">
+                        <div class="flex gap-3.5 items-center">
+                            <div class="w-11 h-11 flex shrink-0 items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-xl text-slate-500 dark:text-slate-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
                             </div>
                             <div>
-                                <p class="text-[11px] font-bold text-[#A5ABB2] uppercase tracking-[0.2em] mb-0.5">Students</p>
-                                <p class="font-black text-[#0A090B] text-lg">{{ students.total }}</p>
+                                <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Total Siswa</p>
+                                <p class="font-extrabold text-sm text-[#0A090B] dark:text-white">{{ students.total }} Peserta</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Action Buttons -->
             <div class="relative self-center lg:self-start" ref="moreButton">
-                <button @click="toggleDropdown"
-                    class="w-16 h-16 flex shrink-0 rounded-[24px] items-center justify-center bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:bg-gray-50 transition-all active:scale-95 group">
-                    <img src="/assets/images/icons/more.svg" class="w-8 h-8 group-hover:rotate-90 transition-transform duration-500" alt="icon">
-                </button>
-                <div v-show="isDropdownOpen"
-                    class="absolute right-0 top-[76px] w-[300px] flex flex-col gap-2 p-3 border border-gray-100 bg-white rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-20 animate-slide-up">
-                    <Link :href="route('dashboard.courses.edit', course.id)" class="flex gap-4 items-center p-5 hover:bg-gray-50 rounded-2xl transition-colors font-black text-[13px] text-gray-700 uppercase tracking-widest">
-                        <img src="/assets/images/icons/note-favorite-outline.svg" class="w-5 h-5 opacity-40" alt="icon">
-                        Edit Course
-                    </Link>
-                    <div class="h-[1px] bg-gray-50 mx-4"></div>
-                    <button class="flex gap-4 items-center p-5 hover:bg-red-50 rounded-2xl transition-colors font-black text-[13px] text-[#FD445E] uppercase tracking-widest">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M17.5 4.98332C14.725 4.70832 11.9333 4.56665 9.15 4.56665C7.5 4.56665 5.85 4.64998 4.2 4.81665L2.5 4.98332" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M7.08325 4.14163L7.26659 3.04996C7.39992 2.25829 7.49992 1.66663 8.90825 1.66663H11.0916C12.4999 1.66663 12.6083 2.29163 12.7333 3.05829L12.9166 4.14163" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M15.7084 7.6167L15.1667 16.0084C15.0751 17.3167 15.0001 18.3334 12.6751 18.3334H7.32508C5.00008 18.3334 4.92508 17.3167 4.83341 16.0084L4.29175 7.6167" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M8.6084 13.75H11.3834" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M7.91675 10.4166H12.0834" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        Delete Course
-                    </button>
-                </div>
+                <Link
+                    :href="route('dashboard.courses.edit', course.id)"
+                    class="px-5 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-[#D95300] hover:text-white text-slate-700 dark:text-slate-200 rounded-2xl font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Edit Informasi Kursus</span>
+                </Link>
             </div>
         </div>
 
-        <div class="mt-20 pb-20">
-            <div class="flex items-center justify-between mb-10">
+        <!-- Questions Section -->
+        <div class="mt-8 pb-20">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div class="flex flex-col gap-1">
-                    <h2 class="font-black text-[32px] text-[#0A090B] tracking-tight">Assessment Module</h2>
-                    <p class="text-[#7F8190] font-medium">Manage questions and tests for this course.</p>
+                    <h2 class="font-black text-2xl lg:text-3xl text-[#0A090B] dark:text-white tracking-tight">Bank Soal & Asesmen</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Kelola butir soal pilihan ganda dan kunci jawaban untuk ujian ini.</p>
                 </div>
-                <div class="px-5 py-2.5 bg-[#0A090B] rounded-full text-[11px] font-black text-white uppercase tracking-[0.2em] shadow-xl shadow-gray-200">
-                    {{ questions.total }} Questions Total
+                <div class="px-4 py-2 bg-[#0A090B] dark:bg-white text-white dark:text-[#0A090B] rounded-xl text-xs font-bold uppercase tracking-wider self-start sm:self-auto">
+                    {{ questions.total }} Butir Soal Terdaftar
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-8">
+            <div class="grid grid-cols-1 gap-5">
                 <!-- Add New Question Card -->
                 <Link :href="route('dashboard.course.question.create', course.id)"
-                    class="w-full group bg-[#6436F1] p-1.5 rounded-[40px] shadow-2xl shadow-indigo-100 hover:shadow-indigo-200 transition-all active:scale-[0.99] border-4 border-transparent hover:border-white">
-                    <div class="w-full h-[140px] flex items-center justify-center p-8 border-2 border-dashed border-white/30 rounded-[36px] group-hover:border-white/60 transition-colors">
-                        <div class="flex items-center gap-6">
-                            <div class="w-16 h-16 rounded-[24px] bg-white text-[#6436F1] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-500">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-width="4" stroke-linecap="round"/></svg>
+                    class="w-full group bg-[#D95300] hover:bg-[#b84600] p-1 rounded-3xl shadow-lg shadow-[#D95300]/20 hover:shadow-xl hover:shadow-[#D95300]/30 transition-all active:scale-[0.99]">
+                    <div class="w-full h-28 flex items-center justify-center p-6 border-2 border-dashed border-white/40 rounded-2xl group-hover:border-white/70 transition-colors">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-white text-[#D95300] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-width="3" stroke-linecap="round"/></svg>
                             </div>
                             <div class="flex flex-col text-left">
-                                <p class="font-black text-2xl text-white">Create New Question</p>
-                                <p class="text-white/60 font-bold text-sm uppercase tracking-widest">Build your assessment database</p>
+                                <p class="font-black text-lg text-white">Buat Pertanyaan Baru</p>
+                                <p class="text-white/80 font-semibold text-xs">Tambahkan butir soal beserta opsi pilihan jawaban</p>
                             </div>
                         </div>
                     </div>
                 </Link>
 
-                <!-- Question Cards -->
-                <div v-for="(question, index) in questions.data" :key="question.id"
-                    class="w-full flex flex-col lg:flex-row lg:items-center justify-between p-8 lg:p-10 bg-white border border-gray-100 rounded-[40px] hover:shadow-2xl hover:shadow-gray-100/40 transition-all group animate-slide-up relative overflow-hidden"
-                    :style="`animation-delay: ${index * 50}ms`"
+                <!-- Question Rows -->
+                <div
+                    v-for="(question, index) in questions.data"
+                    :key="question.id"
+                    class="w-full flex flex-col lg:flex-row lg:items-center justify-between p-6 lg:p-7 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-3xl hover:border-[#D95300]/40 dark:hover:border-[#D95300]/40 transition-all group animate-slide-up relative overflow-hidden"
                 >
-                    <div class="absolute top-0 left-0 w-2 h-full bg-[#6436F1] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    
-                    <div class="flex items-center gap-8 lg:w-[70%]">
-                        <div class="w-16 h-16 shrink-0 rounded-2xl bg-gray-50 flex items-center justify-center font-black text-2xl text-[#A5ABB2] border border-gray-100 group-hover:bg-[#EAE8FE] group-hover:text-[#6436F1] transition-colors">
+                    <div class="flex items-start lg:items-center gap-5 lg:w-[70%]">
+                        <div class="w-12 h-12 shrink-0 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-black text-base text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 group-hover:bg-[#D95300]/10 group-hover:text-[#D95300] transition-colors">
                             {{ (questions.current_page - 1) * questions.per_page + index + 1 }}
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <p class="text-[10px] font-black text-[#A5ABB2] uppercase tracking-[0.2em]">Question Description</p>
-                            <p class="font-black text-2xl text-[#0A090B] leading-tight">{{ question.question }}</p>
+                        <div class="flex flex-col gap-1.5 min-w-0">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Teks Pertanyaan</span>
+                            <p class="font-bold text-base text-[#0A090B] dark:text-white leading-relaxed">{{ question.question }}</p>
                         </div>
                     </div>
-                    
-                    <div class="flex items-center gap-4 mt-8 lg:mt-0">
-                        <Link :href="route('dashboard.course.question.edit', { courseId: course.id, questionId: question.id })"
-                            class="px-10 py-5 bg-[#0A090B] text-white font-black rounded-[20px] text-[13px] uppercase tracking-widest hover:bg-[#6436F1] transition-all active:scale-95 shadow-lg shadow-gray-200">
-                            Edit Content
+
+                    <div class="flex items-center gap-2.5 mt-5 lg:mt-0 justify-end">
+                        <Link
+                            :href="route('dashboard.course.question.edit', { courseId: course.id, questionId: question.id })"
+                            class="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-[#D95300] hover:text-white text-slate-700 dark:text-slate-200 font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-95"
+                        >
+                            Edit Soal
                         </Link>
-                        <button @click="confirmDeleteQuestion(question.id)"
-                            class="w-[60px] h-[60px] flex shrink-0 items-center justify-center rounded-[20px] bg-white border border-gray-100 text-[#FD445E] hover:bg-[#FD445E] hover:text-white transition-all active:scale-95 shadow-sm group/trash">
-                            <svg class="w-6 h-6 group-hover/trash:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <button
+                            @click="confirmDeleteQuestion(question.id)"
+                            class="w-10 h-10 flex shrink-0 items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-rose-500 hover:bg-rose-500 hover:text-white transition-all active:scale-95 shadow-xs"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                     </div>
                 </div>
 
                 <!-- Empty State -->
-                <div v-if="questions.data.length === 0" class="py-24 bg-gray-50/50 rounded-[48px] text-center border-2 border-dashed border-gray-100">
-                    <img src="/assets/images/icons/note-text.svg" class="w-16 h-16 mx-auto mb-6 opacity-10" alt="icon">
-                    <p class="text-[#7F8190] font-black text-xl">No assessment modules found.</p>
-                    <p class="text-gray-400 font-medium mt-2">Start adding questions to this course to begin testing students.</p>
+                <div v-if="questions.data.length === 0" class="py-20 bg-white dark:bg-[#111116] rounded-3xl text-center border-2 border-dashed border-slate-200 dark:border-slate-800">
+                    <p class="text-slate-500 dark:text-slate-400 font-bold text-base">Belum ada butir soal dalam modul ujian ini.</p>
+                    <p class="text-slate-400 dark:text-slate-500 text-xs mt-1">Mulai buat soal pilihan ganda di atas agar siswa dapat mengikuti ujian CBT.</p>
                 </div>
 
                 <!-- Pagination -->
-                <div class="mt-10">
+                <div class="mt-8">
                     <Pagination :links="questions.links" />
                 </div>
             </div>
@@ -233,9 +231,9 @@ const formatDate = (dateString) => {
 
         <AlertDialog
             :show="isDeleteDialogOpen"
-            title="Hapus Pertanyaan?"
-            message="Apakah Anda yakin ingin menghapus pertanyaan ini? Tindakan ini tidak dapat dibatalkan."
-            confirm-text="Ya, Hapus"
+            title="Hapus Pertanyaan Ini?"
+            message="Apakah Anda yakin ingin menghapus butir soal ini beserta seluruh opsi jawabannya? Tindakan ini tidak dapat dibatalkan."
+            confirm-text="Ya, Hapus Soal"
             cancel-text="Batal"
             type="danger"
             @close="isDeleteDialogOpen = false"
@@ -245,21 +243,8 @@ const formatDate = (dateString) => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
-.font-poppins {
-    font-family: 'Poppins', sans-serif;
-}
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
-.animate-slide-up {
-    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+.animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 </style>
-

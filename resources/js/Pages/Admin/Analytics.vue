@@ -16,10 +16,10 @@ const props = defineProps({
 const enrollmentData = {
     labels: props.enrollmentTrends.map(t => t.month),
     datasets: [{
-        label: 'New Students',
+        label: 'Siswa Baru',
         data: props.enrollmentTrends.map(t => t.count),
-        borderColor: '#6436F1',
-        backgroundColor: 'rgba(100, 54, 241, 0.1)',
+        borderColor: '#D95300',
+        backgroundColor: 'rgba(217, 83, 0, 0.12)',
         fill: true,
         tension: 0.4
     }]
@@ -28,18 +28,18 @@ const enrollmentData = {
 const performanceData = {
     labels: props.coursePerformance.map((c, index) => `#${index + 1} ${c.name}`),
     datasets: [{
-        label: 'Average Score (%)',
+        label: 'Rata-Rata Nilai (%)',
         data: props.coursePerformance.map(c => c.avg_score),
-        backgroundColor: props.coursePerformance.map((_, index) => index === 0 ? '#6436F1' : '#2B82FE'),
+        backgroundColor: props.coursePerformance.map((_, index) => index === 0 ? '#D95300' : '#2B82FE'),
         borderRadius: 8,
     }]
 };
 
 const passFailData = {
-    labels: ['Passed (>=70)', 'Failed'],
+    labels: ['Lulus (>= 70%)', 'Belum Lulus (< 70%)'],
     datasets: [{
         data: [props.passFailRatio.passed, props.passFailRatio.failed],
-        backgroundColor: ['#28A745', '#FD445E'],
+        backgroundColor: ['#10B981', '#F43F5E'],
         borderWidth: 0,
     }]
 };
@@ -56,39 +56,67 @@ const chartOptions = {
 </script>
 
 <template>
-    <Head title="Analytics" />
+    <Head title="Analitik Nilai & Performa · Naiju Studio" />
+
     <AdminLayout>
         <Breadcrumbs :items="[
-            { label: 'Dashboard', href: route('dashboard.overview') },
-            { label: 'Analytics' }
+            { label: 'Naiju Studio', href: route('dashboard.overview') },
+            { label: 'Analitik Nilai' }
         ]" />
-        
+
         <div class="flex flex-col gap-2 animate-slide-up">
-            <h1 class="font-black text-[32px] tracking-tight text-[#0A090B]">Analytics</h1>
-            <p class="text-[#7F8190] font-medium text-lg">Real-time data insights and platform performance.</p>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12 pb-20">
+            <div class="flex flex-col gap-2 mb-8">
+                <h1 class="font-black text-3xl lg:text-4xl tracking-tight text-[#0A090B] dark:text-white leading-tight">
+                    Analitik Asesmen & Tren Siswa
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 font-medium text-base">
+                    Visualisasi data real-time capaian kelulusan, keterlibatan peserta, dan skor rata-rata materi ujian.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-20">
                 <!-- Enrollment Trend -->
-                <div class="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
-                    <h3 class="text-xl font-black mb-6">Enrollment Trend</h3>
+                <div class="bg-white dark:bg-[#111116] p-7 lg:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-[#0A090B] dark:text-white">Tren Pendaftaran Siswa</h2>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Pertumbuhan peserta didik per bulan</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-[#D95300]/10 text-[#D95300] uppercase tracking-wider">
+                            Akumulasi Bulanan
+                        </span>
+                    </div>
                     <div class="h-64">
                         <Line :data="enrollmentData" :options="chartOptions" />
                     </div>
                 </div>
 
                 <!-- Pass/Fail Ratio -->
-                <div class="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
-                    <h3 class="text-xl font-black mb-6">Pass/Fail Ratio</h3>
-                    <div class="h-64 relative">
+                <div class="bg-white dark:bg-[#111116] p-7 lg:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-[#0A090B] dark:text-white">Rasio Kelulusan Asesmen</h2>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Perbandingan peserta lulus vs remidial</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                            Standar KKM 70%
+                        </span>
+                    </div>
+                    <div class="h-64 relative flex items-center justify-center">
                         <Doughnut :data="passFailData" :options="{ ...chartOptions, plugins: { legend: { display: true, position: 'bottom' } } }" />
                     </div>
                 </div>
 
                 <!-- Course Performance -->
-                <div class="lg:col-span-2 bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-black">Performance of Top Enrolled Courses</h3>
-                        <span class="px-4 py-1.5 bg-gray-50 rounded-full text-[10px] font-black uppercase tracking-widest text-[#7F8190]">Avg Score of Top 5 by Enrollment</span>
+                <div class="lg:col-span-2 bg-white dark:bg-[#111116] p-7 lg:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-[#0A090B] dark:text-white">Performa Rata-Rata Kursus Teratas</h2>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Daftar kursus dengan peserta terbanyak beserta rata-rata skor evaluasi</p>
+                        </div>
+                        <span class="px-3.5 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 self-start sm:self-auto">
+                            5 Kursus Paling Populer
+                        </span>
                     </div>
                     <div class="h-80">
                         <Bar :data="performanceData" :options="chartOptions" />
@@ -101,5 +129,5 @@ const chartOptions = {
 
 <style scoped>
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 </style>

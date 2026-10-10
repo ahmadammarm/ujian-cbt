@@ -9,7 +9,7 @@ const props = defineProps({
         default: '48',
     },
     contentClasses: {
-        default: 'py-1 bg-white',
+        default: 'py-1.5 bg-white dark:bg-[#111116]',
     },
 });
 
@@ -59,7 +59,7 @@ const widthClass = {
                 style="display: none"
                 @click="open = false"
             >
-                <div class="rounded-md ring-1 ring-black ring-opacity-5" :class="contentClasses">
+                <div class="rounded-xl ring-1 ring-black/5 dark:ring-white/10 shadow-lg border border-transparent dark:border-slate-800 overflow-hidden" :class="contentClasses">
                     <slot name="content" />
                 </div>
             </div>
