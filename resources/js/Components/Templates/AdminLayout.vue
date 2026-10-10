@@ -196,7 +196,7 @@ onUnmounted(() => {
 }
 
 .nav-link.active .icon {
-    @apply brightness-0 invert opacity-100 dark:invert-0 dark:brightness-0 dark:invert;
+    @apply brightness-0 invert opacity-100 dark:brightness-0 dark:invert;
 }
 
 .nav-link span {
