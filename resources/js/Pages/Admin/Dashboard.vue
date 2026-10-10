@@ -42,7 +42,7 @@ const props = defineProps({
                 <div class="flex items-center gap-3">
                     <Link
                         :href="route('dashboard.courses.create')"
-                        class="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#D95300] hover:bg-[#b84600] text-white rounded-2xl font-bold text-sm shadow-lg shadow-[#D95300]/20 hover:shadow-xl hover:shadow-[#D95300]/30 transition-all duration-300"
+                        class="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#D95300] hover:bg-[#b84600] text-white rounded-2xl font-bold text-sm transition-colors active:scale-95"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />

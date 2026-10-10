@@ -216,7 +216,7 @@ const isFormValid = computed(() => {
                                 type="button"
                                 @click="submitWithAction('create_another')"
                                 :disabled="form.processing || !isFormValid"
-                                class="px-6 py-3 bg-[#D95300] hover:bg-[#b84600] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-md shadow-[#D95300]/20 hover:shadow-lg hover:shadow-[#D95300]/30 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+                                class="px-6 py-3 bg-[#D95300] hover:bg-[#b84600] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
                             >
                                 <span>Simpan &amp; Tambah Soal Berikutnya</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

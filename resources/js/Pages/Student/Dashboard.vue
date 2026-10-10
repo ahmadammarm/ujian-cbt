@@ -159,7 +159,7 @@ const getLatestScore = (courseId) => {
                     </div>
                     <p class="text-base font-bold text-[#0A090B] dark:text-white">Belum Ada Riwayat Ujian</p>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">Mulai ikuti modul kursus untuk mengikuti ujian dan mencatat sertifikat evaluasi Anda.</p>
-                    <Link :href="route('dashboard.learning.index')" class="mt-6 inline-flex px-6 py-3 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#2B82FE]/20">
+                    <Link :href="route('dashboard.learning.index')" class="mt-6 inline-flex px-6 py-3 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95">
                         Buka Katalog Kursus
                     </Link>
                 </div>

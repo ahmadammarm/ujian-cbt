@@ -25,7 +25,7 @@ import { Head, Link } from '@inertiajs/vue3';
                     <p class="text-gray-400 font-medium text-poppins">Update your password, email, and personal information.</p>
                 </Link>
                 
-                <div class="p-10 bg-white border border-gray-100 rounded-[40px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-xl hover:shadow-[#D95300]/5 transition-all group active:scale-[0.99] cursor-pointer">
+                <div class="p-10 bg-white border border-gray-100 rounded-[40px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-xl transition-all group active:scale-[0.99] cursor-pointer">
                     <div class="w-16 h-16 bg-gray-50 rounded-[24px] flex items-center justify-center mb-8 group-hover:bg-[#FFF2E6] transition-colors">
                         <img src="/assets/images/icons/setting-2.svg" class="w-8 h-8 opacity-40 group-hover:opacity-100 transition-opacity" alt="icon">
                     </div>

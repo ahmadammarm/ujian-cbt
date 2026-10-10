@@ -52,7 +52,7 @@ onUnmounted(() => {
             >
                 <div class="flex flex-col gap-10">
                     <Link :href="route('dashboard.overview')" class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-[#D95300] rounded-xl flex items-center justify-center shadow-lg shadow-[#D95300]/20 text-white shrink-0">
+                        <div class="w-10 h-10 bg-[#D95300] rounded-xl flex items-center justify-center text-white shrink-0">
                             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
                                 <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                             </svg>
@@ -188,7 +188,7 @@ onUnmounted(() => {
 }
 
 .nav-link.active {
-    @apply bg-[#D95300] text-white shadow-md shadow-[#D95300]/20 hover:bg-[#D95300] dark:bg-[#D95300] dark:text-white;
+    @apply bg-[#D95300] text-white hover:bg-[#D95300] dark:bg-[#D95300] dark:text-white;
 }
 
 .nav-link .icon {

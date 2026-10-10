@@ -28,7 +28,7 @@ const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
     <div class="bg-white dark:bg-[#111116] p-6 lg:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs transition-colors">
         <!-- Question Header & Statement -->
         <div class="flex items-start gap-5">
-            <div class="w-10 h-10 rounded-2xl bg-[#2B82FE] text-white flex items-center justify-center shrink-0 font-extrabold text-sm shadow-md shadow-[#2B82FE]/20">
+            <div class="w-10 h-10 rounded-2xl bg-[#2B82FE] text-white flex items-center justify-center shrink-0 font-extrabold text-sm">
                 {{ index + 1 }}
             </div>
             <div class="flex-1 min-w-0">
@@ -75,7 +75,7 @@ const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
                             class="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-sm shrink-0 border transition-all duration-200"
                             :class="[
                                 localSelected === answer.answer
-                                ? 'bg-[#2B82FE] text-white border-[#2B82FE] shadow-sm shadow-[#2B82FE]/25 scale-105'
+                                ? 'bg-[#2B82FE] text-white border-[#2B82FE] scale-105'
                                 : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 group-hover:border-slate-300 dark:group-hover:border-slate-600'
                             ]"
                         >

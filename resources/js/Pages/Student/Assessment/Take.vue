@@ -107,7 +107,7 @@ const finishTest = () => {
         <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0E0E12]/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 h-20 px-6 lg:px-10 flex items-center justify-between transition-colors">
             <!-- Brand & Course Info -->
             <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-[#2B82FE] rounded-xl flex items-center justify-center shadow-md shadow-[#2B82FE]/20 text-white shrink-0">
+                <div class="w-10 h-10 bg-[#2B82FE] rounded-xl flex items-center justify-center text-white shrink-0">
                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
                         <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                     </svg>
@@ -224,7 +224,7 @@ const finishTest = () => {
                     <button
                         v-if="currentQuestionIndex < course.questions.length - 1"
                         @click="nextQuestion"
-                        class="px-7 py-3.5 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#2B82FE]/25 active:scale-95 flex items-center gap-2"
+                        class="px-7 py-3.5 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95 flex items-center gap-2"
                     >
                         <span>Soal Berikutnya</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,7 +234,7 @@ const finishTest = () => {
                     <button
                         v-else
                         @click="finishTest"
-                        class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-emerald-600/25 active:scale-95 flex items-center gap-2"
+                        class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95 flex items-center gap-2"
                     >
                         <span>Kumpulkan Ujian</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -263,7 +263,7 @@ const finishTest = () => {
                             class="w-full aspect-square rounded-xl flex items-center justify-center text-xs font-bold transition-all border relative"
                             :class="[
                                 currentQuestionIndex === idx
-                                ? 'bg-[#2B82FE] border-[#2B82FE] text-white shadow-md shadow-[#2B82FE]/30 ring-2 ring-[#2B82FE]/30 scale-105 z-10'
+                                ? 'bg-[#2B82FE] border-[#2B82FE] text-white scale-105 z-10'
                                 : (isAnswered(question.id)
                                     ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500/40 text-emerald-600 dark:text-emerald-400 font-extrabold'
                                     : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200/80 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-[#2B82FE] hover:text-[#2B82FE]')

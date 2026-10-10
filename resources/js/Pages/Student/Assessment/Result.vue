@@ -101,7 +101,7 @@ const getDuration = () => {
                             :href="route('dashboard.learning.start', assessment.course_id)"
                             method="post"
                             as="button"
-                            class="w-full py-3.5 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#2B82FE]/20 active:scale-95 text-center"
+                            class="w-full py-3.5 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95 text-center"
                         >
                             Ikuti Ujian Ulang
                         </Link>
