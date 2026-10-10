@@ -31,6 +31,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Fix backend code style: `vendor/bin/pint`
 - Clear application cache: `php artisan optimize:clear`
 
+## Brand Architecture & Design System
+
+### Brand Identity
+- **Primary Brand**: Naiju
+- **Full Tagline / Lockup**: `Naiju — Platform Ujian & Asesmen Digital` (or `Naiju CBT`)
+- **Brand Spaces**:
+  - Teacher Workspace: `Naiju Studio` (`Naiju Studio · Pengajar`)
+  - Student Portal: `Naiju Exam` (`Naiju Exam · Portal Siswa`)
+- **Emblem**: Geometric 'N' monogram vector (`ApplicationLogo.vue`)
+
+### Core Palette Tokens
+- **Terracotta Orange (`#D95300`)**: Primary brand identity, teacher space primary accents, critical action CTAs.
+- **Cobalt Blue (`#2B82FE`)**: Student portal accents, active navigation states, interactive highlights.
+- **Obsidian Black (`#0A090B`)**: High-contrast typography, dark panels, structured surface elements.
+
 ## Architecture & Code Structure
 
 ### Technology Stack

@@ -14,17 +14,20 @@ import { Link } from '@inertiajs/vue3';
             
             <!-- Logo top left -->
             <div class="absolute top-10 left-10">
-                <div class="w-14 h-14 bg-white p-2 rounded-xl shadow-2xl flex items-center justify-center">
-                    <svg class="w-9 h-9 text-[#D95300]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+                <div class="w-14 h-14 bg-white p-2.5 rounded-2xl shadow-2xl flex items-center justify-center text-[#D95300]">
+                    <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+                        <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                     </svg>
                 </div>
             </div>
 
             <!-- Text bottom left -->
-            <div class="absolute bottom-16 left-12 pr-12 animate-fade-in">
+            <div class="absolute bottom-16 left-12 pr-12 animate-fade-in space-y-2">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white/90">
+                    Platform Ujian & Asesmen Digital
+                </div>
                 <h2 class="text-4xl lg:text-5xl font-bold text-white leading-tight">
-                    Selamat datang di <span class="text-[#D95300]">Ujian CBT</span>
+                    Selamat datang di <span class="text-[#D95300]">Naiju</span>
                 </h2>
             </div>
         </div>
@@ -33,9 +36,9 @@ import { Link } from '@inertiajs/vue3';
         <div class="flex-1 flex flex-col justify-center items-center px-6 py-12 sm:px-12 lg:px-20 bg-white">
             <div class="w-full max-w-[440px] animate-slide-up">
                 <slot />
-                
+
                 <p class="mt-12 text-center text-sm text-gray-400 font-medium">
-                    &copy; {{ new Date().getFullYear() }} Ujian CBT. All rights reserved.
+                    &copy; {{ new Date().getFullYear() }} Naiju. All rights reserved.
                 </p>
             </div>
         </div>

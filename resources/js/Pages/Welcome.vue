@@ -51,7 +51,7 @@ const mockOptions = [
 </script>
 
 <template>
-    <Head title="Ujian CBT - Platform Ujian Digital Terpercaya" />
+    <Head title="Naiju - Platform Ujian Digital Terpercaya" />
 
     <div class="min-h-screen bg-[#F8FAFC] text-[#0A090B] font-sans antialiased selection:bg-[#D95300] selection:text-white">
         <!-- Navigation Bar -->
@@ -59,14 +59,14 @@ const mockOptions = [
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 <!-- Brand Identity -->
                 <Link :href="route('dashboard')" class="flex items-center gap-3.5 group">
-                    <div class="w-11 h-11 bg-[#D95300] rounded-xl flex items-center justify-center shadow-md shadow-[#D95300]/15 group-hover:bg-[#BF4900] transition-colors">
-                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                    <div class="w-11 h-11 bg-[#D95300] rounded-xl flex items-center justify-center shadow-md shadow-[#D95300]/15 group-hover:bg-[#BF4900] transition-colors text-white">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                         </svg>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-xl font-extrabold tracking-tight text-[#0A090B]">Ujian CBT</span>
-                        <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Computer Based Test</span>
+                        <span class="text-xl font-extrabold tracking-tight text-[#0A090B]">Naiju</span>
+                        <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Platform Ujian &amp; Asesmen Digital</span>
                     </div>
                 </Link>
 
@@ -123,7 +123,7 @@ const mockOptions = [
                     <div class="lg:col-span-6 space-y-8">
                         <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-[#FFF4EC] border border-[#FED7AA] rounded-full text-xs font-bold text-[#D95300] tracking-wide">
                             <span class="w-2 h-2 rounded-full bg-[#D95300] ring-4 ring-[#D95300]/20"></span>
-                            <span>Sistem CBT Standar Institusi & Akademik</span>
+                            <span>Naiju CBT — Platform Asesmen Digital Standar Institusi</span>
                         </div>
 
                         <div class="space-y-4">
@@ -212,7 +212,7 @@ const mockOptions = [
                                         <div class="w-3 h-3 rounded-full bg-amber-500"></div>
                                         <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
                                     </div>
-                                    <span class="text-xs font-mono text-slate-400 pl-2 border-l border-slate-700">SESI UJIAN: AKTIF</span>
+                                    <span class="text-xs font-mono text-slate-300 pl-2 border-l border-slate-700 font-semibold tracking-wider">NAIJU EXAM · SESI AKTIF</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <div class="px-2.5 py-1 bg-slate-800 border border-slate-700 rounded-md flex items-center gap-1.5 text-xs font-mono text-emerald-400">
@@ -398,7 +398,7 @@ const mockOptions = [
                                         : 'text-slate-600 hover:text-slate-900'
                                 ]"
                             >
-                                Ruang Kerja Pengajar (Teacher)
+                                Naiju Studio (Ruang Pengajar)
                             </button>
                             <button
                                 type="button"
@@ -410,7 +410,7 @@ const mockOptions = [
                                         : 'text-slate-600 hover:text-slate-900'
                                 ]"
                             >
-                                Lingkungan Siswa (Student)
+                                Naiju Exam (Portal Siswa)
                             </button>
                         </div>
                     </div>
@@ -679,7 +679,7 @@ const mockOptions = [
                             Siap Menjalankan Asesmen Digital?
                         </div>
                         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-                            Mulai Gunakan Ujian CBT untuk Institusi Anda Hari Ini.
+                            Mulai Gunakan Naiju untuk Institusi Anda Hari Ini.
                         </h2>
                         <p class="text-sm sm:text-base text-slate-400 leading-relaxed">
                             Daftarkan akun peserta untuk mulai mencoba ujian, atau masuk menggunakan kredensial pengajar untuk mengelola bank soal dan memantau kemajuan siswa.
@@ -714,13 +714,13 @@ const mockOptions = [
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 bg-[#D95300] rounded-lg flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        <div class="w-9 h-9 bg-[#D95300] rounded-lg flex items-center justify-center text-white">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                             </svg>
                         </div>
-                        <span class="font-extrabold text-base tracking-tight text-[#0A090B]">Ujian CBT</span>
-                        <span class="text-xs text-slate-400 pl-3 border-l border-slate-200">Modern Computer Based Test Platform</span>
+                        <span class="font-extrabold text-base tracking-tight text-[#0A090B]">Naiju</span>
+                        <span class="text-xs text-slate-400 pl-3 border-l border-slate-200">Platform Ujian &amp; Asesmen Digital</span>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-6 text-xs font-semibold text-slate-500">
@@ -731,7 +731,7 @@ const mockOptions = [
                     </div>
 
                     <div class="text-xs text-slate-500 font-medium">
-                        &copy; {{ new Date().getFullYear() }} Ujian CBT. Hak Cipta Dilindungi.
+                        &copy; {{ new Date().getFullYear() }} Naiju. Hak Cipta Dilindungi.
                     </div>
                 </div>
             </div>

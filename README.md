@@ -1,6 +1,6 @@
-# Ujian CBT - Computer Based Test Platform
+# Naiju - Computer Based Test Platform
 
-Ujian CBT is a simple modern mock Computer Based Test (CBT) platform. Developed with **Laravel 11**, **Inertia.js**, and **Vue 3**, it delivers a seamless, SPA-like examination experience while maintaining strict server-side security standards and resource isolation.
+Naiju is a simple modern mock Computer Based Test (CBT) platform. Developed with **Laravel 11**, **Inertia.js**, and **Vue 3**, it delivers a seamless, SPA-like examination experience while maintaining strict server-side security standards and resource isolation.
 
 ---
 

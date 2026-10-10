@@ -51,12 +51,15 @@ onUnmounted(() => {
             >
                 <div class="flex flex-col gap-10">
                     <Link :href="route('dashboard')" class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-[#2B82FE] rounded-xl flex items-center justify-center shadow-lg shadow-[#2B82FE]/20">
-                            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <div class="w-10 h-10 bg-[#2B82FE] rounded-xl flex items-center justify-center shadow-lg shadow-[#2B82FE]/20 text-white">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                             </svg>
                         </div>
-                        <span class="text-xl font-bold tracking-tight">Ujian CBT</span>
+                        <div class="flex flex-col">
+                            <span class="text-xl font-extrabold tracking-tight text-[#0A090B]">Naiju</span>
+                            <span class="text-[10px] font-bold text-[#2B82FE] uppercase tracking-wider -mt-0.5">Exam · Portal Siswa</span>
+                        </div>
                     </Link>
 
                     <div class="flex flex-col gap-8">
@@ -97,7 +100,7 @@ onUnmounted(() => {
                         </svg>
                     </button>
 
-                    <div class="lg:hidden font-bold text-lg text-[#2B82FE]">Ujian Online</div>
+                    <div class="lg:hidden font-bold text-lg text-[#2B82FE]">Naiju Exam</div>
                     <div class="hidden lg:block"></div>
 
                     <div class="flex items-center gap-6">

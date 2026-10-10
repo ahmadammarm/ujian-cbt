@@ -51,12 +51,15 @@ onUnmounted(() => {
             >
                 <div class="flex flex-col gap-10">
                     <Link :href="route('dashboard')" class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-[#D95300] rounded-xl flex items-center justify-center shadow-lg shadow-[#D95300]/20">
-                            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <div class="w-10 h-10 bg-[#D95300] rounded-xl flex items-center justify-center shadow-lg shadow-[#D95300]/20 text-white">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
                             </svg>
                         </div>
-                        <span class="text-xl font-bold tracking-tight">Ujian CBT</span>
+                        <div class="flex flex-col">
+                            <span class="text-xl font-extrabold tracking-tight text-[#0A090B]">Naiju</span>
+                            <span class="text-[10px] font-bold text-[#D95300] uppercase tracking-wider -mt-0.5">Studio · Pengajar</span>
+                        </div>
                     </Link>
 
                     <div class="flex flex-col gap-8">
@@ -110,7 +113,7 @@ onUnmounted(() => {
                     </button>
 
                     <!-- Spacer for mobile, nothing for desktop -->
-                    <div class="lg:hidden font-bold text-lg">Ujian Online</div>
+                    <div class="lg:hidden font-bold text-lg text-[#D95300]">Naiju Studio</div>
                     <div class="hidden lg:block"></div>
 
                     <div class="flex items-center gap-6">
