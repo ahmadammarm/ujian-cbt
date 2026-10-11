@@ -1,11 +1,12 @@
 <script setup>
 import StudentLayout from '@/Components/Templates/StudentLayout.vue';
 import CourseThumbnail from '@/Components/Atoms/CourseThumbnail.vue';
+import MetricCard from '@/Components/Molecules/MetricCard.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     courses: Array,
-    assessments: Array
+    assessments: Array,
 });
 
 const getLatestScore = (courseId) => {
@@ -38,66 +39,50 @@ const getLatestScore = (courseId) => {
             <!-- Stats Overview -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Enrolled Courses -->
-                <div class="p-7 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-3xl flex flex-col justify-between gap-6 shadow-xs hover:border-[#2B82FE]/30 dark:hover:border-[#2B82FE]/40 transition-all group">
-                    <div class="flex items-center justify-between">
-                        <div class="w-14 h-14 bg-[#2B82FE]/10 dark:bg-[#2B82FE]/20 rounded-2xl flex items-center justify-center text-[#2B82FE] group-hover:scale-105 transition-transform">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.168.477-4.5 1.253" />
-                            </svg>
-                        </div>
-                        <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Kurikulum</span>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Kursus Diikuti</p>
-                        <p class="text-4xl font-extrabold text-[#0A090B] dark:text-white tracking-tight">{{ courses.length }}</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                        <Link :href="route('dashboard.learning.index')" class="text-xs font-bold text-[#2B82FE] hover:underline flex items-center gap-1">
-                            Buka modul belajar
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                        </Link>
-                    </div>
-                </div>
+                <MetricCard
+                    title="Kursus Diikuti"
+                    :value="courses.length"
+                    sublabel="Kurikulum"
+                    :href="route('dashboard.learning.index')"
+                    link-text="Buka modul belajar"
+                    theme="student"
+                >
+                    <template #icon>
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.168.477-4.5 1.253" />
+                        </svg>
+                    </template>
+                </MetricCard>
 
                 <!-- Completed Assessments -->
-                <div class="p-7 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-3xl flex flex-col justify-between gap-6 shadow-xs hover:border-emerald-500/30 dark:hover:border-emerald-500/40 transition-all group">
-                    <div class="flex items-center justify-between">
-                        <div class="w-14 h-14 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Penyelesaian</span>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Ujian Selesai</p>
-                        <p class="text-4xl font-extrabold text-[#0A090B] dark:text-white tracking-tight">{{ assessments.filter(a => a.finished_at).length }}</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Dari total asesmen yang ditugaskan</span>
-                    </div>
-                </div>
+                <MetricCard
+                    title="Ujian Selesai"
+                    :value="assessments.filter(a => a.finished_at).length"
+                    sublabel="Penyelesaian"
+                    footer-text="Dari total asesmen yang ditugaskan"
+                    theme="emerald"
+                >
+                    <template #icon>
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </template>
+                </MetricCard>
 
                 <!-- Average Score -->
-                <div class="p-7 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-3xl flex flex-col justify-between gap-6 shadow-xs hover:border-amber-500/30 dark:hover:border-amber-500/40 transition-all group">
-                    <div class="flex items-center justify-between">
-                        <div class="w-14 h-14 bg-amber-500/10 dark:bg-amber-500/20 rounded-2xl flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:scale-105 transition-transform">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                        </div>
-                        <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Rata-Rata</span>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Skor Kumulatif</p>
-                        <p class="text-4xl font-extrabold text-[#0A090B] dark:text-white tracking-tight">
-                            {{ assessments.length > 0 ? Math.round(assessments.reduce((acc, a) => acc + (a.score || 0), 0) / assessments.length) : 0 }}%
-                        </p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Ambang batas kompetensi standar: 70%</span>
-                    </div>
-                </div>
+                <MetricCard
+                    title="Skor Kumulatif"
+                    :value="`${assessments.length > 0 ? Math.round(assessments.reduce((acc, a) => acc + (a.score || 0), 0) / assessments.length) : 0}%`"
+                    sublabel="Rata-Rata"
+                    footer-text="Ambang batas kompetensi standar: 70%"
+                    theme="amber"
+                >
+                    <template #icon>
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </template>
+                </MetricCard>
             </div>
 
             <!-- Recent Assessments -->

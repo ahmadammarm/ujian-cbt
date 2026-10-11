@@ -39,13 +39,3 @@ defineProps({
     </nav>
 </template>
 
-<style scoped>
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-.animate-fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
-}
-</style>
-

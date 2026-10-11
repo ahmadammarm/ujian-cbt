@@ -164,12 +164,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-
-.font-poppins {
-    font-family: 'Poppins', sans-serif;
-}
-
 .nav-link {
     @apply flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/80 hover:text-[#0A090B] dark:hover:text-white;
 }

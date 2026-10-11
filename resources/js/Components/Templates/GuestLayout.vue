@@ -50,29 +50,3 @@ import ThemeToggle from '@/Components/Atoms/ThemeToggle.vue';
     </div>
 </template>
 
-<style>
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fade-in {
-    animation: fadeIn 1s ease-out forwards;
-}
-
-.animate-slide-up {
-    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-</style>
-

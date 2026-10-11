@@ -63,15 +63,3 @@ defineProps({
     </AuthenticatedLayout>
 </template>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
-.font-poppins {
-    font-family: 'Poppins', sans-serif;
-}
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
-.animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.delay-200 { animation-delay: 200ms; }
-</style>
-

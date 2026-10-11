@@ -27,10 +27,3 @@ import { Head } from '@inertiajs/vue3';
     </AdminLayout>
 </template>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
-.text-poppins { font-family: 'Poppins', sans-serif; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-</style>
-

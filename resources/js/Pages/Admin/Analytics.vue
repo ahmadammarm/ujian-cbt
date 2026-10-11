@@ -126,8 +126,3 @@ const chartOptions = {
         </div>
     </AdminLayout>
 </template>
-
-<style scoped>
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-</style>

@@ -153,10 +153,3 @@ const buttonClass = computed(() => {
         </Transition>
     </Teleport>
 </template>
-
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-.font-poppins {
-    font-family: 'Poppins', sans-serif;
-}
-</style>
