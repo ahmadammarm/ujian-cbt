@@ -42,11 +42,25 @@ class AssessmentService
     }
 
     /**
+     * Record a new violation occurrence for an assessment.
+     */
+    public function recordViolation(StudentAssessment $assessment): int
+    {
+        $assessment->increment('violations_count');
+
+        return (int) $assessment->fresh()->violations_count;
+    }
+
+    /**
      * Calculate score and finalize the assessment with a batch of answers.
      */
-    public function finishAttempt(StudentAssessment $assessment, array $answersData): StudentAssessment
-    {
-        return DB::transaction(function () use ($assessment, $answersData) {
+    public function finishAttempt(
+        StudentAssessment $assessment,
+        array $answersData,
+        int $violationsCount = 0,
+        string $submittedReason = StudentAssessment::REASON_NORMAL
+    ): StudentAssessment {
+        return DB::transaction(function () use ($assessment, $answersData, $violationsCount, $submittedReason) {
             // 1. Save all answers
             foreach ($answersData as $questionId => $answerText) {
                 StudentAnswer::updateOrCreate(
@@ -79,11 +93,16 @@ class AssessmentService
                 }
             }
 
-            // Calculate score as percentage (out of 50 questions)
+            // Calculate score as percentage (out of total questions)
             $score = ($correctAnswersCount / $totalQuestions) * 100;
+
+            // Preserve whichever violation count is higher (persisted vs submitted payload)
+            $finalViolationsCount = max((int) $assessment->violations_count, $violationsCount);
 
             $assessment->update([
                 'score' => $score,
+                'violations_count' => $finalViolationsCount,
+                'submitted_reason' => $submittedReason,
                 'finished_at' => now(),
             ]);
 

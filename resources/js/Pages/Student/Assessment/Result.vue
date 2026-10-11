@@ -37,7 +37,7 @@ const getDuration = () => {
     <Head title="Rapor Hasil Ujian" />
 
     <StudentLayout>
-        <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-8">
             <!-- Header Section -->
             <div class="flex flex-col gap-2">
                 <div class="flex items-center gap-2">
@@ -52,6 +52,26 @@ const getDuration = () => {
                 <p class="text-sm lg:text-base text-slate-500 dark:text-slate-400 max-w-2xl">
                     Berikut adalah rekapitulasi capaian dan lembar penilaian digital untuk kursus <strong class="text-[#0A090B] dark:text-white">{{ assessment.course.name }}</strong>.
                 </p>
+            </div>
+
+            <!-- Violation Notice Banner (if auto-submitted due to violations) -->
+            <div
+                v-if="assessment.submitted_reason === 'violation_limit'"
+                class="p-5 bg-rose-500/10 border border-rose-500/30 rounded-3xl flex items-start gap-4 transition-all"
+            >
+                <div class="w-10 h-10 rounded-2xl bg-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                    </svg>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <h4 class="text-sm sm:text-base font-extrabold text-rose-600 dark:text-rose-400">
+                        Ujian Dihentikan Otomatis: Batas Toleransi Pelanggaran Terlampaui
+                    </h4>
+                    <p class="text-xs sm:text-sm text-rose-600/90 dark:text-rose-400/90 leading-relaxed font-medium">
+                        Sistem CBT mendeteksi keluar dari mode layar penuh atau berpindah jendela ujian sebanyak <strong>{{ assessment.violations_count }} kali</strong> (melebihi toleransi maksimal). Seluruh lembar jawaban yang tersimpan telah dikumpulkan dan dinilai secara otomatis.
+                    </p>
+                </div>
             </div>
 
             <!-- Two-Column Result Layout -->
@@ -92,6 +112,17 @@ const getDuration = () => {
                         <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
                             <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Waktu Pengerjaan</span>
                             <span class="text-xs font-bold text-[#0A090B] dark:text-white">{{ getDuration() }}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Catatan Pelanggaran</span>
+                            <span
+                                class="text-xs font-extrabold px-2.5 py-1 rounded-lg"
+                                :class="(assessment.violations_count || 0) > 0
+                                    ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                                    : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'"
+                            >
+                                {{ assessment.violations_count || 0 }} kali
+                            </span>
                         </div>
                     </div>
 

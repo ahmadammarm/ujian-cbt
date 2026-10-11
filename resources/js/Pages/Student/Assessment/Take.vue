@@ -1,28 +1,160 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
+import axios from 'axios';
 import CountdownTimer from '@/Components/Molecules/CountdownTimer.vue';
 import QuestionCard from '@/Components/Organisms/QuestionCard.vue';
 import ThemeToggle from '@/Components/Atoms/ThemeToggle.vue';
 import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
+import ProctoringModal from '@/Components/Organisms/ProctoringModal.vue';
 
 const props = defineProps({
     course: Object,
     assessment: Object,
-    serverTime: String
+    serverTime: String,
+    maxViolationsAllowed: {
+        type: Number,
+        default: 3,
+    },
 });
 
 const currentQuestionIndex = ref(0);
 const answers = ref({}); // Local state for all answers {questionId: answerText}
 const isSaving = ref(false);
 const isConfirmDialogOpen = ref(false);
+const isSubmittingExam = ref(false);
 
-// Key for localStorage to prevent conflicts between assessments
+// Proctoring & Fullscreen State
+const isFullscreen = ref(false);
+const hasStartedExam = ref(false);
+const violationCount = ref(props.assessment.violations_count || 0);
+const proctoringState = ref('pre_exam'); // 'pre_exam' | 'warning' | 'limit_reached'
+const showProctoringModal = ref(true);
+const lastViolationTimestamp = ref(0);
+
+// Keys for localStorage to persist state across sessions
 const storageKey = computed(() => `assessment_progress_${props.assessment.id}`);
 const indexKey = computed(() => `assessment_index_${props.assessment.id}`);
+const violationKey = computed(() => `assessment_violations_${props.assessment.id}`);
+const startedKey = computed(() => `assessment_started_${props.assessment.id}`);
 
-// Load answers and last index from localStorage on mount
+// Request Fullscreen on Document
+const enterFullscreen = async () => {
+    try {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            await elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+            await elem.webkitRequestFullscreen();
+        }
+        isFullscreen.value = true;
+        return true;
+    } catch (err) {
+        console.warn('Fullscreen request could not be granted:', err);
+        return false;
+    }
+};
+
+// Start exam and enter fullscreen
+const handleStartFullscreen = async () => {
+    await enterFullscreen();
+    hasStartedExam.value = true;
+    localStorage.setItem(startedKey.value, 'true');
+    showProctoringModal.value = false;
+};
+
+// Resume exam from warning
+const handleResumeFullscreen = async () => {
+    await enterFullscreen();
+    showProctoringModal.value = false;
+};
+
+// Trigger violation with 1500ms debounce to prevent double-counting across blur/visibilitychange/fullscreenchange
+const triggerViolation = (reason = '') => {
+    if (!hasStartedExam.value || isSubmittingExam.value) {
+        return;
+    }
+
+    const now = Date.now();
+    if (now - lastViolationTimestamp.value < 1500) {
+        return;
+    }
+    lastViolationTimestamp.value = now;
+
+    violationCount.value++;
+    localStorage.setItem(violationKey.value, violationCount.value.toString());
+
+    // Asynchronously record violation to the server
+    axios.post(route('dashboard.learning.violation', props.assessment.id))
+        .catch((err) => {
+            console.error('Gagal mencatat pelanggaran ke server:', err);
+        });
+
+    if (violationCount.value > props.maxViolationsAllowed) {
+        proctoringState.value = 'limit_reached';
+        showProctoringModal.value = true;
+
+        // Auto submit exam after short grace display
+        setTimeout(() => {
+            submitExam('violation_limit');
+        }, 1500);
+    } else {
+        proctoringState.value = 'warning';
+        showProctoringModal.value = true;
+    }
+};
+
+// Event Listeners for Proctoring
+const handleFullscreenChange = () => {
+    isFullscreen.value = !!document.fullscreenElement;
+    if (hasStartedExam.value && !document.fullscreenElement && !isSubmittingExam.value) {
+        triggerViolation('Keluar dari mode layar penuh');
+    }
+};
+
+const handleVisibilityChange = () => {
+    if (document.hidden && hasStartedExam.value && !isSubmittingExam.value) {
+        triggerViolation('Berpindah tab atau browser diminimalkan');
+    }
+};
+
+const handleWindowBlur = () => {
+    if (hasStartedExam.value && !isSubmittingExam.value) {
+        triggerViolation('Jendela browser kehilangan fokus');
+    }
+};
+
+// Block shortcut keys (F12, DevTools, View Source, Print, Save)
+const handleKeydown = (e) => {
+    if (e.key === 'F12') {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+
+    const isCtrlOrMeta = e.ctrlKey || e.metaKey;
+
+    // DevTools: Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+    if (isCtrlOrMeta && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+
+    // View source: Ctrl+U, Print: Ctrl+P, Save: Ctrl+S
+    if (isCtrlOrMeta && ['u', 'U', 's', 'S', 'p', 'P'].includes(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+};
+
+const preventDefaultAction = (e) => {
+    e.preventDefault();
+};
+
 onMounted(() => {
+    // Restore answers and index from localStorage
     const savedProgress = localStorage.getItem(storageKey.value);
     if (savedProgress) {
         try {
@@ -36,6 +168,50 @@ onMounted(() => {
     if (savedIndex) {
         currentQuestionIndex.value = parseInt(savedIndex);
     }
+
+    const savedViolations = localStorage.getItem(violationKey.value);
+    if (savedViolations) {
+        violationCount.value = Math.max(violationCount.value, parseInt(savedViolations));
+    }
+
+    // Check if previously started
+    const savedStarted = localStorage.getItem(startedKey.value);
+    if (savedStarted === 'true') {
+        hasStartedExam.value = true;
+    }
+
+    // Fullscreen validation on mount
+    if (!document.fullscreenElement) {
+        isFullscreen.value = false;
+        showProctoringModal.value = true;
+        proctoringState.value = hasStartedExam.value ? 'warning' : 'pre_exam';
+    } else {
+        isFullscreen.value = true;
+        if (hasStartedExam.value) {
+            showProctoringModal.value = false;
+        }
+    }
+
+    // Register Proctoring & Security Listeners
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleWindowBlur);
+    window.addEventListener('keydown', handleKeydown);
+    document.addEventListener('contextmenu', preventDefaultAction);
+    document.addEventListener('copy', preventDefaultAction);
+    document.addEventListener('cut', preventDefaultAction);
+    document.addEventListener('paste', preventDefaultAction);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.removeEventListener('blur', handleWindowBlur);
+    window.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('contextmenu', preventDefaultAction);
+    document.removeEventListener('copy', preventDefaultAction);
+    document.removeEventListener('cut', preventDefaultAction);
+    document.removeEventListener('paste', preventDefaultAction);
 });
 
 const currentQuestion = computed(() => props.course.questions[currentQuestionIndex.value]);
@@ -60,18 +236,33 @@ const handleSaveAnswer = (answer) => {
 };
 
 const handleTimeout = () => {
-    submitExam();
+    submitExam('timeout');
 };
 
-const submitExam = () => {
+const submitExam = (reason = 'normal') => {
+    isSubmittingExam.value = true;
+
+    if (document.fullscreenElement) {
+        try {
+            document.exitFullscreen().catch(() => {});
+        } catch (e) {}
+    }
+
     router.post(route('dashboard.learning.finish', props.assessment.id), {
-        answers: answers.value
+        answers: answers.value,
+        violations_count: violationCount.value,
+        submitted_reason: reason,
     }, {
         onSuccess: () => {
             // Clear progress on success
             localStorage.removeItem(storageKey.value);
             localStorage.removeItem(indexKey.value);
-        }
+            localStorage.removeItem(violationKey.value);
+            localStorage.removeItem(startedKey.value);
+        },
+        onFinish: () => {
+            isSubmittingExam.value = false;
+        },
     });
 };
 
@@ -102,7 +293,19 @@ const finishTest = () => {
 <template>
     <Head :title="'Ruang Ujian: ' + course.name" />
 
-    <div class="min-h-screen bg-[#F8F9FA] dark:bg-[#0A090B] font-poppins text-[#0A090B] dark:text-slate-100 transition-colors">
+    <div class="min-h-screen bg-[#F8F9FA] dark:bg-[#0A090B] font-poppins text-[#0A090B] dark:text-slate-100 transition-colors select-none">
+        <!-- Proctoring Modal (Pre-Exam, Warning, Limit Reached) -->
+        <ProctoringModal
+            :show="showProctoringModal"
+            :state="proctoringState"
+            :currentViolation="violationCount"
+            :maxAllowed="maxViolationsAllowed"
+            :courseName="course.name"
+            :isSubmitting="isSubmittingExam"
+            @start-fullscreen="handleStartFullscreen"
+            @resume-fullscreen="handleResumeFullscreen"
+        />
+
         <!-- CBT Distraction-Free Top Bar -->
         <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0E0E12]/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 h-20 px-6 lg:px-10 flex items-center justify-between transition-colors">
             <!-- Brand & Course Info -->
@@ -126,14 +329,26 @@ const finishTest = () => {
                         <span>•</span>
                         <span class="inline-flex items-center gap-1.5 text-emerald-500">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Tersinkronisasi
+                            Proctoring Aktif
                         </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Controls: Timer, Theme Toggle, End Exam -->
+            <!-- Right Controls: Violation Badge, Timer, Theme Toggle, End Exam -->
             <div class="flex items-center gap-3 sm:gap-5">
+                <!-- Violation Counter Badge -->
+                <div
+                    v-if="violationCount > 0"
+                    class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border"
+                    :class="violationCount >= maxViolationsAllowed
+                        ? 'bg-rose-500/10 border-rose-500/25 text-rose-600 dark:text-rose-400'
+                        : 'bg-amber-500/10 border-amber-500/25 text-amber-600 dark:text-amber-400'"
+                >
+                    <span class="w-2 h-2 rounded-full" :class="violationCount >= maxViolationsAllowed ? 'bg-rose-500 animate-ping' : 'bg-amber-500'"></span>
+                    <span>Pelanggaran: {{ violationCount }}/{{ maxViolationsAllowed }}</span>
+                </div>
+
                 <div class="hidden sm:flex flex-col text-right">
                     <span class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">Sisa Waktu</span>
                     <CountdownTimer
@@ -153,7 +368,7 @@ const finishTest = () => {
                 <!-- Finish Exam Button -->
                 <button
                     @click="finishTest"
-                    class="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-rose-500/20 active:scale-95 shrink-0"
+                    class="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-rose-500/20 active:scale-95 shrink-0 cursor-pointer"
                 >
                     Selesaikan Ujian
                 </button>
@@ -164,17 +379,26 @@ const finishTest = () => {
         <main class="py-8 px-6 lg:px-10 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
             <!-- Left Column: Question Workspace -->
             <div class="flex-1 flex flex-col gap-6">
-                <!-- Mobile Timer Bar -->
+                <!-- Mobile Timer & Violation Bar -->
                 <div class="sm:hidden flex items-center justify-between p-4 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-2xl">
                     <div class="flex flex-col">
                         <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">Sisa Waktu</span>
                         <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Pengerjaan</span>
                     </div>
-                    <CountdownTimer
-                        :startTime="assessment.started_at"
-                        :durationHours="90"
-                        @timeout="handleTimeout"
-                    />
+                    <div class="flex items-center gap-3">
+                        <span
+                            v-if="violationCount > 0"
+                            class="text-[10px] font-bold px-2 py-0.5 rounded-md"
+                            :class="violationCount >= maxViolationsAllowed ? 'bg-rose-500/15 text-rose-600' : 'bg-amber-500/15 text-amber-600'"
+                        >
+                            {{ violationCount }}/{{ maxViolationsAllowed }}
+                        </span>
+                        <CountdownTimer
+                            :startTime="assessment.started_at"
+                            :durationHours="90"
+                            @timeout="handleTimeout"
+                        />
+                    </div>
                 </div>
 
                 <!-- Status & Progress Bar -->
@@ -213,7 +437,7 @@ const finishTest = () => {
                     <button
                         @click="prevQuestion"
                         :disabled="currentQuestionIndex === 0"
-                        class="px-6 py-3.5 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-2xl font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all disabled:opacity-40 disabled:pointer-events-none shadow-xs flex items-center gap-2"
+                        class="px-6 py-3.5 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-2xl font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all disabled:opacity-40 disabled:pointer-events-none shadow-xs flex items-center gap-2 cursor-pointer"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
@@ -224,7 +448,7 @@ const finishTest = () => {
                     <button
                         v-if="currentQuestionIndex < course.questions.length - 1"
                         @click="nextQuestion"
-                        class="px-7 py-3.5 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95 flex items-center gap-2"
+                        class="px-7 py-3.5 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95 flex items-center gap-2 cursor-pointer"
                     >
                         <span>Soal Berikutnya</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,7 +458,7 @@ const finishTest = () => {
                     <button
                         v-else
                         @click="finishTest"
-                        class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95 flex items-center gap-2"
+                        class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95 flex items-center gap-2 cursor-pointer"
                     >
                         <span>Kumpulkan Ujian</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -260,7 +484,7 @@ const finishTest = () => {
                             v-for="(question, idx) in course.questions"
                             :key="idx"
                             @click="goToQuestion(idx)"
-                            class="w-full aspect-square rounded-xl flex items-center justify-center text-xs font-bold transition-all border relative"
+                            class="w-full aspect-square rounded-xl flex items-center justify-center text-xs font-bold transition-all border relative cursor-pointer"
                             :class="[
                                 currentQuestionIndex === idx
                                 ? 'bg-[#2B82FE] border-[#2B82FE] text-white scale-105 z-10'
@@ -302,7 +526,7 @@ const finishTest = () => {
             cancel-text="Lanjut Mengerjakan"
             type="primary"
             @close="isConfirmDialogOpen = false"
-            @confirm="submitExam"
+            @confirm="submitExam('normal')"
         />
     </div>
 </template>

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Student\FinishAssessmentRequest;
 use App\Models\Course;
 use App\Models\StudentAssessment;
 use App\Services\AssessmentService;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class LearningController extends Controller
 {
@@ -15,7 +18,7 @@ class LearningController extends Controller
         protected AssessmentService $assessmentService
     ) {}
 
-    public function dashboard()
+    public function dashboard(): Response
     {
         $user = Auth::user();
         $courses = $user->courses()->with('category')->withCount('questions')->get();
@@ -30,13 +33,13 @@ class LearningController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(): Response
     {
         $user = Auth::user();
         $courses = $user->courses()->with('category')->withCount('questions')->get();
-        
+
         // Enrich courses with latest attempt info
-        $courses->each(function($course) use ($user) {
+        $courses->each(function ($course) use ($user) {
             $course->latest_assessment = StudentAssessment::where('user_id', $user->id)
                 ->where('course_id', $course->id)
                 ->orderBy('created_at', 'desc')
@@ -44,15 +47,15 @@ class LearningController extends Controller
         });
 
         return Inertia::render('Student/Courses/Index', [
-            'courses' => $courses
+            'courses' => $courses,
         ]);
     }
 
-    public function start($courseId)
+    public function start($courseId): RedirectResponse
     {
         $user = Auth::user();
 
-        if (!$user->courses()->where('course_id', $courseId)->exists()) {
+        if (! $user->courses()->where('course_id', $courseId)->exists()) {
             abort(403, 'You are not enrolled in this course.');
         }
 
@@ -61,19 +64,19 @@ class LearningController extends Controller
 
         return redirect()->route('dashboard.learning.course', [
             'courseId' => $course->id,
-            'assessmentId' => $assessment->id
+            'assessmentId' => $assessment->id,
         ]);
     }
 
-    public function learning($courseId, $assessmentId)
+    public function learning($courseId, $assessmentId): Response|RedirectResponse
     {
         $user = Auth::user();
 
-        if (!$user->courses()->where('course_id', $courseId)->exists()) {
+        if (! $user->courses()->where('course_id', $courseId)->exists()) {
             abort(403, 'You are not enrolled in this course.');
         }
 
-        $course = Course::with(['questions.answers' => function($query) {
+        $course = Course::with(['questions.answers' => function ($query) {
             $query->select('id', 'course_question_id', 'answer'); // Exclude is_correct
         }])->findOrFail($courseId);
         $assessment = StudentAssessment::findOrFail($assessmentId);
@@ -83,17 +86,36 @@ class LearningController extends Controller
         }
 
         if ($this->assessmentService->isExpired($assessment)) {
-            return $this->finish($assessment->id);
+            $this->assessmentService->finishAttempt($assessment, [], 0, StudentAssessment::REASON_TIMEOUT);
+
+            return redirect()->route('dashboard.learning.report', ['assessmentId' => $assessment->id]);
         }
 
         return Inertia::render('Student/Assessment/Take', [
             'course' => $course,
             'assessment' => $assessment,
             'serverTime' => now(),
+            'maxViolationsAllowed' => StudentAssessment::MAX_VIOLATIONS_ALLOWED,
         ]);
     }
 
-    public function finish(Request $request, $assessmentId)
+    public function recordViolation($assessmentId): JsonResponse
+    {
+        $assessment = StudentAssessment::findOrFail($assessmentId);
+
+        if ($assessment->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $count = $this->assessmentService->recordViolation($assessment);
+
+        return response()->json([
+            'violations_count' => $count,
+            'max_allowed' => StudentAssessment::MAX_VIOLATIONS_ALLOWED,
+        ]);
+    }
+
+    public function finish(FinishAssessmentRequest $request, $assessmentId): RedirectResponse
     {
         $assessment = StudentAssessment::findOrFail($assessmentId);
 
@@ -101,13 +123,17 @@ class LearningController extends Controller
             abort(403);
         }
 
-        $answers = $request->input('answers', []);
-        $this->assessmentService->finishAttempt($assessment, $answers);
+        $validated = $request->validated();
+        $answers = $validated['answers'] ?? [];
+        $violationsCount = (int) ($validated['violations_count'] ?? 0);
+        $submittedReason = $validated['submitted_reason'] ?? StudentAssessment::REASON_NORMAL;
+
+        $this->assessmentService->finishAttempt($assessment, $answers, $violationsCount, $submittedReason);
 
         return redirect()->route('dashboard.learning.report', ['assessmentId' => $assessment->id]);
     }
 
-    public function learning_rapport($assessmentId)
+    public function learning_rapport($assessmentId): Response
     {
         $assessment = StudentAssessment::with(['course.category', 'answers'])->findOrFail($assessmentId);
 
@@ -116,7 +142,7 @@ class LearningController extends Controller
         }
 
         return Inertia::render('Student/Assessment/Result', [
-            'assessment' => $assessment
+            'assessment' => $assessment,
         ]);
     }
 }

@@ -51,6 +51,8 @@ Route::middleware(['auth', 'verified', 'role_redirect'])->group(function () {
             Route::get('/learning/{courseId}/take/{assessmentId}', [LearningController::class, 'learning'])->name('learning.course');
             Route::post('/learning/answer/{assessmentId}/{questionId}', [StudentAnswerController::class, 'store'])
                 ->name('learning.answer')->middleware('throttle:60,1');
+            Route::post('/learning/violation/{assessmentId}', [LearningController::class, 'recordViolation'])
+                ->name('learning.violation')->middleware('throttle:60,1');
             Route::post('/learning/finish/{assessmentId}', [LearningController::class, 'finish'])
                 ->name('learning.finish')->middleware('throttle:10,1');
             Route::get('/learning/result/{assessmentId}', [LearningController::class, 'learning_rapport'])->name('learning.report');
