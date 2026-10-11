@@ -2,6 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Mandatory Development Rules & Guidelines
+All AI agents and developers working on this repository **MUST strictly load and adhere to the project standards** located in the `.claude/rules/` directory:
+- **Backend Standards**: `.claude/rules/backend-pattern.md`
+  - Strict Request-Controller-Service Triad (Form Request validation, thin controllers, domain services).
+  - Explicit relationship return types, universal `$fillable` mass-assignment protection, and database transactions (`DB::transaction`) for multi-write operations.
+  - DRY service queries and class constants for thresholds and status codes (zero hardcoded numbers or strings).
+- **Frontend Standards**: `.claude/rules/frontend-pattern.md`
+  - Atomic Design hierarchy (`Atoms/`, `Molecules/`, `Organisms/`, `Templates/`).
+  - Vue 3 Composition API with `<script setup>`, explicit `defineProps`, and Inertia.js form/navigation management.
+  - Tailwind CSS utility styling with Poppins typography and project color tokens (no arbitrary inline styles or isolated custom `<style>` overrides).
+
+---
+
 ## Development Commands
 
 ### Dependency Management
@@ -31,6 +44,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Fix backend code style: `vendor/bin/pint`
 - Clear application cache: `php artisan optimize:clear`
 
+---
+
 ## Brand Architecture & Design System
 
 ### Brand Identity
@@ -44,7 +59,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Core Palette Tokens
 - **Terracotta Orange (`#D95300`)**: Primary brand identity, teacher space primary accents, critical action CTAs.
 - **Cobalt Blue (`#2B82FE`)**: Student portal accents, active navigation states, interactive highlights.
-- **Obsidian Black (`#0A090B`)**: High-contrast typography, dark panels, structured surface elements.
+- **Obsidian Black (`#0A090B`) & Dark Surface (`#111116`)**: High-contrast typography, dark panels, structured surface elements.
+
+---
 
 ## Architecture & Code Structure
 
@@ -65,17 +82,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - Teachers only manage their own courses via `$user->teacherCourses()` (`teacher_id` column on `courses`).
   - Students can only access courses they are enrolled in via the `course_students` pivot table.
 
-### Assessment Lifecycle & Integrity
-- Examination flow (`app/Services/AssessmentService.php` and `LearningController.php`):
-  - Starting: `startAttempt()` creates a `StudentAssessment` record.
-  - Taking: Questions are delivered to the frontend with correct answers stripped (`$query->select('id', 'course_question_id', 'answer')` excludes `is_correct`), preventing answer key inspection in browser DevTools.
-  - Real-time persistence: Answers are saved individually via `saveAnswer()` on `StudentAnswerController` (`throttle:60,1`).
-  - Completion: `finishAttempt()` calculates scores based on a 50-question scale inside a database transaction (`throttle:10,1`), locking the attempt with `finished_at`.
-  - Results: Delivered via `learning_rapport()` presenting the final score and question review.
+### Assessment Lifecycle, Integrity & Proctoring
+- Examination flow (`app/Services/AssessmentService.php`, `LearningController.php`, `Take.vue`):
+  - **Prerequisite Fullscreen Lock**: `ProctoringModal.vue` requires students to activate Fullscreen mode before viewing questions.
+  - **Tab Switch & Anti-Cheat Proctoring**: Monitors `fullscreenchange`, `visibilitychange`, and `window.blur` with a 1500ms debounce cooldown to record genuine violations. Violations are logged to database via `POST /dashboard/learning/violation/{assessmentId}` (`recordViolation`).
+  - **Graduated Penalty Tolerance**: Up to 3 warning dialogs with backdrop blur lock. Exceeding tolerance (violation 4) automatically triggers submission with reason `violation_limit`.
+  - **Cheating & Inspection Prevention**: Blocks DevTools shortcuts (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S, Ctrl+P), disables right-click context menu, prevents copy/cut/paste, and applies CSS `select-none`.
+  - **Answer Integrity**: Question payloads exclude `is_correct` answer keys (`$query->select('id', 'course_question_id', 'answer')`), preventing inspection in browser network logs.
+  - **Real-time Persistence**: Answers are saved individually via `saveAnswer()` on `StudentAnswerController` (`throttle:60,1`).
+  - **Submission Confirmation**: `ExamSubmitModal.vue` displays an interactive breakdown of answered vs. unanswered questions, percentages, and contextual warning banners with full Light/Dark mode styling.
+  - **Completion & Scoring**: `finishAttempt()` calculates scores based on a 50-question scale inside a database transaction (`throttle:10,1`), locking the attempt with `finished_at`.
+  - **Rapport Evaluation**: Delivered via `learning_rapport()` (`Result.vue`), presenting final score, pass/fail status (KKM 70%), elapsed duration, and proctoring violation logs.
 
 ### Service Layer Pattern
 - Controllers are thin and delegate domain logic and database transactions to `app/Services/`:
-  - `AssessmentService`: Test attempt lifecycle, answer persistence, score calculation, expiry checking.
+  - `AssessmentService`: Test attempt lifecycle, violation recording, answer persistence, score calculation, expiry checking.
   - `CourseService`: Course lifecycle and cover image storage in `storage/app/public/course_covers`.
   - `CourseQuestionService`: Question and multiple-choice answers creation/updates.
   - `StudentService`: Student listing, search filters, pagination, and suspension toggling (`is_active`).
@@ -86,9 +107,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Frontend Component Structure (Atomic Design)
 Components located in `resources/js/Components/` adhere to Atomic Design:
-- `Atoms/`: Base components (`PrimaryButton.vue`, `TextInput.vue`, `InputLabel.vue`, `InputError.vue`, `Checkbox.vue`, `NavLink.vue`, `ApplicationLogo.vue`).
+- `Atoms/`: Base components (`PrimaryButton.vue`, `TextInput.vue`, `InputLabel.vue`, `InputError.vue`, `Checkbox.vue`, `NavLink.vue`, `ApplicationLogo.vue`, `ThemeToggle.vue`).
 - `Molecules/`: Composed components (`Breadcrumbs.vue`, `CountdownTimer.vue`, `DropdownLink.vue`, `Pagination.vue`).
-- `Organisms/`: Complex UI blocks (`AlertDialog.vue`, `Dropdown.vue`, `Modal.vue`, `QuestionCard.vue`).
+- `Organisms/`: Complex UI blocks (`AlertDialog.vue`, `ExamSubmitModal.vue`, `ProctoringModal.vue`, `Dropdown.vue`, `Modal.vue`, `QuestionCard.vue`).
 - `Templates/`: Page layout wrappers (`AdminLayout.vue`, `StudentLayout.vue`, `AuthenticatedLayout.vue`, `GuestLayout.vue`).
 - Pages in `resources/js/Pages/` are organized by domain: `Admin/`, `Student/`, `Auth/`, and `Errors/`.
 - Routes in Vue use Ziggy via the global `route()` helper.
