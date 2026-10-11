@@ -5,7 +5,7 @@ import axios from 'axios';
 import CountdownTimer from '@/Components/Molecules/CountdownTimer.vue';
 import QuestionCard from '@/Components/Organisms/QuestionCard.vue';
 import ThemeToggle from '@/Components/Atoms/ThemeToggle.vue';
-import AlertDialog from '@/Components/Organisms/AlertDialog.vue';
+import ExamSubmitModal from '@/Components/Organisms/ExamSubmitModal.vue';
 import ProctoringModal from '@/Components/Organisms/ProctoringModal.vue';
 
 const props = defineProps({
@@ -517,14 +517,13 @@ const finishTest = () => {
             </aside>
         </main>
 
-        <!-- Final Confirmation Modal -->
-        <AlertDialog
+        <!-- Final CBT Exam Submit Confirmation Modal -->
+        <ExamSubmitModal
             :show="isConfirmDialogOpen"
-            title="Selesaikan Ujian Sekarang?"
-            :message="'Anda telah menjawab ' + totalAnswered + ' dari ' + course.questions.length + ' soal. Setelah dikumpulkan, lembar jawaban akan langsung dinilai oleh sistem.'"
-            confirm-text="Ya, Kumpulkan Jawaban"
-            cancel-text="Lanjut Mengerjakan"
-            type="primary"
+            :totalQuestions="course.questions.length"
+            :totalAnswered="totalAnswered"
+            :courseName="course.name"
+            :isSubmitting="isSubmittingExam"
             @close="isConfirmDialogOpen = false"
             @confirm="submitExam('normal')"
         />
