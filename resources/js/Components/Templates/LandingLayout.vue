@@ -20,7 +20,7 @@ defineProps({
         <LandingNavbar :canLogin="canLogin" :canRegister="canRegister" />
 
         <!-- Main Content Slot -->
-        <main class="pt-28 lg:pt-36">
+        <main class="w-full">
             <slot />
         </main>
 

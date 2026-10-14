@@ -312,173 +312,187 @@ const progressPercentage = computed(() => {
 </script>
 
 <template>
-    <div id="simulasi">
-        <div class="bg-white dark:bg-[#111116] rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md overflow-hidden transition-colors">
-            <!-- Institutional Exam App Header -->
-            <div class="px-6 py-3.5 bg-[#0A090B] dark:bg-black text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-800">
-                <div class="flex items-center gap-3">
-                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
-                    <span class="text-xs font-mono font-bold tracking-wider text-slate-200">NAIJU CBT · SIMULASI UJIAN ONLINE</span>
-                    <span class="text-xs text-slate-400 border-l border-slate-700 pl-3">Mata Uji: Rekayasa Web</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="px-2.5 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono font-bold text-emerald-400">
-                        Sisa Waktu: {{ formattedTime }}
-                    </div>
-                    <span class="text-[11px] font-semibold text-slate-400">50 Butir Soal</span>
-                </div>
-            </div>
-
-            <!-- Session Meta Bar & Real-Time Sync Indicator -->
-            <div class="px-6 py-2.5 bg-slate-50 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400">
+    <div id="simulasi" class="relative">
+        <!-- Precision Device Hardware Chassis (Authentic School Lab Computer / Tablet Frame) -->
+        <div class="p-3 sm:p-4 bg-[#0A090B] rounded-[28px] border border-white/20 dark:border-slate-800 shadow-2xl shadow-black/50 transition-all">
+            <!-- Hardware Bezel Top Sensor & Camera Dot -->
+            <div class="hidden sm:flex items-center justify-between px-2 pb-2.5 text-[10px] text-slate-400 font-mono">
                 <div class="flex items-center gap-2">
-                    <span>Peserta: <strong class="text-slate-900 dark:text-slate-100 font-semibold">Ahmad Ammar</strong> (ID #ST-0042)</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>PROCTORING CLIENT: ACTIVE</span>
                 </div>
-
-                <!-- Live Auto-Save Indicator -->
-                <div class="flex items-center gap-2 font-mono">
-                    <span v-if="isSaving" class="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                        Menyimpan jawaban ke server...
-                    </span>
-                    <span v-else class="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Tersimpan di server ({{ lastSavedTime }})
-                    </span>
-                </div>
+                <!-- Camera dot -->
+                <div class="w-2 h-2 rounded-full bg-slate-800 border border-slate-700/80"></div>
+                <div>SECURE CBT TERMINAL</div>
             </div>
 
-            <!-- Progress Meter -->
-            <div class="w-full bg-slate-100 dark:bg-slate-800 h-1">
-                <div
-                    class="bg-emerald-500 h-full transition-all duration-300"
-                    :style="{ width: `${progressPercentage}%` }"
-                ></div>
-            </div>
+            <div class="bg-white dark:bg-[#111116] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md overflow-hidden transition-colors">
+                <!-- Institutional Exam App Header -->
+                <div class="px-5 py-3 bg-[#0A090B] dark:bg-black text-white flex flex-wrap items-center justify-between gap-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+                        <span class="text-xs font-mono font-bold tracking-wider text-slate-200">NAIJU CBT · CLIENT SIMULATOR</span>
+                        <span class="hidden sm:inline text-xs text-slate-400 border-l border-slate-700 pl-2.5">Mata Uji: Rekayasa Web</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <div class="px-2.5 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono font-bold text-emerald-400">
+                            Sisa: {{ formattedTime }}
+                        </div>
+                        <span class="text-[11px] font-semibold text-slate-400">50 Soal</span>
+                    </div>
+                </div>
 
-            <!-- Interactive Question Workspace -->
-            <div class="p-6 sm:p-7 space-y-6">
-                <!-- Question Prompt & Points -->
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                            Butir Soal {{ currentQuestion.num }} dari 50
+                <!-- Session Meta Bar & Real-Time Sync Indicator -->
+                <div class="px-5 py-2.5 bg-slate-50 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <span>Peserta: <strong class="text-slate-900 dark:text-slate-100 font-semibold">Ahmad Ammar</strong> (ID #ST-0042)</span>
+                    </div>
+
+                    <!-- Live Auto-Save Indicator -->
+                    <div class="flex items-center gap-2 font-mono text-[11px]">
+                        <span v-if="isSaving" class="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                            Menyimpan jawaban...
                         </span>
-                        <span class="text-xs font-semibold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
-                            Bobot: 2.0 Poin
+                        <span v-else class="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Tersimpan ({{ lastSavedTime }})
                         </span>
                     </div>
-                    <p class="text-base sm:text-lg font-bold text-[#0A090B] dark:text-white leading-relaxed">
-                        {{ currentQuestion.title }}
-                    </p>
                 </div>
 
-                <!-- Interactive Multiple Choice Options -->
-                <div class="space-y-2.5">
+                <!-- Progress Meter -->
+                <div class="w-full bg-slate-100 dark:bg-slate-800 h-1">
                     <div
-                        v-for="opt in currentQuestion.options"
-                        :key="opt.id"
-                        @click="selectAnswer(opt.id)"
-                        :class="[
-                            'p-3.5 sm:p-4 rounded-xl border text-sm flex items-start gap-3.5 cursor-pointer transition-all',
-                            currentQuestion.selected === opt.id
-                                ? 'bg-orange-50/70 dark:bg-[#D95300]/10 border-[#D95300] dark:border-[#D95300] text-slate-900 dark:text-white shadow-xs'
-                                : 'bg-slate-50/70 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300'
-                        ]"
-                    >
-                        <span
+                        class="bg-emerald-500 h-full transition-all duration-300"
+                        :style="{ width: `${progressPercentage}%` }"
+                    ></div>
+                </div>
+
+                <!-- Interactive Question Workspace -->
+                <div class="p-5 sm:p-6 space-y-5">
+                    <!-- Question Prompt & Points -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#D95300] dark:text-orange-400">
+                                Butir Soal {{ currentQuestion.num }} dari 50
+                            </span>
+                            <span class="text-xs font-semibold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700">
+                                Bobot: 2.0 Poin
+                            </span>
+                        </div>
+                        <p class="text-sm sm:text-base font-bold text-[#0A090B] dark:text-white leading-relaxed">
+                            {{ currentQuestion.title }}
+                        </p>
+                    </div>
+
+                    <!-- Interactive Multiple Choice Options -->
+                    <div class="space-y-2">
+                        <div
+                            v-for="opt in currentQuestion.options"
+                            :key="opt.id"
+                            @click="selectAnswer(opt.id)"
                             :class="[
-                                'w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors',
+                                'p-3 rounded-xl border text-xs sm:text-sm flex items-start gap-3 cursor-pointer transition-all',
                                 currentQuestion.selected === opt.id
-                                    ? 'bg-[#D95300] text-white'
-                                    : 'bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                                    ? 'bg-orange-50/80 dark:bg-[#D95300]/15 border-[#D95300] dark:border-[#D95300] text-slate-900 dark:text-white shadow-xs'
+                                    : 'bg-slate-50/70 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300'
                             ]"
                         >
-                            {{ opt.id }}
-                        </span>
-                        <span class="pt-0.5 leading-relaxed">{{ opt.text }}</span>
-                    </div>
-                </div>
-
-                <!-- Action Controls & Flag Toggle -->
-                <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <button
-                        type="button"
-                        @click="toggleFlag"
-                        :class="[
-                            'px-3.5 py-2 rounded-lg border font-semibold flex items-center gap-1.5 transition-colors cursor-pointer',
-                            currentQuestion.isFlagged
-                                ? 'bg-amber-100 dark:bg-amber-950/60 border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200'
-                                : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
-                        ]"
-                    >
-                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                            <path d="M5 21V4C5 4 7 3 12 3C17 3 19 5 19 5V14C19 14 17 12 12 12C7 12 5 14 5 14V21Z" />
-                        </svg>
-                        <span>{{ currentQuestion.isFlagged ? 'Ditandai Ragu' : 'Tandai Ragu-ragu' }}</span>
-                    </button>
-
-                    <div class="flex items-center gap-2">
-                        <button
-                            type="button"
-                            @click="goToPrevious"
-                            :disabled="activeQuestionNumber === 1"
-                            class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
-                        >
-                            Sebelumnya
-                        </button>
-                        <button
-                            type="button"
-                            @click="goToNext"
-                            :disabled="activeQuestionNumber === questions.length"
-                            class="px-4 py-2 rounded-lg bg-[#0A090B] dark:bg-white text-white dark:text-[#0A090B] font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-xs cursor-pointer"
-                        >
-                            Berikutnya
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Question Sheet Navigator Palette -->
-                <div class="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl space-y-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
-                        <span>Navigasi Soal Ujian (Pilih Nomor untuk Berpindah)</span>
-                        <div class="flex items-center gap-3 text-[11px]">
-                            <span class="flex items-center gap-1.5">
-                                <span class="w-2.5 h-2.5 rounded bg-emerald-600"></span>
-                                <span>{{ answeredCount }} Terjawab</span>
+                            <span
+                                :class="[
+                                    'w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors',
+                                    currentQuestion.selected === opt.id
+                                        ? 'bg-[#D95300] text-white'
+                                        : 'bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                                ]"
+                            >
+                                {{ opt.id }}
                             </span>
-                            <span class="flex items-center gap-1.5">
-                                <span class="w-2.5 h-2.5 rounded bg-amber-400"></span>
-                                <span>Ragu</span>
-                            </span>
-                            <span class="flex items-center gap-1.5">
-                                <span class="w-2.5 h-2.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700"></span>
-                                <span>Kosong</span>
-                            </span>
+                            <span class="pt-0.5 leading-relaxed">{{ opt.text }}</span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-10 gap-1.5 text-center">
+                    <!-- Action Controls & Flag Toggle -->
+                    <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
                         <button
-                            v-for="item in questions"
-                            :key="item.num"
-                            @click="activeQuestionNumber = item.num"
                             type="button"
+                            @click="toggleFlag"
                             :class="[
-                                'h-7 rounded text-[11px] font-bold flex items-center justify-center transition-colors cursor-pointer',
-                                item.num === activeQuestionNumber
-                                    ? 'bg-[#D95300] text-white ring-2 ring-[#D95300]/40'
-                                    : item.isFlagged
-                                    ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700'
-                                    : item.selected !== null
-                                    ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800'
-                                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                'px-3 py-1.5 rounded-lg border font-semibold flex items-center gap-1.5 transition-colors cursor-pointer',
+                                currentQuestion.isFlagged
+                                    ? 'bg-amber-100 dark:bg-amber-950/60 border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200'
+                                    : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                             ]"
                         >
-                            {{ item.num }}
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                <path d="M5 21V4C5 4 7 3 12 3C17 3 19 5 19 5V14C19 14 17 12 12 12C7 12 5 14 5 14V21Z" />
+                            </svg>
+                            <span>{{ currentQuestion.isFlagged ? 'Ditandai Ragu' : 'Tandai Ragu' }}</span>
                         </button>
+
+                        <div class="flex items-center gap-2">
+                            <button
+                                type="button"
+                                @click="goToPrevious"
+                                :disabled="activeQuestionNumber === 1"
+                                class="px-3.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            >
+                                Sebelumnya
+                            </button>
+                            <button
+                                type="button"
+                                @click="goToNext"
+                                :disabled="activeQuestionNumber === questions.length"
+                                class="px-3.5 py-1.5 rounded-lg bg-[#0A090B] dark:bg-white text-white dark:text-[#0A090B] font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-xs cursor-pointer"
+                            >
+                                Berikutnya
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Question Sheet Navigator Palette -->
+                    <div class="p-3 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl space-y-2">
+                        <div class="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
+                            <span class="text-[11px]">Navigasi Soal:</span>
+                            <div class="flex items-center gap-2 text-[10px]">
+                                <span class="flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded bg-emerald-600"></span>
+                                    <span>{{ answeredCount }} Terjawab</span>
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded bg-amber-400"></span>
+                                    <span>Ragu</span>
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700"></span>
+                                    <span>Kosong</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-10 gap-1 text-center">
+                            <button
+                                v-for="item in questions"
+                                :key="item.num"
+                                @click="activeQuestionNumber = item.num"
+                                type="button"
+                                :class="[
+                                    'h-6 rounded text-[10px] font-bold flex items-center justify-center transition-colors cursor-pointer',
+                                    item.num === activeQuestionNumber
+                                        ? 'bg-[#D95300] text-white ring-2 ring-[#D95300]/40'
+                                        : item.isFlagged
+                                        ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700'
+                                        : item.selected !== null
+                                        ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800'
+                                        : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                ]"
+                            >
+                                {{ item.num }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
