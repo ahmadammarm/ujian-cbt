@@ -48,10 +48,13 @@ The application is hardened following senior-level security standards to ensure 
 ## Installation & Setup
 
 ### Prerequisites
-- PHP 8.2 or higher
+- PHP 8.2 or higher, always on the latest patched release of your branch (verified on PHP 8.5.12)
+- PHP extensions: `mbstring`, `openssl`, `curl`, `fileinfo`, `pdo_mysql`, `zip`, `intl`, `gd`, `sodium`
 - **PNPM** (`npm install -g pnpm`)
 - Composer
 - Database (MySQL/SQLite)
+
+> **Security note:** PHP releases occasionally ship fixes for serious vulnerabilities, including remote code execution (RCE). Run `php -v` and compare it with the latest release on [php.net](https://www.php.net/downloads) before deploying, and upgrade outdated installs. Keep `composer.lock` dependencies up to date as well.
 
 ### 1. Dependency Management
 ```bash
