@@ -48,13 +48,13 @@ The application is hardened following senior-level security standards to ensure 
 ## Installation & Setup
 
 ### Prerequisites
-- PHP 8.2 or higher, always on the latest patched release of your branch (verified on PHP 8.5.12)
+- PHP **8.5.12** (recommended), or the minimum patched release of an older supported branch: **8.4.27**, **8.3.36** or **8.2.35**. `composer.json` rejects anything older.
 - PHP extensions: `mbstring`, `openssl`, `curl`, `fileinfo`, `pdo_mysql`, `zip`, `intl`, `gd`, `sodium`
 - **PNPM** (`npm install -g pnpm`)
 - Composer
 - Database (MySQL/SQLite)
 
-> **Security note:** PHP releases occasionally ship fixes for serious vulnerabilities, including remote code execution (RCE). Run `php -v` and compare it with the latest release on [php.net](https://www.php.net/downloads) before deploying, and upgrade outdated installs. Keep `composer.lock` dependencies up to date as well.
+> **Security note:** On 21 October 2026 the PHP team released 8.5.12, 8.4.27, 8.3.36 and 8.2.35 to fix two critical unauthenticated remote code execution flaws in PHP core (CVE-2026-109618 and CVE-2026-109619, nicknamed "php2shell"). Older builds are vulnerable, so check `php -v` before deploying. PHP has no LTS releases: each branch gets two years of active support and two of security-only fixes (8.2 reaches end of life on 31 Dec 2026), so prefer 8.4 or 8.5 for new deployments. Advisory: [CERT-EU 2026-018](https://cert.europa.eu/publications/security-advisories/2026-018/).
 
 ### 1. Dependency Management
 ```bash
