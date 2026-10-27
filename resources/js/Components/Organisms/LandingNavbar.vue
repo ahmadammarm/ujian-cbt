@@ -1,138 +1,113 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import ThemeToggle from '@/Components/Atoms/ThemeToggle.vue';
+import ApplicationLogo from '@/Components/Atoms/ApplicationLogo.vue';
+import InkButton from '@/Components/Atoms/InkButton.vue';
 
 defineProps({
     canLogin: {
         type: Boolean,
         default: true,
     },
-    canRegister: {
-        type: Boolean,
-        default: true,
-    },
 });
 
-const isMobileMenuOpen = ref(false);
+const sections = [
+    { href: '#persiapan', label: 'Hari ujian' },
+    { href: '#aturan', label: 'Aturan' },
+    { href: '#tanya', label: 'Tanya jawab' },
+];
+
+const isMenuOpen = ref(false);
+
+const closeMenu = () => {
+    isMenuOpen.value = false;
+};
+
+const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+        closeMenu();
+    }
+};
+
+onMounted(() => window.addEventListener('keydown', handleKeydown));
+onUnmounted(() => window.removeEventListener('keydown', handleKeydown));
 </script>
 
 <template>
-    <header class="fixed top-0 inset-x-0 z-50 bg-[#0A090B]/95 dark:bg-[#070709]/95 backdrop-blur-md border-b border-white/10 dark:border-slate-800 transition-colors">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Lockup -->
-            <Link :href="route('dashboard')" class="flex items-center gap-3.5 group">
-                <div class="w-10 h-10 bg-[#D95300] text-white rounded-xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105">
-                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                        <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
-                    </svg>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-xl font-black tracking-tight text-white">Naiju</span>
-                    <span class="text-[10px] font-bold text-orange-200/90 dark:text-slate-400 uppercase tracking-wider">Platform CBT &amp; Asesmen</span>
-                </div>
+    <header class="sticky top-0 z-40 border-b border-rule bg-paper/90 backdrop-blur">
+        <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-6 sm:pl-24 sm:pr-8">
+            <Link href="/" class="flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen">
+                <span class="flex size-9 items-center justify-center rounded-lg bg-ink text-paper">
+                    <ApplicationLogo class="size-5" />
+                </span>
+                <span class="font-hand text-2xl font-extrabold text-ink">Naiju</span>
             </Link>
 
-            <!-- Desktop Navigation Destinations (Pahamify Style) -->
-            <nav class="hidden lg:flex items-center gap-7 text-sm font-semibold text-white/90">
-                <a href="#keunggulan" class="hover:text-[#FF8A4C] transition-colors">Keunggulan</a>
-                <a href="#spesifikasi" class="hover:text-[#FF8A4C] transition-colors">Spesifikasi</a>
-                <a href="#alur-kerja" class="hover:text-[#FF8A4C] transition-colors">Alur Ujian</a>
-                <a href="#pilar" class="hover:text-[#FF8A4C] transition-colors">Ruang Kerja</a>
-                <a href="#keamanan" class="hover:text-[#FF8A4C] transition-colors">Keamanan</a>
-                <a href="#faq" class="hover:text-[#FF8A4C] transition-colors">Tanya Jawab</a>
+            <nav aria-label="Bagian halaman" class="hidden items-center gap-8 md:flex">
+                <a
+                    v-for="section in sections"
+                    :key="section.href"
+                    :href="section.href"
+                    class="font-legible text-sm font-bold text-ink-soft underline-offset-8 hover:text-ink hover:underline hover:decoration-pen hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen"
+                >{{ section.label }}</a>
             </nav>
 
-            <!-- Access Controls & Theme Switcher -->
-            <div class="hidden sm:flex items-center gap-3">
-                <ThemeToggle class="text-white" />
-
+            <div class="flex items-center gap-2 sm:gap-3">
                 <template v-if="canLogin">
-                    <Link
-                        v-if="$page.props.auth.user"
-                        :href="route('dashboard')"
-                        class="px-5 py-2.5 bg-[#D95300] hover:bg-[#BF4900] text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-sm transition-all hover:scale-105"
-                    >
-                        Buka Dashboard
-                    </Link>
-
-                    <template v-else>
-                        <Link
-                            :href="route('login')"
-                            class="px-5 py-2 text-xs font-bold text-white hover:text-white border border-white/20 hover:bg-white/10 rounded-full transition-all"
-                        >
-                            Masuk
-                        </Link>
-
-                        <a
-                            href="#simulasi"
-                            class="px-5 py-2 bg-[#D95300] hover:bg-[#BF4900] text-white text-xs font-extrabold uppercase tracking-wider rounded-full shadow-md shadow-orange-950/30 hover:scale-105 transition-all"
-                        >
-                            Coba Simulasi
-                        </a>
-                    </template>
+                    <InkButton v-if="$page.props.auth.user" :href="route('dashboard')" size="sm">Dashboard</InkButton>
+                    <InkButton v-else :href="route('login')" size="sm">Masuk</InkButton>
                 </template>
-            </div>
 
-            <!-- Mobile Hamburger Button -->
-            <div class="flex items-center gap-2 lg:hidden">
-                <ThemeToggle class="text-white" />
                 <button
                     type="button"
-                    @click="isMobileMenuOpen = !isMobileMenuOpen"
-                    class="p-2 rounded-xl text-white hover:bg-white/15 focus:outline-none transition-colors"
-                    aria-label="Toggle Navigation Menu"
+                    class="flex size-10 items-center justify-center rounded-lg text-ink transition-colors hover:bg-rule/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen active:scale-95 md:hidden"
+                    :aria-expanded="isMenuOpen"
+                    aria-controls="landing-menu"
+                    :aria-label="isMenuOpen ? 'Tutup menu' : 'Buka menu'"
+                    @click="isMenuOpen = !isMenuOpen"
                 >
-                    <svg v-if="!isMobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                    <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true">
+                        <path v-if="isMenuOpen" d="M6 6l12 12M18 6L6 18" />
+                        <path v-else d="M4 7h16M4 12h16M4 17h10" />
                     </svg>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Drawer Navigation -->
-        <div
-            v-if="isMobileMenuOpen"
-            class="lg:hidden bg-[#0A090B] dark:bg-[#070709] border-b border-white/10 dark:border-slate-800 px-6 py-6 space-y-4 animate-slide-up"
+        <!-- Mobile menu -->
+        <Transition
+            enter-active-class="transition duration-200 ease-out motion-reduce:transition-none"
+            enter-from-class="-translate-y-2 opacity-0"
+            leave-active-class="transition duration-150 ease-in motion-reduce:transition-none"
+            leave-to-class="-translate-y-2 opacity-0"
         >
-            <nav class="flex flex-col space-y-3 text-sm font-semibold text-white/90">
-                <a @click="isMobileMenuOpen = false" href="#keunggulan" class="hover:text-[#FF8A4C] py-1">Keunggulan</a>
-                <a @click="isMobileMenuOpen = false" href="#spesifikasi" class="hover:text-[#FF8A4C] py-1">Spesifikasi</a>
-                <a @click="isMobileMenuOpen = false" href="#alur-kerja" class="hover:text-[#FF8A4C] py-1">Alur Ujian</a>
-                <a @click="isMobileMenuOpen = false" href="#pilar" class="hover:text-[#FF8A4C] py-1">Ruang Kerja</a>
-                <a @click="isMobileMenuOpen = false" href="#keamanan" class="hover:text-[#FF8A4C] py-1">Keamanan</a>
-                <a @click="isMobileMenuOpen = false" href="#faq" class="hover:text-[#FF8A4C] py-1">Tanya Jawab</a>
-            </nav>
-
-            <div class="pt-4 border-t border-white/10 dark:border-slate-800 flex flex-col gap-3">
-                <template v-if="canLogin">
-                    <Link
-                        v-if="$page.props.auth.user"
-                        :href="route('dashboard')"
-                        class="w-full text-center py-3 bg-[#D95300] text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-sm"
-                    >
-                        Buka Dashboard
-                    </Link>
-                    <template v-else>
-                        <Link
-                            :href="route('login')"
-                            class="w-full text-center py-2.5 border border-white/30 text-white font-bold text-sm rounded-full"
-                        >
-                            Masuk
-                        </Link>
+            <nav
+                v-show="isMenuOpen"
+                id="landing-menu"
+                aria-label="Menu utama"
+                class="absolute inset-x-0 top-full border-b border-rule bg-paper shadow-[0_16px_32px_-20px_rgba(27,42,107,0.45)] md:hidden"
+            >
+                <ul class="mx-auto max-w-6xl px-6 py-2 sm:pl-24 sm:pr-8">
+                    <li v-for="section in sections" :key="section.href">
                         <a
-                            href="#simulasi"
-                            @click="isMobileMenuOpen = false"
-                            class="w-full text-center py-2.5 bg-[#D95300] text-white font-bold text-sm rounded-full shadow-md"
+                            :href="section.href"
+                            class="flex items-center justify-between border-b border-dashed border-rule py-4 font-hand text-xl font-bold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen"
+                            @click="closeMenu"
                         >
-                            Coba Simulasi CBT
+                            {{ section.label }}
+                            <span aria-hidden="true" class="text-pen">→</span>
                         </a>
-                    </template>
-                </template>
-            </div>
-        </div>
+                    </li>
+                    <li v-if="canLogin && !$page.props.auth.user" class="py-4">
+                        <Link
+                            :href="route('password.request')"
+                            class="font-legible text-sm font-bold text-ink-soft underline decoration-pen/50 decoration-2 underline-offset-4 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen"
+                        >
+                            Lupa password?
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
+        </Transition>
     </header>
 </template>

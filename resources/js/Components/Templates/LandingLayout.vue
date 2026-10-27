@@ -7,24 +7,20 @@ defineProps({
         type: Boolean,
         default: true,
     },
-    canRegister: {
-        type: Boolean,
-        default: true,
-    },
 });
 </script>
 
 <template>
-    <div class="min-h-screen bg-[#F8FAFC] dark:bg-[#09090B] text-[#0A090B] dark:text-slate-100 font-poppins antialiased selection:bg-[#D95300] selection:text-white transition-colors">
-        <!-- Navigation Header -->
-        <LandingNavbar :canLogin="canLogin" :canRegister="canRegister" />
+    <div class="relative min-h-screen overflow-x-clip bg-paper bg-notebook-lines font-legible text-ink antialiased selection:bg-stabilo selection:text-ink">
+        <!-- Notebook margin line -->
+        <span aria-hidden="true" class="pointer-events-none absolute inset-y-0 left-16 z-0 hidden w-px bg-pen/40 sm:block"></span>
 
-        <!-- Main Content Slot -->
-        <main class="w-full">
+        <LandingNavbar :canLogin="canLogin" />
+
+        <main class="relative z-10">
             <slot />
         </main>
 
-        <!-- Institutional Footer -->
         <LandingFooter />
     </div>
 </template>

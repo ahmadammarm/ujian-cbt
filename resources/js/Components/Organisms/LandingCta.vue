@@ -1,54 +1,30 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
-
-defineProps({
-    canRegister: {
-        type: Boolean,
-        default: true,
-    },
-});
+import InkButton from '@/Components/Atoms/InkButton.vue';
 </script>
 
 <template>
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <!-- Pahamify-Style Vibrant Terracotta Rounded CTA Banner -->
-        <div class="relative overflow-hidden bg-gradient-to-r from-[#B83E00] via-[#D95300] to-[#EA580C] rounded-[32px] p-8 sm:p-12 lg:p-16 shadow-2xl text-white">
-            <!-- Decorative Aura Background Circles -->
-            <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
-            <div class="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-amber-300/20 blur-2xl pointer-events-none"></div>
+    <section class="py-16 sm:py-24">
+        <div class="mx-auto max-w-6xl px-6 sm:pl-24 sm:pr-8">
+            <!-- Notebook cover label -->
+            <div class="mx-auto max-w-xl rounded-[1.75rem] border-2 border-ink bg-paper p-2">
+                <div class="rounded-[1.4rem] border border-ink/40 px-5 py-7 sm:px-10 sm:py-8 text-center">
+                    <dl class="mx-auto max-w-xs space-y-3 text-left">
+                        <div class="flex items-end gap-3">
+                            <dt class="w-14 font-form text-[11px] font-semibold uppercase tracking-widest text-ink-soft">Nama</dt>
+                            <dd class="flex-1 border-b border-dotted border-ink/50 font-hand text-lg sm:text-xl font-semibold text-ink">kamu</dd>
+                        </div>
+                        <div class="flex items-end gap-3">
+                            <dt class="w-14 font-form text-[11px] font-semibold uppercase tracking-widest text-ink-soft">Mapel</dt>
+                            <dd class="flex-1 border-b border-dotted border-ink/50 font-hand text-lg sm:text-xl font-semibold text-ink">yang diujikan hari ini</dd>
+                        </div>
+                    </dl>
 
-            <div class="relative z-10 max-w-2xl space-y-5">
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
-                    Siap Mewujudkan Ujian Sekolah yang Praktis &amp; Bebas Curang?
-                </h2>
+                    <p class="mt-8 font-hand text-2xl font-extrabold text-ink sm:text-3xl">Sudah siap?</p>
 
-                <p class="text-sm sm:text-base text-orange-50/95 leading-relaxed font-normal">
-                    Mulai selenggarakan ujian online dengan bank soal guru yang aman, koreksi nilai instan, dan proses pengerjaan yang bebas contek. Hemat kertas, hemat waktu, dan hasil belajar terukur akurat.
-                </p>
-
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-3">
-                    <a
-                        href="#simulasi"
-                        class="px-8 py-4 bg-[#0A090B] hover:bg-black text-white text-sm font-black uppercase tracking-wider rounded-full text-center shadow-2xl shadow-black/40 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-                    >
-                        Coba Simulasi CBT Sekarang
-                    </a>
-
-                    <Link
-                        v-if="!$page.props.auth.user"
-                        :href="route('login')"
-                        class="px-6 py-4 bg-white/15 hover:bg-white/25 text-white font-bold text-sm rounded-full border border-white/30 backdrop-blur-sm text-center transition-all"
-                    >
-                        Masuk ke Portal Ujian
-                    </Link>
-
-                    <Link
-                        v-else
-                        :href="route('dashboard')"
-                        class="px-6 py-4 bg-white text-[#D95300] hover:bg-orange-50 font-bold text-sm rounded-full text-center shadow-md transition-all"
-                    >
-                        Buka Dashboard
-                    </Link>
+                    <div class="mt-6">
+                        <InkButton v-if="$page.props.auth.user" :href="route('dashboard')">Buka dashboard</InkButton>
+                        <InkButton v-else :href="route('login')">Masuk ke Naiju Exam</InkButton>
+                    </div>
                 </div>
             </div>
         </div>
