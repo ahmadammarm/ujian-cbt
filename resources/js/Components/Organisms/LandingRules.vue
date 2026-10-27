@@ -1,4 +1,6 @@
 <script setup>
+import StickyNote from '@/Components/Atoms/StickyNote.vue';
+
 const tallies = [
     { count: 1, label: 'Peringatan pertama' },
     { count: 2, label: 'Peringatan kedua' },
@@ -44,8 +46,7 @@ const disabled = ['Klik kanan', 'Salin, potong, dan tempel', 'Shortcut seperti F
 
             <!-- Sticky note with tally marks -->
             <div class="lg:col-span-6 lg:col-start-7">
-                <div class="relative mx-auto max-w-md -rotate-1 bg-sticky px-6 pb-8 pt-10 sm:-rotate-2 sm:px-8 sm:pb-10 sm:pt-12 text-graphite shadow-[0_2px_0_rgba(0,0,0,0.04),0_22px_40px_-20px_rgba(27,42,107,0.5)] motion-reduce:rotate-0">
-                    <span aria-hidden="true" class="absolute -top-3 left-1/2 h-7 w-28 -translate-x-1/2 rotate-3 bg-rule/80"></span>
+                <StickyNote>
 
                     <p class="font-hand text-2xl font-bold">Hitung pelanggaranmu</p>
 
@@ -71,7 +72,7 @@ const disabled = ['Klik kanan', 'Salin, potong, dan tempel', 'Shortcut seperti F
                     <p class="mt-8 font-legible text-sm leading-6 text-graphite/80">
                         Peringatan muncul di layar, jadi kamu selalu tahu sudah berapa kali. Jawaban yang sudah kamu isi tetap dinilai.
                     </p>
-                </div>
+                </StickyNote>
             </div>
         </div>
     </section>

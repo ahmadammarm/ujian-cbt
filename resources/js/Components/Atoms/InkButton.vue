@@ -2,10 +2,15 @@
 import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 
+// Renders an Inertia Link when `href` is given, otherwise a native button (e.g. form submit)
 const props = defineProps({
     href: {
         type: String,
-        required: true,
+        default: null,
+    },
+    type: {
+        type: String,
+        default: 'submit',
     },
     size: {
         type: String,
@@ -22,13 +27,15 @@ const sizeClasses = computed(() =>
 </script>
 
 <template>
-    <Link
-        :href="href"
+    <component
+        :is="href ? Link : 'button'"
+        :href="href ?? undefined"
+        :type="href ? undefined : type"
         :class="[
-            'inline-flex items-center justify-center gap-2 rounded-full bg-ink font-legible font-bold text-paper transition-transform hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen focus-visible:ring-offset-2 focus-visible:ring-offset-paper motion-reduce:transition-none',
+            'inline-flex items-center justify-center gap-2 rounded-full bg-ink font-legible font-bold text-paper transition-transform hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none',
             sizeClasses,
         ]"
     >
         <slot />
-    </Link>
+    </component>
 </template>

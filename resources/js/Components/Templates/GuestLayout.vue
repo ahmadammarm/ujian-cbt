@@ -1,52 +1,79 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import ThemeToggle from '@/Components/Atoms/ThemeToggle.vue';
+import ApplicationLogo from '@/Components/Atoms/ApplicationLogo.vue';
+
+defineProps({
+    sheetLabel: {
+        type: String,
+        required: true,
+    },
+    title: {
+        type: String,
+        required: true,
+    },
+    intro: {
+        type: String,
+        default: '',
+    },
+});
+
+const currentYear = new Date().getFullYear();
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col md:flex-row bg-white dark:bg-[#09090B] font-sans selection:bg-[#D95300]/20 transition-colors">
-        <!-- Left Section: Image (Hidden on mobile) -->
-        <div class="hidden md:flex md:w-[55%] lg:w-[60%] relative h-screen sticky top-0 overflow-hidden">
-            <img
-                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop"
-                alt="Auth Background"
-                class="absolute inset-0 w-full h-full object-cover brightness-[0.4]"
-            />
+    <div class="relative flex min-h-screen flex-col overflow-x-clip bg-paper bg-notebook-lines font-legible text-ink antialiased selection:bg-stabilo selection:text-ink">
+        <!-- Notebook margin line -->
+        <span aria-hidden="true" class="pointer-events-none absolute inset-y-0 left-16 z-0 hidden w-px bg-pen/40 sm:block"></span>
 
-            <!-- Logo top left -->
-            <div class="absolute top-10 left-10">
-                <div class="w-14 h-14 bg-white p-2.5 rounded-2xl shadow-2xl flex items-center justify-center text-[#D95300]">
-                    <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                        <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
-                    </svg>
+        <header class="relative z-10 border-b border-rule bg-paper/90 backdrop-blur">
+            <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6 sm:pl-24 sm:pr-8">
+                <Link href="/" class="flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen">
+                    <span class="flex size-9 items-center justify-center rounded-lg bg-ink text-paper">
+                        <ApplicationLogo class="size-5" />
+                    </span>
+                    <span class="font-hand text-2xl font-extrabold text-ink">Naiju</span>
+                </Link>
+                <Link
+                    href="/"
+                    class="font-legible text-sm font-bold text-ink-soft underline-offset-8 hover:text-ink hover:underline hover:decoration-pen hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen"
+                >
+                    <span aria-hidden="true">←</span> Beranda
+                </Link>
+            </div>
+        </header>
+
+        <main class="relative z-10 flex-1 py-10 sm:py-16">
+            <div class="mx-auto grid max-w-6xl items-start gap-12 px-6 sm:pl-24 sm:pr-8 lg:grid-cols-12 lg:gap-10">
+                <!-- Paper sheet -->
+                <div
+                    :class="[
+                        'rounded-md border border-pen/25 bg-paper p-6 shadow-[0_1px_0_rgba(27,42,107,0.06),0_24px_48px_-24px_rgba(27,42,107,0.45)] motion-safe:animate-slide-up sm:p-10',
+                        $slots.note ? 'lg:col-span-7 xl:col-span-6' : 'w-full max-w-xl lg:col-span-7',
+                    ]"
+                >
+                    <div class="flex items-baseline justify-between gap-4 border-b-2 border-pen pb-2 font-form text-[11px] font-semibold uppercase tracking-[0.18em] text-pen">
+                        <span>{{ sheetLabel }}</span>
+                        <span class="hidden min-[400px]:inline">Naiju Exam</span>
+                    </div>
+
+                    <h1 class="mt-8 font-hand text-4xl font-extrabold leading-tight text-ink sm:text-5xl">{{ title }}</h1>
+                    <p v-if="intro" class="mt-3 font-legible text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">{{ intro }}</p>
+
+                    <div class="mt-8">
+                        <slot />
+                    </div>
                 </div>
-            </div>
 
-            <!-- Text bottom left -->
-            <div class="absolute bottom-16 left-12 pr-12 animate-fade-in space-y-2">
-                <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white/90">
-                    Platform Ujian &amp; Asesmen Digital
-                </div>
-                <h2 class="text-4xl lg:text-5xl font-bold text-white leading-tight">
-                    Selamat datang di <span class="text-[#D95300]">Naiju</span>
-                </h2>
+                <aside v-if="$slots.note" class="lg:col-span-5 lg:pt-16 xl:col-start-8">
+                    <slot name="note" />
+                </aside>
             </div>
-        </div>
+        </main>
 
-        <!-- Right Section: Form -->
-        <div class="flex-1 flex flex-col justify-center items-center px-6 py-12 sm:px-12 lg:px-20 bg-white dark:bg-[#09090B] relative transition-colors">
-            <div class="absolute top-6 right-6">
-                <ThemeToggle />
-            </div>
-
-            <div class="w-full max-w-[440px] animate-slide-up text-slate-900 dark:text-slate-100">
-                <slot />
-
-                <p class="mt-12 text-center text-sm text-gray-400 dark:text-slate-500 font-medium">
-                    &copy; {{ new Date().getFullYear() }} Naiju. All rights reserved.
-                </p>
-            </div>
-        </div>
+        <footer class="relative z-10 py-8">
+            <p class="mx-auto max-w-6xl px-6 font-legible text-sm text-ink-soft sm:pl-24 sm:pr-8">
+                <span class="font-hand text-base font-bold text-ink">Naiju Exam</span> · portal ujian siswa · © {{ currentYear }}
+            </p>
+        </footer>
     </div>
 </template>
-

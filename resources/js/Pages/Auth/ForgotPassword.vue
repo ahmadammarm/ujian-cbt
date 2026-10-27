@@ -1,9 +1,10 @@
 <script setup>
+import FormStatus from '@/Components/Atoms/FormStatus.vue';
+import InkButton from '@/Components/Atoms/InkButton.vue';
+import PenLink from '@/Components/Atoms/PenLink.vue';
+import StickyNote from '@/Components/Atoms/StickyNote.vue';
+import NotebookField from '@/Components/Molecules/NotebookField.vue';
 import GuestLayout from '@/Components/Templates/GuestLayout.vue';
-import InputError from '@/Components/Atoms/InputError.vue';
-import InputLabel from '@/Components/Atoms/InputLabel.vue';
-import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
-import TextInput from '@/Components/Atoms/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -22,48 +23,45 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Lupa Kata Sandi" />
+    <GuestLayout
+        sheet-label="Lupa password"
+        title="Lupa password?"
+        intro="Tulis email akunmu. Kami kirim tautan untuk membuat password baru."
+    >
+        <Head title="Lupa password" />
 
-        <div class="mb-10">
-            <h1 class="text-4xl font-bold text-gray-900 mb-3">Lupa Kata Sandi</h1>
-            <p class="text-gray-500 font-medium text-lg">Masukkan email Anda untuk menerima tautan reset kata sandi.</p>
-        </div>
+        <FormStatus v-if="status" class="mb-8">{{ status }}</FormStatus>
 
-        <div v-if="status" class="mb-6 p-4 rounded-xl bg-green-50 text-sm text-green-600 border border-green-100">
-            {{ status }}
-        </div>
+        <form class="space-y-7" @submit.prevent="submit">
+            <NotebookField
+                id="email"
+                v-model="form.email"
+                type="email"
+                label="Email"
+                placeholder="nama@email.com"
+                autocomplete="username"
+                :error="form.errors.email"
+                required
+                autofocus
+            />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Alamat Email" />
-                <TextInput
-                    id="email"
-                    type="email"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                    placeholder="Email Anda"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-10 space-y-6">
-                <PrimaryButton :class="{ 'opacity-50': form.processing }" :disabled="form.processing">
-                    Kirim Tautan Reset
-                </PrimaryButton>
-
-                <p class="text-center text-lg font-medium">
-                    <Link
-                        :href="route('login')"
-                        class="text-[#D95300] hover:underline"
-                    >
-                        Kembali ke Masuk
-                    </Link>
-                </p>
-            </div>
+            <InkButton class="w-full" :disabled="form.processing">
+                {{ form.processing ? 'Sedang mengirim…' : 'Kirim tautan reset' }}
+            </InkButton>
         </form>
+
+        <p class="mt-8 border-t border-dashed border-rule pt-6 font-legible text-sm text-ink-soft">
+            Sudah ingat?
+            <PenLink :href="route('login')">Kembali ke halaman masuk</PenLink>
+        </p>
+
+        <template #note>
+            <StickyNote>
+                <p class="font-hand text-2xl font-bold">Emailnya tidak sampai?</p>
+                <p class="mt-3 font-legible text-base leading-7">
+                    Cek folder spam atau promosi. Kalau tetap tidak ada, minta gurumu mengecek alamat email di akunmu.
+                </p>
+            </StickyNote>
+        </template>
     </GuestLayout>
 </template>
-

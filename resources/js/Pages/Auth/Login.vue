@@ -1,11 +1,12 @@
 <script setup>
 import Checkbox from '@/Components/Atoms/Checkbox.vue';
+import FormStatus from '@/Components/Atoms/FormStatus.vue';
+import InkButton from '@/Components/Atoms/InkButton.vue';
+import PenLink from '@/Components/Atoms/PenLink.vue';
+import StickyNote from '@/Components/Atoms/StickyNote.vue';
+import NotebookField from '@/Components/Molecules/NotebookField.vue';
 import GuestLayout from '@/Components/Templates/GuestLayout.vue';
-import InputError from '@/Components/Atoms/InputError.vue';
-import InputLabel from '@/Components/Atoms/InputLabel.vue';
-import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
-import TextInput from '@/Components/Atoms/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps({
     canResetPassword: {
@@ -30,79 +31,64 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout sheet-label="Masuk" title="Halo lagi." intro="Masuk pakai email dan password dari gurumu.">
         <Head title="Masuk" />
 
-        <div class="mb-10">
-            <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-3">Selamat Datang</h1>
-            <p class="text-gray-500 dark:text-slate-400 font-medium text-lg">Masuk ke akun Anda untuk melanjutkan</p>
-        </div>
+        <FormStatus v-if="status" class="mb-8">{{ status }}</FormStatus>
 
-        <div v-if="status" class="mb-6 p-4 rounded-xl bg-green-50 text-sm text-green-600 border border-green-100">
-            {{ status }}
-        </div>
+        <form class="space-y-7" @submit.prevent="submit">
+            <NotebookField
+                id="email"
+                v-model="form.email"
+                type="email"
+                label="Email"
+                placeholder="nama@email.com"
+                autocomplete="username"
+                :error="form.errors.email"
+                required
+                autofocus
+            />
 
-        <form @submit.prevent="submit">
-            <div class="space-y-6">
-                <div>
-                    <InputLabel for="email" value="Alamat Email" />
-                    <TextInput
-                        id="email"
-                        type="email"
-                        v-model="form.email"
-                        required
-                        autofocus
-                        autocomplete="username"
-                        placeholder="Email Anda"
-                    />
-                    <InputError class="mt-2" :message="form.errors.email" />
-                </div>
+            <NotebookField
+                id="password"
+                v-model="form.password"
+                type="password"
+                label="Password"
+                autocomplete="current-password"
+                :error="form.errors.password"
+                required
+            />
 
-                <div>
-                    <InputLabel for="password" value="Kata Sandi" />
-                    <TextInput
-                        id="password"
-                        type="password"
-                        v-model="form.password"
-                        required
-                        autocomplete="current-password"
-                        placeholder="Kata Sandi Anda"
-                    />
-                    <InputError class="mt-2" :message="form.errors.password" />
-                </div>
-            </div>
-
-            <div class="flex items-center justify-between mt-6">
-                <div class="flex items-center">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <label class="flex cursor-pointer items-center gap-3 font-legible text-sm font-bold text-ink">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-3 text-sm font-medium text-gray-600 dark:text-slate-400">Ingat saya</span>
-                </div>
-
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="text-sm font-bold text-[#D95300] hover:underline"
-                >
-                    Lupa Kata Sandi?
-                </Link>
+                    Ingat saya
+                </label>
+                <PenLink v-if="canResetPassword" :href="route('password.request')" class="text-sm">
+                    Lupa password?
+                </PenLink>
             </div>
 
-            <div class="mt-10">
-                <PrimaryButton :class="{ 'opacity-50': form.processing }" :disabled="form.processing">
-                    Masuk
-                </PrimaryButton>
-            </div>
-
-            <div class="mt-10 text-center text-lg">
-                <span class="text-gray-600 dark:text-slate-400 font-medium">Belum punya akun?</span>
-                <Link
-                    :href="route('register')"
-                    class="ms-2 font-bold text-[#D95300] hover:underline"
-                >
-                    Daftar
-                </Link>
-            </div>
+            <InkButton class="w-full" :disabled="form.processing">
+                {{ form.processing ? 'Sedang masuk…' : 'Masuk' }}
+            </InkButton>
         </form>
+
+        <p class="mt-8 border-t border-dashed border-rule pt-6 font-legible text-sm text-ink-soft">
+            Belum punya akun?
+            <PenLink :href="route('register')">Daftar di sini</PenLink>
+        </p>
+
+        <template #note>
+            <StickyNote>
+                <p class="font-hand text-2xl font-bold">Belum dapat akun?</p>
+                <p class="mt-3 font-legible text-base leading-7">
+                    Biasanya guru atau wali kelas yang membuatkan akunmu. Tanya mereka dulu sebelum daftar sendiri.
+                </p>
+                <p class="mt-4 font-legible text-sm leading-6 text-graphite/80">
+                    Guru juga masuk dari halaman ini dan otomatis diarahkan ke Naiju Studio.
+                </p>
+            </StickyNote>
+        </template>
     </GuestLayout>
 </template>
-

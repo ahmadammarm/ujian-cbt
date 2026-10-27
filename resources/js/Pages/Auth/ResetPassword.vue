@@ -1,9 +1,7 @@
 <script setup>
+import InkButton from '@/Components/Atoms/InkButton.vue';
+import NotebookField from '@/Components/Molecules/NotebookField.vue';
 import GuestLayout from '@/Components/Templates/GuestLayout.vue';
-import InputError from '@/Components/Atoms/InputError.vue';
-import InputLabel from '@/Components/Atoms/InputLabel.vue';
-import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
-import TextInput from '@/Components/Atoms/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -32,63 +30,49 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Atur Ulang Kata Sandi" />
+    <GuestLayout
+        sheet-label="Password baru"
+        title="Bikin password baru."
+        intro="Pakai password yang mudah kamu ingat, tapi sulit ditebak teman."
+    >
+        <Head title="Buat password baru" />
 
-        <div class="mb-8">
-            <h1 class="text-2xl font-semibold text-gray-900">Set new password</h1>
-            <p class="text-gray-500 mt-2">Create a secure password for your account.</p>
-        </div>
+        <form class="space-y-7" @submit.prevent="submit">
+            <NotebookField
+                id="email"
+                v-model="form.email"
+                type="email"
+                label="Email"
+                autocomplete="username"
+                :error="form.errors.email"
+                required
+            />
 
-        <form @submit.prevent="submit">
-            <div class="space-y-5">
-                <div>
-                    <InputLabel for="email" value="Email Address" />
-                    <TextInput
-                        id="email"
-                        type="email"
-                        v-model="form.email"
-                        required
-                        autofocus
-                        autocomplete="username"
-                        placeholder="name@example.com"
-                    />
-                    <InputError class="mt-2" :message="form.errors.email" />
-                </div>
+            <NotebookField
+                id="password"
+                v-model="form.password"
+                type="password"
+                label="Password baru"
+                hint="Minimal 8 karakter."
+                autocomplete="new-password"
+                :error="form.errors.password"
+                required
+                autofocus
+            />
 
-                <div>
-                    <InputLabel for="password" value="New Password" />
-                    <TextInput
-                        id="password"
-                        type="password"
-                        v-model="form.password"
-                        required
-                        autocomplete="new-password"
-                        placeholder="••••••••"
-                    />
-                    <InputError class="mt-2" :message="form.errors.password" />
-                </div>
+            <NotebookField
+                id="password_confirmation"
+                v-model="form.password_confirmation"
+                type="password"
+                label="Ulangi password baru"
+                autocomplete="new-password"
+                :error="form.errors.password_confirmation"
+                required
+            />
 
-                <div>
-                    <InputLabel for="password_confirmation" value="Confirm New Password" />
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        v-model="form.password_confirmation"
-                        required
-                        autocomplete="new-password"
-                        placeholder="••••••••"
-                    />
-                    <InputError class="mt-2" :message="form.errors.password_confirmation" />
-                </div>
-            </div>
-
-            <div class="mt-8">
-                <PrimaryButton :class="{ 'opacity-50': form.processing }" :disabled="form.processing">
-                    Reset Password
-                </PrimaryButton>
-            </div>
+            <InkButton class="w-full" :disabled="form.processing">
+                {{ form.processing ? 'Sedang menyimpan…' : 'Simpan password baru' }}
+            </InkButton>
         </form>
     </GuestLayout>
 </template>
-
