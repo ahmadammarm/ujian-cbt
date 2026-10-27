@@ -1,9 +1,8 @@
 <script setup>
-import InputError from '@/Components/Atoms/InputError.vue';
-import InputLabel from '@/Components/Atoms/InputLabel.vue';
-import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
-import TextInput from '@/Components/Atoms/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import FormStatus from '@/Components/Atoms/FormStatus.vue';
+import InkButton from '@/Components/Atoms/InkButton.vue';
+import NotebookField from '@/Components/Molecules/NotebookField.vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -23,81 +22,58 @@ const form = useForm({
 </script>
 
 <template>
-    <section>
+    <div>
         <header>
-            <h2 class="text-2xl font-bold text-[#0A090B] font-poppins">Profile Information</h2>
-
-            <p class="mt-2 text-gray-500 font-medium font-poppins text-base">
-                Update your account's profile information and email address.
-            </p>
+            <h2 class="text-xl font-bold text-ink">Data akun</h2>
+            <p class="mt-1 text-[15px] text-ink-soft">Nama ini yang dilihat guru dan muncul di rapor.</p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
-            <div>
-                <InputLabel for="name" value="Name" />
+        <form class="mt-6 space-y-7" @submit.prevent="form.patch(route('profile.update'))">
+            <NotebookField
+                id="name"
+                v-model="form.name"
+                label="Nama lengkap"
+                autocomplete="name"
+                :error="form.errors.name"
+                required
+            />
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+            <NotebookField
+                id="email"
+                v-model="form.email"
+                type="email"
+                label="Email"
+                autocomplete="username"
+                :error="form.errors.email"
+                required
+            />
 
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <p class="text-sm mt-2 text-gray-800">
-                    Your email address is unverified.
+            <div v-if="mustVerifyEmail && user.email_verified_at === null" class="space-y-3">
+                <p class="text-sm text-ink">
+                    Emailmu belum diverifikasi.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="rounded-sm font-bold underline decoration-pen/50 decoration-2 underline-offset-4 hover:decoration-pen focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen"
                     >
-                        Click here to re-send the verification email.
+                        Kirim ulang email verifikasi
                     </Link>
                 </p>
-
-                <div
-                    v-show="status === 'verification-link-sent'"
-                    class="mt-2 font-medium text-sm text-green-600"
-                >
-                    A new verification link has been sent to your email address.
-                </div>
+                <FormStatus v-show="status === 'verification-link-sent'">Tautan verifikasi baru sudah dikirim ke emailmu.</FormStatus>
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-
+                <InkButton size="sm" :disabled="form.processing">Simpan</InkButton>
                 <Transition
-                    enter-active-class="transition ease-in-out"
+                    enter-active-class="transition ease-in-out motion-reduce:transition-none"
                     enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
+                    leave-active-class="transition ease-in-out motion-reduce:transition-none"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
+                    <p v-if="form.recentlySuccessful" role="status" class="font-hand text-lg font-bold text-ink">Tersimpan.</p>
                 </Transition>
             </div>
         </form>
-    </section>
+    </div>
 </template>
-

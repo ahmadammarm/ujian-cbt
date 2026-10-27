@@ -15,11 +15,6 @@ const props = defineProps({
         type: String,
         default: 'Kursus',
     },
-    // Kept for backwards compatibility; the study-desk theme uses one palette for every space
-    theme: {
-        type: String,
-        default: null,
-    },
     imgClass: {
         type: String,
         default: 'w-full h-full object-cover',

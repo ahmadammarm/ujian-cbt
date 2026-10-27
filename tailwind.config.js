@@ -3,7 +3,6 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: 'class',
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
@@ -15,8 +14,6 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['"Atkinson Hyperlegible"', ...defaultTheme.fontFamily.sans],
-                nunito: ['Nunito', ...defaultTheme.fontFamily.sans],
-                poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
                 hand: ['"Shantell Sans"', 'cursive'],
                 legible: ['"Atkinson Hyperlegible"', ...defaultTheme.fontFamily.sans],
                 form: ['"IBM Plex Mono"', ...defaultTheme.fontFamily.mono],
@@ -29,6 +26,8 @@ export default {
                 ink: {
                     DEFAULT: '#1B2A6B',
                     soft: '#4A5683',
+                    // Lighter ink for chart fills; validated against paper with the pen red for CVD separation
+                    mark: '#3D53A6',
                 },
                 pen: '#C8323F',
                 graphite: '#34353B',

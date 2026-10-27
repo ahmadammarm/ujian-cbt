@@ -27,11 +27,6 @@ defineProps({
         type: String,
         default: '',
     },
-    // Kept for backwards compatibility; the study-desk theme uses one palette for every space
-    theme: {
-        type: String,
-        default: null,
-    },
 });
 </script>
 

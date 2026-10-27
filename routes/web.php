@@ -26,10 +26,6 @@ Route::middleware(['auth', 'verified', 'role_redirect'])->group(function () {
             Route::get('/students', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('students.index');
             Route::post('/students/{student}/toggle-suspension', [\App\Http\Controllers\Admin\StudentController::class, 'toggleSuspension'])->name('students.toggle-suspension');
             Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics');
-            Route::get('/messages', fn() => Inertia::render('Admin/Messages'))->name('messages');
-            Route::get('/rewards', fn() => Inertia::render('Admin/Rewards'))->name('rewards');
-            Route::get('/plugins', fn() => Inertia::render('Admin/Plugins'))->name('plugins');
-            Route::get('/settings', fn() => Inertia::render('Admin/Settings'))->name('settings');
 
             Route::resource('courses', CourseController::class);
             Route::post('/courses/{course}/enroll-students', [CourseController::class, 'enrollStudents'])->name('courses.enroll-students');

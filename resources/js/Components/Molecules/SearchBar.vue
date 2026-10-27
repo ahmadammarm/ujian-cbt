@@ -14,11 +14,6 @@ defineProps({
         type: String,
         default: 'Cari',
     },
-    // Kept for backwards compatibility; the study-desk theme uses one palette for every space
-    theme: {
-        type: String,
-        default: null,
-    },
 });
 
 const emit = defineEmits(['update:modelValue']);

@@ -1,10 +1,8 @@
 <script setup>
-import InputError from '@/Components/Atoms/InputError.vue';
-import InputLabel from '@/Components/Atoms/InputLabel.vue';
-import PrimaryButton from '@/Components/Atoms/PrimaryButton.vue';
-import TextInput from '@/Components/Atoms/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import InkButton from '@/Components/Atoms/InkButton.vue';
+import NotebookField from '@/Components/Molecules/NotebookField.vue';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -34,73 +32,54 @@ const updatePassword = () => {
 </script>
 
 <template>
-    <section>
+    <div>
         <header>
-            <h2 class="text-2xl font-bold text-[#0A090B] font-poppins">Update Password</h2>
-
-            <p class="mt-2 text-gray-500 font-medium font-poppins text-base">
-                Ensure your account is using a long, random password to stay secure.
-            </p>
+            <h2 class="text-xl font-bold text-ink">Ganti password</h2>
+            <p class="mt-1 text-[15px] text-ink-soft">Pakai password yang mudah kamu ingat, tapi sulit ditebak teman.</p>
         </header>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
-            <div>
-                <InputLabel for="current_password" value="Current Password" />
+        <form class="mt-6 space-y-7" @submit.prevent="updatePassword">
+            <NotebookField
+                id="current_password"
+                ref="currentPasswordInput"
+                v-model="form.current_password"
+                type="password"
+                label="Password sekarang"
+                autocomplete="current-password"
+                :error="form.errors.current_password"
+            />
 
-                <TextInput
-                    id="current_password"
-                    ref="currentPasswordInput"
-                    v-model="form.current_password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="current-password"
-                />
+            <NotebookField
+                id="password"
+                ref="passwordInput"
+                v-model="form.password"
+                type="password"
+                label="Password baru"
+                hint="Minimal 8 karakter."
+                autocomplete="new-password"
+                :error="form.errors.password"
+            />
 
-                <InputError :message="form.errors.current_password" class="mt-2" />
-            </div>
-
-            <div>
-                <InputLabel for="password" value="New Password" />
-
-                <TextInput
-                    id="password"
-                    ref="passwordInput"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-
-                <InputError :message="form.errors.password" class="mt-2" />
-            </div>
-
-            <div>
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-
-                <InputError :message="form.errors.password_confirmation" class="mt-2" />
-            </div>
+            <NotebookField
+                id="password_confirmation"
+                v-model="form.password_confirmation"
+                type="password"
+                label="Ulangi password baru"
+                autocomplete="new-password"
+                :error="form.errors.password_confirmation"
+            />
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-
+                <InkButton size="sm" :disabled="form.processing">Simpan password</InkButton>
                 <Transition
-                    enter-active-class="transition ease-in-out"
+                    enter-active-class="transition ease-in-out motion-reduce:transition-none"
                     enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
+                    leave-active-class="transition ease-in-out motion-reduce:transition-none"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
+                    <p v-if="form.recentlySuccessful" role="status" class="font-hand text-lg font-bold text-ink">Tersimpan.</p>
                 </Transition>
             </div>
         </form>
-    </section>
+    </div>
 </template>
-
