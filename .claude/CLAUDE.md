@@ -11,7 +11,7 @@ All AI agents and developers working on this repository **MUST strictly load and
 - **Frontend Standards**: `.claude/rules/frontend-pattern.md`
   - Atomic Design hierarchy (`Atoms/`, `Molecules/`, `Organisms/`, `Templates/`).
   - Vue 3 Composition API with `<script setup>`, explicit `defineProps`, and Inertia.js form/navigation management.
-  - Tailwind CSS utility styling with Poppins typography and project color tokens (no arbitrary inline styles or isolated custom `<style>` overrides).
+  - Tailwind CSS utility styling with the "study desk" design tokens and typography described below (no arbitrary inline styles or isolated custom `<style>` overrides). Light mode only.
 
 ---
 
@@ -52,14 +52,31 @@ All AI agents and developers working on this repository **MUST strictly load and
 - **Primary Brand**: Naiju
 - **Full Tagline / Lockup**: `Naiju — Platform Ujian & Asesmen Digital` (or `Naiju CBT`)
 - **Brand Spaces**:
-  - Teacher Workspace: `Naiju Studio` (`Naiju Studio · Pengajar`)
-  - Student Portal: `Naiju Exam` (`Naiju Exam · Portal Siswa`)
+  - Teacher Workspace: `Naiju Studio` (`Naiju Studio · Ruang pengajar`)
+  - Student Portal: `Naiju Exam` (`Naiju Exam · Portal siswa`)
+- **Audience & voice**: SMP/SMA students and their teachers. UI copy is Indonesian, sentence case, informal "kamu" for students, plain verbs, no emoji.
 - **Emblem**: Geometric 'N' monogram vector (`ApplicationLogo.vue`)
 
-### Core Palette Tokens
-- **Terracotta Orange (`#D95300`)**: Primary brand identity, teacher space primary accents, critical action CTAs.
-- **Cobalt Blue (`#2B82FE`)**: Student portal accents, active navigation states, interactive highlights.
-- **Obsidian Black (`#0A090B`) & Dark Surface (`#111116`)**: High-contrast typography, dark panels, structured surface elements.
+### Design System: "Study Desk"
+The whole app (landing, auth, student portal, exam, teacher workspace) uses one visual language drawn from an Indonesian school notebook and the LJK answer sheet. **Light mode only — there is no dark mode.** Tokens live in `tailwind.config.js`; never use raw hex values in templates.
+
+| Token | Hex | Use |
+|---|---|---|
+| `desk` | `#EEF2F8` | App background (dashboards, exam) |
+| `paper` | `#FBFCFE` | Cards, sheets, landing/auth background |
+| `rule` | `#CFE0F3` | Borders, dividers, notebook lines (`bg-notebook-lines`) |
+| `ink` / `ink-soft` | `#1B2A6B` / `#4A5683` | Text, primary actions / secondary text |
+| `ink-mark` | `#3D53A6` | Chart fills only (validated with `pen` for colour-blind separation) |
+| `pen` | `#C8323F` | Printed LJK labels, scores, errors, violations, destructive actions |
+| `graphite` | `#34353B` | 2B-pencil fills (answered bubbles), sticky-note text |
+| `stabilo` | `#FFE45E` | Active/selected state, focus highlight on fields, warnings |
+| `sticky` | `#FFF1A6` | Sticky notes and flash notifications |
+
+- **Typography**: `font-hand` (Shantell Sans) for page titles (h1) and handwritten accents only; `font-legible` / default `sans` (Atkinson Hyperlegible) for body, tables, and forms; `font-form` (IBM Plex Mono) for small uppercase labels, numbers, and timers.
+- **Structural motifs**: a red notebook margin line (`border-pen/40`) separates the sidebar from content; LJK sheet headers are a mono `pen` label over `border-b-2 border-pen`; the active nav item / selected answer is highlighted in `stabilo`.
+- **Signature elements**: scores are always rendered with `ScoreMark` (red-pen circled number); violations with `TallyMarks`; answer choices with `BubbleMark` (pencil-filled LJK bubble).
+- **Charts**: colours come from `resources/js/Utils/chartTheme.js` (mirrors the tokens). Validate any new chart palette with the dataviz palette validator before use.
+- **Shared constants**: the pass mark (`PASSING_SCORE = 70`) and date helpers live in `resources/js/Utils/exam.js`; never hardcode `70` in a component.
 
 ---
 
@@ -89,9 +106,10 @@ All AI agents and developers working on this repository **MUST strictly load and
   - **Graduated Penalty Tolerance**: Up to 3 warning dialogs with backdrop blur lock. Exceeding tolerance (violation 4) automatically triggers submission with reason `violation_limit`.
   - **Cheating & Inspection Prevention**: Blocks DevTools shortcuts (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S, Ctrl+P), disables right-click context menu, prevents copy/cut/paste, and applies CSS `select-none`.
   - **Answer Integrity**: Question payloads exclude `is_correct` answer keys (`$query->select('id', 'course_question_id', 'answer')`), preventing inspection in browser network logs.
-  - **Real-time Persistence**: Answers are saved individually via `saveAnswer()` on `StudentAnswerController` (`throttle:60,1`).
-  - **Submission Confirmation**: `ExamSubmitModal.vue` displays an interactive breakdown of answered vs. unanswered questions, percentages, and contextual warning banners with full Light/Dark mode styling.
-  - **Completion & Scoring**: `finishAttempt()` calculates scores based on a 50-question scale inside a database transaction (`throttle:10,1`), locking the attempt with `finished_at`.
+  - **Answer Persistence**: `Take.vue` keeps answers, current question index, violation count, and the started flag in `localStorage` (`assessment_progress_{id}`, `assessment_index_{id}`, `assessment_violations_{id}`, `assessment_started_{id}`) and sends all answers on submit. The per-answer route (`StudentAnswerController::store`, `throttle:60,1`) exists but is not called by the frontend.
+  - **Single Submission**: `submitExam()` returns early while a submission is in flight, so timeout, violation limit, and manual submit cannot post twice. Only one `CountdownTimer` is mounted.
+  - **Submission Confirmation**: `ExamSubmitModal.vue` shows answered vs. unanswered counts and percentage, with a warning when questions are still empty.
+  - **Completion & Scoring**: `finishAttempt()` scores `correct / total questions × 100` (falls back to 50 only when a course has no questions) inside a database transaction (`throttle:10,1`), setting `finished_at`.
   - **Rapport Evaluation**: Delivered via `learning_rapport()` (`Result.vue`), presenting final score, pass/fail status (KKM 70%), elapsed duration, and proctoring violation logs.
 
 ### Service Layer Pattern
@@ -107,11 +125,12 @@ All AI agents and developers working on this repository **MUST strictly load and
 
 ### Frontend Component Structure (Atomic Design)
 Components located in `resources/js/Components/` adhere to Atomic Design:
-- `Atoms/`: Base components (`PrimaryButton.vue`, `TextInput.vue`, `InputLabel.vue`, `InputError.vue`, `Checkbox.vue`, `NavLink.vue`, `ApplicationLogo.vue`, `ThemeToggle.vue`).
-- `Molecules/`: Composed components (`Breadcrumbs.vue`, `CountdownTimer.vue`, `DropdownLink.vue`, `Pagination.vue`).
-- `Organisms/`: Complex UI blocks (`AlertDialog.vue`, `ExamSubmitModal.vue`, `ProctoringModal.vue`, `Dropdown.vue`, `Modal.vue`, `QuestionCard.vue`).
-- `Templates/`: Page layout wrappers (`AdminLayout.vue`, `StudentLayout.vue`, `AuthenticatedLayout.vue`, `GuestLayout.vue`).
-- Pages in `resources/js/Pages/` are organized by domain: `Admin/`, `Student/`, `Auth/`, and `Errors/`.
+- `Atoms/`: `InkButton` (primary; link or submit button, `variant` ink/danger), `GhostButton` (secondary outline), `PenLink` (underlined text link), `Icon` (all inline SVG icons by name — do not use image icons), `NavItem`, `BubbleMark`, `AnswerBubble`, `ScoreMark`, `TallyMarks`, `StatusBadge`, `FormStatus`, `StickyNote`, `Highlighter`, `Checkbox`, `CourseThumbnail`, `ApplicationLogo`.
+- `Molecules/`: `PageHeader` (eyebrow + handwritten h1 + description + actions), `EmptyState`, `MetricCard`, `SearchBar`, form fields `NotebookField` / `NotebookSelect` / `NotebookTextarea` / `CoverUpload`, `FlashNote` (renders shared `flash` props), `CountdownTimer`, `Breadcrumbs`, `Pagination`, `DropdownLink`.
+- `Organisms/`: `QuestionCard`, `ProctoringModal`, `ExamSubmitModal`, `CourseForm`, `QuestionForm`, `CourseRow`, `StudentRow`, `AlertDialog`, `Modal`, `Dropdown`, `ErrorSheet`, and the `Landing*` sections.
+- `Templates/`: `AppShell` (sidebar + mobile drawer shared by the dashboards), `StudentLayout` and `AdminLayout` (thin `AppShell` wrappers that only define nav items), `GuestLayout` (auth pages), `LandingLayout`.
+- Pages in `resources/js/Pages/` are organized by domain: `Admin/`, `Student/`, `Auth/`, `Profile/` (rendered in `AdminLayout` or `StudentLayout` by `auth.user.role`), and `Errors/`.
+- Shared Inertia props (`HandleInertiaRequests`): `auth.user` (`id`, `name`, `email`, `role`) and `flash` (`success`, `error`).
 - Routes in Vue use Ziggy via the global `route()` helper.
 
 ### Security Hardening

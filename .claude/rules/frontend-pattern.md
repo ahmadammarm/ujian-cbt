@@ -36,7 +36,7 @@ Pages are specific instances of templates that represent a route in the applicat
 ## 3. Directory and Naming Conventions
 
 ### 3.1 Naming Standards
-*   **Component Files:** PascalCase (e.g., `PrimaryButton.vue`).
+*   **Component Files:** PascalCase (e.g., `InkButton.vue`).
 *   **Page Files:** PascalCase, organized by role (e.g., `Admin/Courses/Index.vue`).
 *   **Props:** camelCase.
 *   **Emits:** kebab-case.
@@ -65,18 +65,29 @@ Pages are specific instances of templates that represent a route in the applicat
 
 ### 5.1 Tailwind CSS Standards
 *   **Utility-First:** Use Tailwind utility classes for all styling.
-*   **Prohibition:** Custom `<style>` blocks and inline styles are strictly prohibited unless dealing with dynamic data-driven styles (e.g., progress bar width).
-*   **Consistency:** Adhere to the established color palette (e.g., `#6436F1` for primary actions, `#FD445E` for danger).
+*   **Prohibition:** Custom `<style>` blocks and inline styles are strictly prohibited unless dealing with dynamic data-driven styles (e.g., progress bar width, animation delay per item).
+*   **Design Tokens Only:** Use the "study desk" tokens from `tailwind.config.js` — `desk`, `paper`, `rule`, `ink`, `ink-soft`, `ink-mark`, `pen`, `graphite`, `stabilo`, `sticky` (meanings in `.claude/CLAUDE.md`). Never write raw hex colors (`bg-[#...]`) in templates; add a token instead.
+    *   Primary action: `InkButton` (`bg-ink`). Secondary: `GhostButton`. Destructive: `variant="danger"` (`pen`).
+    *   Selected / active / focused field: `stabilo` highlight. Errors and violations: `pen`.
+*   **Typography:** `font-hand` only for page titles (via `PageHeader`) and handwritten accents; `font-legible` (default `sans`) for body, tables, and forms; `font-form` for small uppercase labels, numbers, and timers.
+*   **Light Mode Only:** The app has no dark mode. Do not add `dark:` variants or a theme toggle.
+*   **Tailwind v3:** The project runs Tailwind 3.4. Do not use v4-only class names (e.g., `shadow-xs`, `shadow-2xs`, `backdrop-blur-xs`, `outline-hidden`); they generate no CSS.
+*   **Icons:** Use the `Icon` atom (`<Icon name="..." />`). Add new paths to its map instead of inlining SVGs or using image files.
 
 ### 5.2 Animations and Transitions
-*   **Visual Continuity:** Use established animation classes like `animate-slide-up` and `animate-fade-in` for entering elements.
-*   **Interactive Feedback:** Implement hover states and active scales (`active:scale-95`) for all buttons and interactive elements.
+*   **Restraint:** Motion is reserved for meaning — the pencil fill (`animate-pencil`), highlighter stroke (`animate-highlight`), and entering elements (`animate-slide-up`, `animate-fade-in`).
+*   **Reduced Motion:** Prefix decorative animation with `motion-safe:` and add `motion-reduce:transition-none` to transitions.
+*   **Interactive Feedback:** Every interactive element needs a hover state and a visible keyboard focus ring (`focus-visible:ring-2 focus-visible:ring-pen`).
+
+### 5.3 Shared Constants
+*   **Exam rules:** Import `PASSING_SCORE`, `isPassing`, and date formatters from `@/Utils/exam`; never hardcode `70` or re-implement date formatting.
+*   **Charts:** Import colors and base options from `@/Utils/chartTheme`.
 
 ## 6. Implementation Example: Atomic DRY Pattern
 
 ### 6.1 Reusable Status Badge (Atom)
 ```vue
-<!-- resources/js/Components/Atoms/StatusBadge.vue -->
+<!-- resources/js/Components/Atoms/StatusBadge.vue (simplified) -->
 <script setup>
 defineProps({
     active: {
@@ -88,8 +99,8 @@ defineProps({
 
 <template>
     <span :class="[
-        'px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest',
-        active ? 'bg-[#E6F9E6] text-[#28A745]' : 'bg-[#FDEBEA] text-[#FD445E]'
+        'inline-flex items-center rounded-full px-3 py-1 font-form text-[10px] font-semibold uppercase tracking-[0.14em]',
+        active ? 'bg-ink/10 text-ink' : 'bg-pen/10 text-pen'
     ]">
         <slot />
     </span>
@@ -98,23 +109,40 @@ defineProps({
 
 ### 6.2 Implementation in an Organism
 ```vue
-<!-- resources/js/Components/Organisms/StudentRow.vue -->
+<!-- resources/js/Components/Organisms/StudentRow.vue (simplified) -->
 <script setup>
+import GhostButton from '@/Components/Atoms/GhostButton.vue';
+import ScoreMark from '@/Components/Atoms/ScoreMark.vue';
 import StatusBadge from '@/Components/Atoms/StatusBadge.vue';
-defineProps({ student: Object });
+
+defineProps({ student: { type: Object, required: true } });
+defineEmits(['toggle-suspension']);
 </script>
 
 <template>
-    <div class="flex items-center p-6 bg-white border border-gray-100 rounded-[32px]">
-        <div class="w-1/3">{{ student.name }}</div>
-        <div class="w-1/3">
-            <StatusBadge :active="student.is_active">
-                {{ student.is_active ? 'Active' : 'Suspended' }}
-            </StatusBadge>
-        </div>
-        <!-- Actions ... -->
+    <div class="flex items-center gap-4 px-5 py-4">
+        <p class="min-w-0 flex-1 truncate font-bold text-ink">{{ student.name }}</p>
+        <ScoreMark :score="student.assessments_avg_score" size="sm" />
+        <StatusBadge :active="student.is_active">
+            {{ student.is_active ? 'Aktif' : 'Nonaktif' }}
+        </StatusBadge>
+        <GhostButton size="sm" variant="danger" @click="$emit('toggle-suspension', student)">
+            Nonaktifkan
+        </GhostButton>
     </div>
 </template>
+```
+
+### 6.3 Page Composition
+Pages compose a Template, a `PageHeader`, and organisms/molecules; they hold data orchestration only:
+```vue
+<StudentLayout>
+    <div class="flex flex-col gap-8">
+        <PageHeader eyebrow="Ujian saya" title="Pilih ujian yang mau dikerjakan." />
+        <ul v-if="courses.length" class="divide-y divide-rule rounded-md border border-rule bg-paper">…</ul>
+        <EmptyState v-else title="Belum ada ujian untukmu." description="…" />
+    </div>
+</StudentLayout>
 ```
 
 ## 7. Performance Optimization
@@ -125,7 +153,7 @@ const search = ref('');
 watch(search, (value) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-        router.get(route('admin.students.index'), { search: value }, {
+        router.get(route('dashboard.students.index'), { search: value }, {
             preserveState: true,
             replace: true,
         });
@@ -140,6 +168,8 @@ watch(search, (value) => {
 *   **Direct API Calls:** Never use `axios` or `fetch` for data that should be passed as Inertia props or handled via `useForm`.
 *   **Manual DOM Manipulation:** Never use `document.getElementById`, `id` attributes for styling, or manual class manipulation.
 *   **Hardcoded Styles:** Never use the `style` attribute for layout or static styling. Use Tailwind.
+*   **Off-palette Colors & Old Fonts:** Never reintroduce Poppins/Nunito, the old terracotta/cobalt palette (`#D95300`, `#2B82FE`, `#0A090B`), Tailwind's default grays (`slate-*`, `gray-*`), or `dark:` variants.
+*   **Duplicated Components:** Before writing a button, field, badge, empty state, or page header, reuse the existing atom/molecule (`InkButton`, `GhostButton`, `NotebookField`, `StatusBadge`, `EmptyState`, `PageHeader`, …).
 *   **Logic in Templates:** Keep logic in the `<script>` section. Templates should be as declarative as possible.
 *   **Hardcoded UI Strings:** Reusable components should accept labels as props rather than hardcoding text.
 *   **Ignoring Accessibility:** Ensure all interactive elements have appropriate focus states and semantic tags.
