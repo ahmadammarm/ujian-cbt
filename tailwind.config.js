@@ -14,7 +14,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+                sans: ['"Atkinson Hyperlegible"', ...defaultTheme.fontFamily.sans],
                 nunito: ['Nunito', ...defaultTheme.fontFamily.sans],
                 poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
                 hand: ['"Shantell Sans"', 'cursive'],
@@ -22,7 +22,8 @@ export default {
                 form: ['"IBM Plex Mono"', ...defaultTheme.fontFamily.mono],
             },
             colors: {
-                // Landing "study desk" tokens: notebook paper, ballpoint ink, red pen, 2B pencil, highlighter
+                // "Study desk" tokens: desk background, notebook paper, ballpoint ink, red pen, 2B pencil, highlighter
+                desk: '#EEF2F8',
                 paper: '#FBFCFE',
                 rule: '#CFE0F3',
                 ink: {

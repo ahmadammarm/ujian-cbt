@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
+import ApplicationLogo from '@/Components/Atoms/ApplicationLogo.vue';
 
 const props = defineProps({
     src: {
@@ -8,15 +9,16 @@ const props = defineProps({
     },
     alt: {
         type: String,
-        default: 'Thumbnail Kursus',
+        default: 'Sampul kursus',
     },
     name: {
         type: String,
-        default: 'Kursus Asesmen',
+        default: 'Kursus',
     },
+    // Kept for backwards compatibility; the study-desk theme uses one palette for every space
     theme: {
         type: String,
-        default: 'teacher', // 'teacher' (Terracotta) | 'student' (Cobalt)
+        default: null,
     },
     imgClass: {
         type: String,
@@ -29,11 +31,9 @@ const props = defineProps({
 });
 
 const hasError = ref(false);
-const isLoaded = ref(false);
 
 watch(() => props.src, () => {
     hasError.value = false;
-    isLoaded.value = false;
 });
 
 const initials = computed(() => {
@@ -58,40 +58,19 @@ const normalizedSrc = computed(() => {
 </script>
 
 <template>
-    <div class="w-full h-full relative overflow-hidden flex items-center justify-center">
-        <!-- Render Real Image if available and not error -->
+    <div class="relative flex h-full w-full items-center justify-center overflow-hidden">
         <img
             v-if="normalizedSrc && !hasError"
             :src="normalizedSrc"
             :alt="alt || name"
             :class="[imgClass]"
             @error="hasError = true"
-            @load="isLoaded = true"
         />
 
-        <!-- Fallback Monogram Card (Zero Blur / Zero Glow) -->
-        <div
-            v-else
-            class="w-full h-full relative flex items-center justify-center select-none bg-slate-100 dark:bg-[#141419]"
-        >
-            <!-- Watermark Monogram Vector -->
-            <div
-                class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.06] dark:opacity-[0.1]"
-                :class="theme === 'student' ? 'text-[#2B82FE]' : 'text-[#D95300]'"
-            >
-                <svg class="w-4/5 h-4/5 fill-current" viewBox="0 0 24 24">
-                    <path d="M4 3.5H8.2L15.8 15.3V3.5H20V20.5H15.8L8.2 8.7V20.5H4V3.5Z" />
-                </svg>
-            </div>
-
-            <!-- Initials Monogram -->
-            <span
-                :class="[
-                    'relative z-10 font-black tracking-tight select-none',
-                    theme === 'student' ? 'text-[#2B82FE]' : 'text-[#D95300]',
-                    monogramClass
-                ]"
-            >
+        <!-- Fallback: initials on notebook-blue paper -->
+        <div v-else class="relative flex h-full w-full select-none items-center justify-center bg-rule/50">
+            <ApplicationLogo class="pointer-events-none absolute size-4/5 text-ink opacity-[0.06]" />
+            <span :class="['relative z-10 font-hand font-extrabold tracking-tight text-ink', monogramClass]">
                 {{ initials }}
             </span>
         </div>

@@ -1,20 +1,26 @@
 <script setup>
+import { computed } from 'vue';
+import { Head } from '@inertiajs/vue3';
 import StudentLayout from '@/Components/Templates/StudentLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import GhostButton from '@/Components/Atoms/GhostButton.vue';
+import Icon from '@/Components/Atoms/Icon.vue';
+import InkButton from '@/Components/Atoms/InkButton.vue';
+import ScoreMark from '@/Components/Atoms/ScoreMark.vue';
+import TallyMarks from '@/Components/Atoms/TallyMarks.vue';
+import PageHeader from '@/Components/Molecules/PageHeader.vue';
+import { PASSING_SCORE, formatDateTime, isPassing } from '@/Utils/exam';
+
+const EXCELLENT_SCORE = 90;
+
+const SUBMITTED_REASON_LABELS = {
+    normal: 'Kamu kirim sendiri',
+    timeout: 'Waktu habis',
+    violation_limit: 'Batas pelanggaran terlewati',
+};
 
 const props = defineProps({
     assessment: Object
 });
-
-const formatDate = (date) => {
-    return new Date(date).toLocaleString('id-ID', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    });
-};
 
 const getDuration = () => {
     const start = new Date(props.assessment.started_at);
@@ -31,184 +37,94 @@ const getDuration = () => {
     result += `${seconds} detik`;
     return result;
 };
+
+const passed = computed(() => isPassing(props.assessment.score));
+const violations = computed(() => props.assessment.violations_count || 0);
+const verdict = computed(() => {
+    if (props.assessment.score >= EXCELLENT_SCORE) return 'Hampir sempurna. Pertahankan!';
+    if (passed.value) return 'Kamu lulus ujian ini.';
+    return 'Belum lulus. Pelajari lagi materinya, lalu coba ujian ulang.';
+});
 </script>
 
 <template>
-    <Head title="Rapor Hasil Ujian" />
+    <Head :title="`Rapor: ${assessment.course.name}`" />
 
     <StudentLayout>
         <div class="flex flex-col gap-8">
-            <!-- Header Section -->
-            <div class="flex flex-col gap-2">
-                <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#2B82FE]/10 text-[#2B82FE] border border-[#2B82FE]/20 tracking-wider uppercase">
-                        Rapor Asesmen Digital
-                    </span>
-                    <span class="text-xs font-semibold text-slate-400 dark:text-slate-500">Hasil Resmi Tersertifikasi</span>
-                </div>
-                <h1 class="text-3xl lg:text-4xl font-extrabold text-[#0A090B] dark:text-white tracking-tight">
-                    Evaluasi Hasil Ujian
-                </h1>
-                <p class="text-sm lg:text-base text-slate-500 dark:text-slate-400 max-w-2xl">
-                    Berikut adalah rekapitulasi capaian dan lembar penilaian digital untuk kursus <strong class="text-[#0A090B] dark:text-white">{{ assessment.course.name }}</strong>.
+            <PageHeader
+                :eyebrow="assessment.course.category ? `Rapor · ${assessment.course.category.name}` : 'Rapor'"
+                :title="assessment.course.name"
+            />
+
+            <div
+                v-if="assessment.submitted_reason === 'violation_limit'"
+                role="note"
+                class="flex items-start gap-3 border-l-4 border-pen bg-pen/10 px-5 py-4 text-[15px] leading-7 text-pen"
+            >
+                <Icon name="alert" class="mt-1 size-5 shrink-0" />
+                <p>
+                    <span class="font-bold">Jawabanmu dikirim otomatis.</span>
+                    Kamu melewati batas peringatan saat ujian. Nilai di bawah dihitung dari jawaban yang sudah terisi saat itu.
                 </p>
             </div>
 
-            <!-- Violation Notice Banner (if auto-submitted due to violations) -->
-            <div
-                v-if="assessment.submitted_reason === 'violation_limit'"
-                class="p-5 bg-rose-500/10 border border-rose-500/30 rounded-3xl flex items-start gap-4 transition-all"
-            >
-                <div class="w-10 h-10 rounded-2xl bg-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                    </svg>
-                </div>
-                <div class="flex flex-col gap-1">
-                    <h4 class="text-sm sm:text-base font-extrabold text-rose-600 dark:text-rose-400">
-                        Ujian Dihentikan Otomatis: Batas Toleransi Pelanggaran Terlampaui
-                    </h4>
-                    <p class="text-xs sm:text-sm text-rose-600/90 dark:text-rose-400/90 leading-relaxed font-medium">
-                        Sistem CBT mendeteksi keluar dari mode layar penuh atau berpindah jendela ujian sebanyak <strong>{{ assessment.violations_count }} kali</strong> (melebihi toleransi maksimal). Seluruh lembar jawaban yang tersimpan telah dikumpulkan dan dinilai secara otomatis.
-                    </p>
-                </div>
+            <div class="grid overflow-hidden rounded-md border border-rule bg-paper md:grid-cols-5">
+                <!-- Graded score -->
+                <section class="flex flex-col items-center justify-center gap-5 border-b border-rule px-6 py-10 text-center md:col-span-2 md:border-b-0 md:border-r">
+                    <ScoreMark :score="assessment.score" size="lg" />
+                    <span
+                        :class="[
+                            'inline-block -rotate-6 border-[3px] px-4 py-1 font-form text-lg font-semibold uppercase tracking-[0.2em]',
+                            passed ? 'border-ink text-ink' : 'border-pen text-pen',
+                        ]"
+                    >
+                        {{ passed ? 'Lulus' : 'Remedial' }}
+                    </span>
+                    <p class="max-w-xs text-[15px] leading-7 text-ink-soft">{{ verdict }} Batas lulus {{ PASSING_SCORE }}.</p>
+                </section>
+
+                <!-- Details -->
+                <section class="px-6 py-6 sm:px-8 md:col-span-3">
+                    <h2 class="font-form text-[11px] font-semibold uppercase tracking-[0.16em] text-pen">Rincian</h2>
+                    <dl class="mt-4 divide-y divide-dashed divide-rule">
+                        <div class="flex flex-wrap justify-between gap-x-6 gap-y-1 py-3">
+                            <dt class="text-ink-soft">Mulai</dt>
+                            <dd class="font-bold">{{ formatDateTime(assessment.started_at) }}</dd>
+                        </div>
+                        <div class="flex flex-wrap justify-between gap-x-6 gap-y-1 py-3">
+                            <dt class="text-ink-soft">Selesai</dt>
+                            <dd class="font-bold">{{ formatDateTime(assessment.finished_at) }}</dd>
+                        </div>
+                        <div class="flex flex-wrap justify-between gap-x-6 gap-y-1 py-3">
+                            <dt class="text-ink-soft">Lama mengerjakan</dt>
+                            <dd class="font-bold">{{ getDuration() }}</dd>
+                        </div>
+                        <div class="flex flex-wrap justify-between gap-x-6 gap-y-1 py-3">
+                            <dt class="text-ink-soft">Cara dikirim</dt>
+                            <dd class="font-bold">{{ SUBMITTED_REASON_LABELS[assessment.submitted_reason] || '–' }}</dd>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-3">
+                            <dt class="text-ink-soft">Pelanggaran</dt>
+                            <dd class="flex items-center gap-3 font-bold">
+                                <TallyMarks v-if="violations > 0" :count="violations" size="sm" tone="pen" />
+                                {{ violations > 0 ? `${violations} kali` : 'Tidak ada' }}
+                            </dd>
+                        </div>
+                    </dl>
+                </section>
             </div>
 
-            <!-- Two-Column Result Layout -->
-            <div class="flex flex-col lg:flex-row gap-8">
-                <!-- Score Card Sidebar -->
-                <div class="lg:w-[380px] flex flex-col gap-6 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-3xl p-7 lg:p-8 h-fit shadow-xs">
-                    <div class="flex flex-col items-center text-center gap-5">
-                        <!-- Circular Score Ring -->
-                        <div
-                            class="w-36 h-36 rounded-full flex flex-col items-center justify-center border-8 transition-all duration-700 shadow-sm"
-                            :class="assessment.score >= 70 ? 'border-emerald-500/20 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400' : 'border-rose-500/20 bg-rose-500/5 text-rose-600 dark:text-rose-400'"
-                        >
-                            <span class="text-4xl font-black tracking-tight">{{ assessment.score }}%</span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-80 mt-1">Skor Akhir</span>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <h3 class="text-2xl font-extrabold text-[#0A090B] dark:text-white">
-                                {{ assessment.score >= 70 ? 'Selamat! Anda Lulus' : 'Remidial Disarankan' }}
-                            </h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-                                {{ assessment.score >= 70
-                                    ? 'Capaian kompetensi Anda telah memenuhi standar ketuntasan minimal yang ditentukan.'
-                                    : 'Skor Anda belum mencapai ambang batas 70%. Silakan pelajari kembali modul dan coba ujian ulang.'
-                                }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Meta Details -->
-                    <div class="flex flex-col gap-3 pt-2">
-                        <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Status Kelulusan</span>
-                            <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg" :class="assessment.score >= 70 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'">
-                                {{ assessment.score >= 70 ? 'LULUS TUNTAS' : 'BELUM TUNTAS' }}
-                            </span>
-                        </div>
-                        <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Waktu Pengerjaan</span>
-                            <span class="text-xs font-bold text-[#0A090B] dark:text-white">{{ getDuration() }}</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                            <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Catatan Pelanggaran</span>
-                            <span
-                                class="text-xs font-extrabold px-2.5 py-1 rounded-lg"
-                                :class="(assessment.violations_count || 0) > 0
-                                    ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
-                                    : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'"
-                            >
-                                {{ assessment.violations_count || 0 }} kali
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="flex flex-col gap-2.5 pt-2">
-                        <Link
-                            :href="route('dashboard.learning.start', assessment.course_id)"
-                            method="post"
-                            as="button"
-                            class="w-full py-3.5 bg-[#2B82FE] hover:bg-blue-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-colors active:scale-95 text-center"
-                        >
-                            Ikuti Ujian Ulang
-                        </Link>
-                        <Link
-                            :href="route('dashboard.learning.index')"
-                            class="w-full py-3.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-center"
-                        >
-                            Kembali ke Daftar Kursus
-                        </Link>
-                    </div>
-                </div>
-
-                <!-- Detailed Analysis Card -->
-                <div class="flex-1 flex flex-col gap-6">
-                    <div class="bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-3xl p-7 lg:p-8 flex flex-col gap-8 shadow-xs">
-                        <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800/80">
-                            <div>
-                                <h2 class="text-xl font-bold text-[#0A090B] dark:text-white">Rincian Informasi Asesmen</h2>
-                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Metadata dan parameter penilaian sistem CBT</p>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
-                                ID: #{{ assessment.id }}
-                            </span>
-                        </div>
-
-                        <!-- Grid Metadata -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col gap-2">
-                                <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Kategori Bidang</span>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-[#2B82FE] shadow-xs">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                        </svg>
-                                    </div>
-                                    <span class="font-bold text-sm text-[#0A090B] dark:text-white">{{ assessment.course.category ? assessment.course.category.name : 'Umum' }}</span>
-                                </div>
-                            </div>
-
-                            <div class="p-5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col gap-2">
-                                <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Waktu Selesai</span>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-emerald-500 shadow-xs">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <span class="font-bold text-sm text-[#0A090B] dark:text-white">{{ formatDate(assessment.finished_at) }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Performance Gauge Section -->
-                        <div class="pt-6 border-t border-slate-100 dark:border-slate-800/80 flex flex-col gap-5">
-                            <h3 class="font-bold text-base text-[#0A090B] dark:text-white">Analisis Skala Penguasaan Materi</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                                Evaluasi ini dikalkulasi berdasarkan skala standardisasi asesmen otomatis 50 poin. Hasil skor <strong>{{ assessment.score }}%</strong> mencerminkan tingkat penguasaan kompetensi kategori
-                                <strong class="text-[#0A090B] dark:text-white">{{ assessment.score >= 90 ? 'Sangat Baik (Mahir)' : (assessment.score >= 70 ? 'Baik (Kompeten)' : 'Perlu Bimbingan Tambahan') }}</strong>.
-                            </p>
-
-                            <div class="flex flex-col gap-2">
-                                <div class="flex items-center justify-between text-xs font-bold">
-                                    <span class="text-slate-400 dark:text-slate-500">Skor Dicapai: {{ assessment.score }}%</span>
-                                    <span class="text-slate-400 dark:text-slate-500">Target KKM: 70%</span>
-                                </div>
-                                <div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
-                                    <div
-                                        class="h-full transition-all duration-1000 rounded-full"
-                                        :class="assessment.score >= 70 ? 'bg-emerald-500' : 'bg-rose-500'"
-                                        :style="{ width: assessment.score + '%' }"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex flex-col gap-3 sm:flex-row">
+                <InkButton
+                    :href="route('dashboard.learning.start', assessment.course_id)"
+                    method="post"
+                    as="button"
+                >
+                    <Icon name="refresh" class="size-5" />
+                    Ujian ulang
+                </InkButton>
+                <GhostButton :href="route('dashboard.learning.index')">Kembali ke ujian saya</GhostButton>
             </div>
         </div>
     </StudentLayout>

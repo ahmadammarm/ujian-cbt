@@ -144,7 +144,7 @@ class CourseController extends Controller
         }
 
         $this->courseService->deleteCourse($course);
-        return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully.');
+        return redirect()->route('dashboard.courses.index')->with('success', 'Kursus berhasil dihapus.');
     }
 
     /**

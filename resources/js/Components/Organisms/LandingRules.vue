@@ -1,5 +1,6 @@
 <script setup>
 import StickyNote from '@/Components/Atoms/StickyNote.vue';
+import TallyMarks from '@/Components/Atoms/TallyMarks.vue';
 
 const tallies = [
     { count: 1, label: 'Peringatan pertama' },
@@ -52,17 +53,7 @@ const disabled = ['Klik kanan', 'Salin, potong, dan tempel', 'Shortcut seperti F
 
                     <ol class="mt-6 space-y-4">
                         <li v-for="tally in tallies" :key="tally.count" class="flex items-center gap-5">
-                            <span aria-hidden="true" class="flex h-8 w-16 shrink-0 items-center gap-1.5">
-                                <span
-                                    v-for="stroke in tally.count"
-                                    :key="stroke"
-                                    :class="[
-                                        'h-8 w-[3px] rounded-full',
-                                        stroke % 2 ? 'rotate-3' : '-rotate-2',
-                                        tally.isFinal && stroke === tally.count ? 'bg-pen' : 'bg-graphite',
-                                    ]"
-                                ></span>
-                            </span>
+                            <TallyMarks :count="tally.count" :highlight-last="tally.isFinal" class="w-16 shrink-0" />
                             <span :class="['font-hand text-xl', tally.isFinal ? 'font-extrabold text-pen' : 'font-semibold']">
                                 <span class="sr-only">Pelanggaran ke-{{ tally.count }}: </span>{{ tally.label }}
                             </span>

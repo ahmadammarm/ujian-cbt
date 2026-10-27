@@ -1,28 +1,27 @@
 <script setup>
-import { computed } from 'vue';
+import Icon from '@/Components/Atoms/Icon.vue';
 
-const props = defineProps({
+defineProps({
     modelValue: {
         type: String,
         default: '',
     },
     placeholder: {
         type: String,
-        default: 'Cari data...',
+        default: 'Cari…',
     },
+    label: {
+        type: String,
+        default: 'Cari',
+    },
+    // Kept for backwards compatibility; the study-desk theme uses one palette for every space
     theme: {
         type: String,
-        default: 'teacher', // 'teacher' (#D95300) or 'student' (#2B82FE)
+        default: null,
     },
 });
 
 const emit = defineEmits(['update:modelValue']);
-
-const focusRingClass = computed(() => {
-    return props.theme === 'student'
-        ? 'focus:ring-[#2B82FE] focus:border-[#2B82FE]'
-        : 'focus:ring-[#D95300] focus:border-[#D95300]';
-});
 
 const handleInput = (event) => {
     emit('update:modelValue', event.target.value);
@@ -35,32 +34,23 @@ const handleClear = () => {
 
 <template>
     <div class="relative w-full">
-        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-        </div>
-
+        <Icon name="search" class="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-soft" />
         <input
-            type="text"
+            type="search"
             :value="modelValue"
-            @input="handleInput"
             :placeholder="placeholder"
-            :class="[
-                'w-full h-12 pl-11 pr-10 bg-white dark:bg-[#111116] border border-slate-200/80 dark:border-slate-800 rounded-2xl transition-all font-medium text-xs text-[#0A090B] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2',
-                focusRingClass,
-            ]"
+            :aria-label="label"
+            class="h-11 w-full rounded-md border border-rule bg-paper pl-10 pr-10 font-legible text-[15px] text-ink transition-colors placeholder:text-ink-soft/60 focus:border-ink focus:bg-stabilo/15 focus:outline-none focus:ring-0 motion-reduce:transition-none [&::-webkit-search-cancel-button]:hidden"
+            @input="handleInput"
         />
-
         <button
             v-if="modelValue"
             type="button"
+            class="absolute right-2 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded text-ink-soft hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen"
+            aria-label="Hapus pencarian"
             @click="handleClear"
-            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
         >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <Icon name="close" class="size-4" />
         </button>
     </div>
 </template>

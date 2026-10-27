@@ -26,6 +26,6 @@ class StudentController extends Controller
     public function toggleSuspension(User $student)
     {
         $this->studentService->toggleSuspension($student);
-        return back()->with('success', 'Student status updated successfully.');
+        return back()->with('success', 'Status akun siswa berhasil diperbarui.');
     }
 }

@@ -38,7 +38,7 @@ class StudentAnswerController extends Controller
 
         try {
             $this->assessmentService->saveAnswer($assessment, $question, $request->answer);
-            return back()->with('success', 'Answer saved.');
+            return back()->with('success', 'Jawaban tersimpan.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

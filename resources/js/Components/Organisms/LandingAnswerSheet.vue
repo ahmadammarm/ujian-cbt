@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import AnswerBubble from '@/Components/Atoms/AnswerBubble.vue';
+import ScoreMark from '@/Components/Atoms/ScoreMark.vue';
 
 const OPTIONS = ['A', 'B', 'C', 'D', 'E'];
 const ANSWER_KEY = ['C', 'A', 'D', 'B', 'E', 'A', 'C', 'B', 'D', 'A'];
@@ -103,17 +104,8 @@ const selectAnswer = (idx, option) => {
                 <p class="max-w-[15rem] font-hand text-sm leading-snug text-ink/80">
                     Klik bulatan mana saja. Nilainya langsung dihitung ulang, sama seperti saat kamu kirim jawaban.
                 </p>
-                <div class="relative flex size-20 shrink-0 items-center justify-center" aria-live="polite">
-                    <svg class="absolute inset-0 size-full -rotate-6 text-pen" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-                        <path
-                            d="M41 6C60 5 75 19 74 40C73 61 58 75 38 74C18 73 5 59 6 39C7 21 21 8 44 9"
-                            stroke="currentColor"
-                            stroke-width="2.5"
-                            stroke-linecap="round"
-                        />
-                    </svg>
-                    <span class="sr-only">Nilai</span>
-                    <span class="relative font-hand text-3xl font-extrabold text-pen">{{ score }}</span>
+                <div aria-live="polite">
+                    <ScoreMark :score="score" />
                 </div>
             </div>
         </div>

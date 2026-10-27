@@ -9,7 +9,7 @@ const props = defineProps({
         default: '48',
     },
     contentClasses: {
-        default: 'py-1.5 bg-white dark:bg-[#111116]',
+        default: 'py-1.5 bg-paper',
     },
 });
 
@@ -32,6 +32,7 @@ const alignmentClasses = {
 
 const widthClass = {
     48: 'w-48',
+    56: 'w-56',
 }[props.width] || props.width;
 </script>
 
@@ -45,25 +46,23 @@ const widthClass = {
         <div v-show="open" class="fixed inset-0 z-40" @click="open = false"></div>
 
         <Transition
-            enter-active-class="transition ease-out duration-200"
+            enter-active-class="transition ease-out duration-150 motion-reduce:transition-none"
             enter-from-class="opacity-0 scale-95"
             enter-to-class="opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-75"
+            leave-active-class="transition ease-in duration-75 motion-reduce:transition-none"
             leave-from-class="opacity-100 scale-100"
             leave-to-class="opacity-0 scale-95"
         >
             <div
                 v-show="open"
-                class="absolute z-50 mt-2 rounded-md shadow-lg"
+                class="absolute z-50 mt-2"
                 :class="[alignmentClasses, widthClass]"
-                style="display: none"
                 @click="open = false"
             >
-                <div class="rounded-xl ring-1 ring-black/5 dark:ring-white/10 shadow-lg border border-transparent dark:border-slate-800 overflow-hidden" :class="contentClasses">
+                <div class="overflow-hidden rounded-md border border-rule shadow-[0_16px_32px_-18px_rgba(27,42,107,0.45)]" :class="contentClasses">
                     <slot name="content" />
                 </div>
             </div>
         </Transition>
     </div>
 </template>
-

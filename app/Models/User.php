@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
+    public const ROLE_TEACHER = 'teacher';
+    public const ROLE_STUDENT = 'student';
+
     public function assessments()
     {
         return $this->hasMany(StudentAssessment::class);
