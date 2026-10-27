@@ -4,6 +4,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
+// Laravel 11's bundled config/database.php uses PDO::MYSQL_ATTR_SSL_CA (deprecated in PHP 8.5)
+// and is loaded before HandleExceptions registers. HandleExceptions resets error_reporting(-1),
+// so deprecations are only muted for that early bootstrap window. Remove after upgrading to Laravel 12.
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
